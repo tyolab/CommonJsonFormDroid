@@ -82,7 +82,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
         titletext.setText(jsonObject.getString(titleKey));
     }
 
-    protected View createEditText(LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, CommonListener listener) throws JSONException {
+    protected View createEditText(LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, final CommonListener listener) throws JSONException {
         View v = factory.inflate(
                 resId, parent, false);
         MaterialEditText editText = (MaterialEditText) v.findViewById(R.id.user_input);
@@ -258,6 +258,8 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
             editText.setInputType(types);
         }
         editText.addTextChangedListener(new GenericTextWatcher(stepName, editText));
+
+        editText.setOnFocusChangeListener(listener);
         return v;
     }
 }

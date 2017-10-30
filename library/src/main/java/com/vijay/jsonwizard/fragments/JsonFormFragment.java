@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.rey.material.widget.EditText;
 import com.rey.material.widget.Switch;
 import com.vijay.jsonwizard.R;
 import com.vijay.jsonwizard.activities.JsonFormActivity;
@@ -45,6 +46,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     private LinearLayout        mMainView;
     private Menu                mMenu;
     private JsonApi             mJsonApi;
+    private boolean             keyboardHidden = true;
 
     public void setJsonApi(JsonApi jsonApi) {
         this.mJsonApi = jsonApi;
@@ -52,6 +54,14 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
 
     public JsonApi getJsonApi() {
         return mJsonApi;
+    }
+
+    public boolean isKeyboardHidden() {
+        return keyboardHidden;
+    }
+
+    public void setKeyboardHidden(boolean keyboardHidden) {
+        this.keyboardHidden = keyboardHidden;
     }
 
     @Override
@@ -117,6 +127,11 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     @Override
     public void onClick(View v) {
         presenter.onClick(v);
+
+        if (!isKeyboardHidden()) {
+            hideKeyBoard();
+            setKeyboardHidden(true);
+        }
     }
 
     @Override
@@ -230,6 +245,8 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     @Override
     public void hideKeyBoard() {
         super.hideSoftKeyboard();
+
+        setKeyboardHidden(true);
     }
 
     @Override
@@ -290,6 +307,10 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         presenter.onCheckedChanged(buttonView, isChecked);
+
+        buttonView.requestFocus();
+        if (!isKeyboardHidden())
+            hideKeyBoard();
     }
 
     @Override
@@ -324,5 +345,17 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     @Override
     public void onVisibilityChange(String key, String o, boolean b) {
         // no ops
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (((v instanceof EditText) || (v instanceof android.widget.EditText))) {
+            if (hasFocus) {
+                setKeyboardHidden(false);
+            }
+            else {
+                hideKeyBoard();
+            }
+        }
     }
 }
