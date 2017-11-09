@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.vijay.jsonwizard.activities.JsonFormActivity"
+            android:name="au.com.tyo.json.android.activities.JsonFormActivity"
             android:label="@string/app_name" >
         </activity>
     </application>

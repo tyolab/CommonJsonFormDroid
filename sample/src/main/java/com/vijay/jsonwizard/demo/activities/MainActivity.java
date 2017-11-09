@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.vijay.jsonwizard.demo.R;
-import com.vijay.jsonwizard.activities.JsonFormActivity;
+import au.com.tyo.json.android.activities.JsonFormActivity;
 import com.vijay.jsonwizard.demo.utils.CommonUtils;
 
 /**

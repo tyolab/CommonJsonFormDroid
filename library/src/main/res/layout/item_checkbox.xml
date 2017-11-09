@@ -1,4 +1,4 @@
-<com.vijay.jsonwizard.customviews.CheckBox
+<au.com.tyo.json.android.customviews.CheckBox
     style="@style/Material.Drawable.CheckBox"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
