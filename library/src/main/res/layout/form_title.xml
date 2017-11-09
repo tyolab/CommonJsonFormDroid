@@ -2,7 +2,7 @@
 <au.com.tyo.json.android.views.FormRowTitle xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/form_title"
+    android:id="@+id/form_row_title"
     >
     <com.rey.material.widget.TextView
         android:id="@android:id/text1"
