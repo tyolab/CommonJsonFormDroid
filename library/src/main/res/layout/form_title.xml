@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<au.com.tyo.json.android.views.FormRowTitle xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-        >
+    android:id="@+id/form_title"
+    >
     <com.rey.material.widget.TextView
         android:id="@android:id/text1"
         android:gravity="left|center_vertical"
@@ -12,4 +13,4 @@
         android:layout_gravity="center_vertical|left"
         android:ellipsize="end"
         />
-</FrameLayout>
+</au.com.tyo.json.android.views.FormRowTitle>
