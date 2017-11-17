@@ -23,6 +23,12 @@ import android.widget.Toast;
 import com.rey.material.widget.EditText;
 import com.rey.material.widget.Switch;
 import com.vijay.jsonwizard.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
+
 import au.com.tyo.json.android.activities.JsonFormActivity;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.interfaces.CommonListener;
@@ -31,11 +37,6 @@ import au.com.tyo.json.android.mvp.MvpFragment;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.JsonFormFragmentView;
 import au.com.tyo.json.android.viewstates.JsonFormFragmentViewState;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Created by vijay on 5/7/15.
@@ -128,10 +129,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     public void onClick(View v) {
         presenter.onClick(v);
 
-        if (!isKeyboardHidden()) {
-            hideKeyBoard();
-            setKeyboardHidden(true);
-        }
+        hideKeyBoard();
     }
 
     @Override
@@ -244,9 +242,10 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
 
     @Override
     public void hideKeyBoard() {
-        super.hideSoftKeyboard();
-
-        setKeyboardHidden(true);
+        if (!isKeyboardHidden()) {
+            super.hideSoftKeyboard();
+            setKeyboardHidden(true);
+        }
     }
 
     @Override
@@ -357,5 +356,10 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
                 hideKeyBoard();
             }
         }
+    }
+
+    @Override
+    public void onUserInputFieldClick(Context context, String key, String text) {
+        // no ops
     }
 }

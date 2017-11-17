@@ -367,6 +367,9 @@ public class FormFragment extends JsonFormFragment {
     }
 
     protected void requestFocusForDummyView() {
+        // hide the keyboard
+        hideKeyBoard();
+
         if (null != dummyView && !dummyView.hasFocus())
             dummyView.requestFocus();
     }
