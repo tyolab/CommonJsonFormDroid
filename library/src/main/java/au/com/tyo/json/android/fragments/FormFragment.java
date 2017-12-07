@@ -1,5 +1,6 @@
 package au.com.tyo.json.android.fragments;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import au.com.tyo.json.android.customviews.RadioButton;
+import au.com.tyo.json.android.views.ButtonContainer;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 19/7/17.
@@ -39,6 +41,7 @@ public class FormFragment extends JsonFormFragment {
     private boolean editable;
 
     private int grayColor;
+    private ColorStateList fieldTextColors;
 
     public static class FieldMetadata {
         public int index;
@@ -80,6 +83,7 @@ public class FormFragment extends JsonFormFragment {
             metadataMap = new HashMap<>();
 
         grayColor = getActivity().getResources().getColor(R.color.grey);
+        fieldTextColors = getActivity().getResources().getColorStateList(R.color.field_text_colors);
     }
 
     @Override
@@ -118,9 +122,16 @@ public class FormFragment extends JsonFormFragment {
 
         View view = getViewByKey(targetKey);
         if (null != view) {
-            TextView button = (TextView) view.findViewById(R.id.user_input);
-            button.setText(text);
-            button.setTextColor(view.getContext().getResources().getColorStateList(R.color.field_text_colors));
+            View v = view.findViewById(R.id.button_text);
+
+            if (null == v)
+                v = view.findViewById(R.id.user_input);
+
+            if (v instanceof TextView) {
+                TextView button = (TextView) v;
+                button.setText(text);
+                button.setTextColor(fieldTextColors);
+            }
         }
     }
 
@@ -167,19 +178,45 @@ public class FormFragment extends JsonFormFragment {
             childView.setAlpha(1.0f);
     }
 
+    private void setInputViewTextColor(TextView inputView, boolean editable) {
+        if (editable)
+            inputView.setTextColor(fieldTextColors);
+        else
+            inputView.setTextColor(grayColor);
+    }
+
+    private void setInputViewTextColor(android.widget.TextView inputView, boolean editable) {
+        if (editable)
+            inputView.setTextColor(fieldTextColors);
+        else
+            inputView.setTextColor(grayColor);
+    }
+
     private void setFormRowEditable(View view, boolean editable) {
         View inputView = view.findViewById(R.id.user_input);
 
         if (null != inputView) {
             inputView.setEnabled(editable);
 
-            if (inputView instanceof android.widget.TextView) {
-                if (editable)
-                    ((android.widget.TextView) inputView).setTextColor(view.getContext().getResources().getColorStateList(R.color.field_text_colors));
-                else
-                    ((android.widget.TextView) inputView).setTextColor(grayColor);
+            if (inputView instanceof ButtonContainer) {
+                inputView.setClickable(editable);
+
+                View v = view.findViewById(R.id.button_text);
+
+                if (v instanceof android.widget.TextView) {
+                    setInputViewTextColor((android.widget.TextView) v, editable);
+                }
+                else if (v instanceof TextView) {
+                    setInputViewTextColor((TextView) v, editable);
+                }
             }
-            if (inputView instanceof Button) {
+            else if (inputView instanceof android.widget.TextView) {
+                setInputViewTextColor((android.widget.TextView) inputView, editable);
+            }
+            else if (inputView instanceof TextView) {
+                setInputViewTextColor((TextView) inputView, editable);
+            }
+            else if (inputView instanceof Button) {
                 inputView.setClickable(editable);
             }
             else if (inputView instanceof ViewGroup) {
