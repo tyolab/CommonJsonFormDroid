@@ -342,12 +342,13 @@ public class FormFragment extends JsonFormFragment {
         }
     }
 
-    public void addUserInputValueToMetadata(String key, String childKey, String value) {
+    public void addUserInputValueToMetadata(String key, String childKey, Object value) {
         FieldMetadata metaData = getFieldMetaData(key);
 
         if (childKey == null) {
             metaData.value = value;
         }
+        // this is checkbox / radio button value
         else {
             Set set = null;
             if (metaData.value == null)
@@ -355,7 +356,10 @@ public class FormFragment extends JsonFormFragment {
 
             set = (Set) metaData.value;
 
-            boolean b = Boolean.parseBoolean(value);
+            boolean b = false;
+            if (value instanceof String)
+                b = Boolean.parseBoolean((String) value);
+
             if (b)
                 set.add(childKey);
             else
@@ -364,7 +368,7 @@ public class FormFragment extends JsonFormFragment {
     }
 
     @Override
-    public void onValueChange(String parentKey, String childKey, String value) {
+    public void onValueChange(String parentKey, String childKey, Object value) {
         addUserInputValueToMetadata(parentKey, childKey, value);
     }
 

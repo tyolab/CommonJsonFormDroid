@@ -337,7 +337,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     }
 
     @Override
-    public void onValueChange(String parentKey, String childKey, String value) {
+    public void onValueChange(String parentKey, String childKey, Object value) {
         // no ops
     }
 
