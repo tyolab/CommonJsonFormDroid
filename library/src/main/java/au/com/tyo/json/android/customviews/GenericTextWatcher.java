@@ -7,12 +7,12 @@ import android.util.Log;
 import android.view.View;
 
 import au.com.tyo.json.android.R;
-import au.com.tyo.json.android.interfaces.JsonApi;
 
 import org.json.JSONException;
 
 import au.com.tyo.app.CommonApp;
 import au.com.tyo.app.Controller;
+import au.com.tyo.json.android.interfaces.JsonApi;
 
 public class GenericTextWatcher implements TextWatcher {
 
@@ -34,7 +34,8 @@ public class GenericTextWatcher implements TextWatcher {
         try {
             String text = editable.toString().trim();
 
-            if (text.length() > 0) {
+            // never do it, we need to catch the empty text too
+            // if (text.length() > 0) {
                 JsonApi api = null;
 
                 String key = (String) mView.getTag(R.id.key);
@@ -60,7 +61,7 @@ public class GenericTextWatcher implements TextWatcher {
                     // TODO- handle
                     e.printStackTrace();
                 }
-            }
+            // }
         } catch (Exception e) {
             Log.e("GenericTextWatcher", "Error in catching text edit value");
         }

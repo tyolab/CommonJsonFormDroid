@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
+import au.com.tyo.utils.StringUtils;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 19/7/17.
@@ -36,6 +38,8 @@ import au.com.tyo.json.android.views.ButtonContainer;
 public class FormFragment extends JsonFormFragment {
 
     public static final String          FRAGMENT_JSON_FORM_TAG = "FormFragment";
+
+    private static final String TAG = FRAGMENT_JSON_FORM_TAG;
 
     private LinearLayout                mainView;
 
@@ -302,11 +306,14 @@ public class FormFragment extends JsonFormFragment {
 
     public View getViewByKey(String key) {
         View view = null;
-        int index = metadataMap.get(key).index;
+        FieldMetadata metaData = getFieldMetaData(key);
+        int index = metaData.index;
         try {
             view = mainView.getChildAt(index);
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            Log.e(TAG, StringUtils.exceptionStackTraceToString(e));
+        }
 
         if (view == null)
             for (int i = 0; i < mainView.getChildCount(); i++) {
@@ -315,6 +322,7 @@ public class FormFragment extends JsonFormFragment {
                 String aKey = (String) view.getTag(R.id.key);
                 if (aKey.equals(key)) {
                     view= childView;
+                    metaData.index = i;
                     break;
                 }
             }
@@ -345,7 +353,12 @@ public class FormFragment extends JsonFormFragment {
 
     @Override
     public void unCheckAllExcept(String parentKey, String childKey) {
-        ViewGroup parent = (ViewGroup) getViewByKey(parentKey).findViewById(R.id.user_input);
+        View rowView = (ViewGroup) getViewByKey(parentKey);
+        if (null == rowView)
+            return;
+
+        ViewGroup parent = rowView.findViewById(R.id.user_input);
+
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View view = parent.getChildAt(i);
@@ -370,13 +383,26 @@ public class FormFragment extends JsonFormFragment {
         else {
             Set set = null;
             if (metaData.value == null)
-                metaData.value = new HashSet<String>();
+                metaData.value = new HashSet();
 
-            set = (Set) metaData.value;
+            if (metaData.value instanceof Set)
+                set = (Set) metaData.value;
+            else {
+                Object v = metaData.value;
+                set = new HashSet();
+                metaData.value = set;
+                set.add(v);
+            }
 
             boolean b = false;
-            if (value instanceof String)
-                b = Boolean.parseBoolean((String) value);
+            if (value instanceof String) {
+                try {
+                    b = Boolean.parseBoolean((String) value);
+                }
+                catch (Exception ex) {
+                    b = false;
+                }
+            }
 
             if (b)
                 set.add(childKey);
