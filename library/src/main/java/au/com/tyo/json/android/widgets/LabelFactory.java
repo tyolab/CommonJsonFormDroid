@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.vijay.jsonwizard.R;
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 

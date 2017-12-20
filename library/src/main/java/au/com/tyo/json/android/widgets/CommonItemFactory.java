@@ -2,7 +2,7 @@ package au.com.tyo.json.android.widgets;
 
 import android.view.View;
 
-import com.vijay.jsonwizard.R;
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
 import org.json.JSONException;

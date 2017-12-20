@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 
 import com.rey.material.widget.Button;
 import com.rey.material.widget.TextView;
-import com.vijay.jsonwizard.R;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,7 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import au.com.tyo.json.FormItem;
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.RadioButton;
+import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
+import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
 
 /**
@@ -32,16 +35,20 @@ import au.com.tyo.json.android.views.ButtonContainer;
 
 public class FormFragment extends JsonFormFragment {
 
-    public static final String FRAGMENT_JSON_FORM_TAG = "FormFragment";
+    public static final String          FRAGMENT_JSON_FORM_TAG = "FormFragment";
 
-    private LinearLayout mainView;
+    private LinearLayout                mainView;
 
-    private View dummyView;
+    private View                        dummyView;
 
-    private boolean editable;
+    private boolean                     editable;
 
-    private int grayColor;
-    private ColorStateList fieldTextColors;
+    private int                         grayColor;
+    private ColorStateList              fieldTextColors;
+
+    private FormItem                    form;
+
+    private JsonFormExtensionPresenter formPresenter;
 
     public static class FieldMetadata {
         public int index;
@@ -61,6 +68,14 @@ public class FormFragment extends JsonFormFragment {
         }
     }
 
+    public FormItem getForm() {
+        return form;
+    }
+
+    public void setForm(FormItem form) {
+        this.form = form;
+    }
+
     public Map<String, FieldMetadata> metadataMap;
 
     public boolean isEditable() {
@@ -73,6 +88,13 @@ public class FormFragment extends JsonFormFragment {
 
     public void setGrayColor(int grayColor) {
         this.grayColor = grayColor;
+    }
+
+    @Override
+    protected JsonFormFragmentPresenter createPresenter() {
+        if (null == formPresenter)
+            formPresenter = new JsonFormExtensionPresenter();
+        return formPresenter;
     }
 
     @Override
@@ -92,6 +114,10 @@ public class FormFragment extends JsonFormFragment {
         mainView = (LinearLayout) rootView.findViewById(R.id.main_layout);
         dummyView = rootView.findViewById(R.id.dummy_view);
         return rootView;
+    }
+
+    public String getCurrentKey() {
+        return formPresenter.getCurrentKey();
     }
 
     @Override
@@ -232,17 +258,9 @@ public class FormFragment extends JsonFormFragment {
             }
             else if (inputView instanceof com.rey.material.widget.Switch)
                 setViewAlpha(inputView, editable);
-
-//                if (inputView.isClickable()) {
-//                    inputView.setOnClickListener(null);
-//                }
         }
         else if (view instanceof EditText)
             view.setEnabled(false);
-//            else if ((inputView = ) != null) {
-//
-//            } else if (view.isClickable())
-//                view.setOnClickListener(null);
     }
 
 
@@ -333,8 +351,8 @@ public class FormFragment extends JsonFormFragment {
             View view = parent.getChildAt(i);
             if (view instanceof RadioButton) {
                 RadioButton radio = (RadioButton) view;
-                String parentKeyAtIndex = (String) radio.getTag(com.vijay.jsonwizard.R.id.key);
-                String childKeyAtIndex = (String) radio.getTag(com.vijay.jsonwizard.R.id.childKey);
+                String parentKeyAtIndex = (String) radio.getTag(R.id.key);
+                String childKeyAtIndex = (String) radio.getTag(R.id.childKey);
                 if (parentKeyAtIndex.equals(parentKey) && !childKeyAtIndex.equals(childKey)) {
                     radio.setChecked(false);
                 }

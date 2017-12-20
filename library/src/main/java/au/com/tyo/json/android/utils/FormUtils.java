@@ -6,7 +6,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rey.material.util.ViewUtil;
-import com.vijay.jsonwizard.R;
+
+import au.com.tyo.json.android.R;
 
 /**
  * Created by vijay on 24-05-2015.

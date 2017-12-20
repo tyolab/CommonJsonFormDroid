@@ -10,7 +10,7 @@ import android.view.View;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.validation.RegexpValidator;
 import com.rey.material.util.ViewUtil;
-import com.vijay.jsonwizard.R;
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.GenericTextWatcher;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;

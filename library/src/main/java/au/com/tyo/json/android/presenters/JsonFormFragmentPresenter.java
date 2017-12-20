@@ -15,7 +15,13 @@ import android.widget.Toast;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rey.material.widget.Switch;
-import com.vijay.jsonwizard.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
+
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.customviews.CheckBox;
 import au.com.tyo.json.android.customviews.RadioButton;
@@ -29,12 +35,6 @@ import au.com.tyo.json.android.viewstates.JsonFormFragmentViewState;
 import au.com.tyo.json.android.widgets.EditTextFactory;
 import au.com.tyo.json.android.widgets.ImagePickerFactory;
 import au.com.tyo.json.android.widgets.SpinnerFactory;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
-
 import fr.ganfra.materialspinner.MaterialSpinner;
 
 import static au.com.tyo.json.android.utils.FormUtils.dpToPixels;

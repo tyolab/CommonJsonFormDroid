@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.rey.material.util.ViewUtil;
-import com.vijay.jsonwizard.R;
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.utils.ValidationStatus;

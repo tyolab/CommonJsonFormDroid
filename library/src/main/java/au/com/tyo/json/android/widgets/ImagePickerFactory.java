@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.vijay.jsonwizard.R;
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.utils.ImageUtils;

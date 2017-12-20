@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import com.vijay.jsonwizard.R;
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.fragments.JsonFormFragment;
 import au.com.tyo.json.android.interfaces.JsonApi;

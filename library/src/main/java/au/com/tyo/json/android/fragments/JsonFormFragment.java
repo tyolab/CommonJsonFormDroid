@@ -22,13 +22,13 @@ import android.widget.Toast;
 
 import com.rey.material.widget.EditText;
 import com.rey.material.widget.Switch;
-import com.vijay.jsonwizard.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
 
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.activities.JsonFormActivity;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.interfaces.CommonListener;

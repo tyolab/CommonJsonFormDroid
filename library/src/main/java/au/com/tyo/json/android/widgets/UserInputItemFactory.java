@@ -13,14 +13,6 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.validation.RegexpValidator;
 import com.rey.material.util.ViewUtil;
 import com.rey.material.widget.TextView;
-import com.vijay.jsonwizard.R;
-import au.com.tyo.json.android.customviews.GenericTextWatcher;
-import au.com.tyo.json.android.interfaces.CommonListener;
-import au.com.tyo.json.android.interfaces.FormWidgetFactory;
-import au.com.tyo.json.android.utils.JsonMetadata;
-import au.com.tyo.json.android.edittext.MaxLengthValidator;
-import au.com.tyo.json.android.edittext.MinLengthValidator;
-import au.com.tyo.json.android.edittext.RequiredValidator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +24,14 @@ import java.util.List;
 import java.util.Set;
 
 import au.com.tyo.json.JsonFormFieldFilter;
+import au.com.tyo.json.android.R;
+import au.com.tyo.json.android.customviews.GenericTextWatcher;
+import au.com.tyo.json.android.edittext.MaxLengthValidator;
+import au.com.tyo.json.android.edittext.MinLengthValidator;
+import au.com.tyo.json.android.edittext.RequiredValidator;
+import au.com.tyo.json.android.interfaces.CommonListener;
+import au.com.tyo.json.android.interfaces.FormWidgetFactory;
+import au.com.tyo.json.android.utils.JsonMetadata;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.

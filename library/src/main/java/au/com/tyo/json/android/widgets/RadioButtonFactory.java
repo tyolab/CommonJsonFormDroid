@@ -7,7 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.vijay.jsonwizard.R;
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.interfaces.CommonListener;

@@ -10,4 +10,5 @@
 
     <!-- signle, multiple -->
     <item type="id" name="valueType"/>
+    <item type="id" name="pick"/>
 </resources>

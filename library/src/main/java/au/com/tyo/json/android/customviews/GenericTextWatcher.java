@@ -6,7 +6,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
-import com.vijay.jsonwizard.R;
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.JsonApi;
 
 import org.json.JSONException;
