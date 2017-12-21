@@ -1,57 +1,82 @@
+/*
+ * Copyright (c) 2017 TYONLINE TECHNOLOGY PTY. LTD. (TYO Lab)
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package au.com.tyo.json.android.widgets;
 
-import android.content.Context;
-import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.customviews.CheckBox;
 import au.com.tyo.json.android.interfaces.CommonListener;
-import au.com.tyo.json.android.interfaces.FormWidgetFactory;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static au.com.tyo.json.android.utils.FormUtils.*;
 
 /**
  * Created by vijay on 24-05-2015.
  */
-public class CheckBoxFactory implements FormWidgetFactory {
+public class CheckBoxFactory extends CompoundItemFactory {
+
     @Override
-    public List<View> getViewsFromJson(String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception {
-        List<View> views = new ArrayList<>(1);
-        views.add(getTextViewWith(context, 16, jsonObject.getString("label"), jsonObject.getString("key"),
-                jsonObject.getString("type"), getLayoutParams(MATCH_PARENT, WRAP_CONTENT, 0, 0, 0, 0),
-                FONT_BOLD_PATH));
+    protected void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+
+        View titleView = createTitleView(factory, jsonObject, "label");
+        parent.addView(titleView);
+
+        String parentKey = jsonObject.getString("key");
+
         JSONArray options = jsonObject.getJSONArray(JsonFormConstants.OPTIONS_FIELD_NAME);
         for (int i = 0; i < options.length(); i++) {
             JSONObject item = options.getJSONObject(i);
-            CheckBox checkBox = (CheckBox) LayoutInflater.from(context).inflate(R.layout.item_checkbox, null);
+            View view = factory.inflate(R.layout.item_checkbox, null);
+            CheckBox checkBox = (CheckBox) view; // (CheckBox) view.findViewById(R.id.user_input);
+
+            String childKey = item.getString("key");
+            String value = item.optString("value");
+
             checkBox.setText(item.getString("text"));
-            checkBox.setTag(R.id.key, jsonObject.getString("key"));
+            checkBox.setTag(R.id.key, parentKey);
             checkBox.setTag(R.id.type, jsonObject.getString("type"));
-            checkBox.setTag(R.id.childKey, item.getString("key"));
+            checkBox.setTag(R.id.childKey, childKey);
             checkBox.setGravity(Gravity.CENTER_VERTICAL);
             checkBox.setTextSize(16);
-            checkBox.setTypeface(Typeface.createFromAsset(context.getAssets(), FONT_REGULAR_PATH));
+            // checkBox.setTypeface(Typeface.createFromAsset(context.getAssets(), Resources.FONT_DEFAULT_PATH));
             checkBox.setOnCheckedChangeListener(listener);
-            if (!TextUtils.isEmpty(item.optString("value"))) {
-                checkBox.setChecked(Boolean.valueOf(item.optString("value")));
+            if (!TextUtils.isEmpty(value)) {
+                checkBox.setChecked(Boolean.valueOf(value));
+                listener.onInitialValueSet(parentKey, childKey, value);
             }
-            if (i == options.length() - 1) {
-                checkBox.setLayoutParams(getLayoutParams(MATCH_PARENT, WRAP_CONTENT, 0, 0, 0, (int) context
-                        .getResources().getDimension(R.dimen.extra_bottom_margin)));
-            }
-            views.add(checkBox);
+
+            /**
+             * TODO
+             *
+             * make it optional maybe
+             */
+//            if (i == options.length() - 1) {
+//                checkBox.setLayoutParams(JsonFormUtils.getRelativeLayoutParams(MATCH_PARENT, WRAP_CONTENT, 0, 0, 0, (int) context
+//                        .getResources().getDimension(R.dimen.extra_bottom_margin)));
+//            }
+
+            parent.addView(view);
         }
-        return views;
     }
 }

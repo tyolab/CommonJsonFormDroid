@@ -2,10 +2,14 @@ package au.com.tyo.json.android.utils;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rey.material.util.ViewUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import au.com.tyo.json.android.R;
 
@@ -40,5 +44,16 @@ public class FormUtils {
     public static int dpToPixels(Context context, float dps) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dps * scale + 0.5f);
+    }
+
+    public static void setKeyTypeTags(View v, JSONObject jsonObject) throws JSONException {
+        v.setTag(R.id.key, jsonObject.getString("key"));
+        v.setTag(R.id.type, jsonObject.getString("type"));
+        v.setTag(R.id.required, jsonObject.getBoolean("required"));
+    }
+
+    public static void formatView(View v, String key, String type) {
+        v.setTag(R.id.key, key);
+        v.setTag(R.id.type, type);
     }
 }

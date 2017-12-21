@@ -20,38 +20,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.rengwuxian.materialedittext.MaterialEditText;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
-import au.com.tyo.json.android.utils.ValidationStatus;
+import au.com.tyo.json.android.interfaces.JsonApi;
 
 /**
- * Created by vijay on 24-05-2015.
+ * Created by Eric Tang (eric.tang@tyo.com.au) on 21/9/17.
  */
-public class EditTextFactory extends UserInputItemFactory {
 
-    public static final int MIN_LENGTH = 0;
-    public static final int MAX_LENGTH = 140;
+public abstract class TitledItemFactory extends UserInputItemFactory {
+
+    protected abstract View getUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
 
     @Override
     protected View createView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
-        int minLength = MIN_LENGTH;
-        int maxLength = MAX_LENGTH;
+        ViewGroup v = (ViewGroup) factory.inflate(R.layout.form_item_two_cols, parent, false);
 
-        View v = createEditText(factory, parent, R.layout.item_edit_text, stepName, jsonObject, minLength, maxLength, listener);
+        // 1st Column
+        bindTitle(v, jsonObject, "title");
+
+        // 2nd Column
+        ViewGroup container = (ViewGroup) v.findViewById(R.id.frame2);
+        View child = getUserInputView(, factory, v, stepName, jsonObject, listener, editable);
+        container.addView(child);
         return v;
     }
-
-    public static ValidationStatus validate(MaterialEditText editText) {
-        boolean validate = editText.validate();
-        if(!validate) {
-            return new ValidationStatus(false, editText.getError().toString());
-        }
-        return new ValidationStatus(true, null);
-    }
-
 }

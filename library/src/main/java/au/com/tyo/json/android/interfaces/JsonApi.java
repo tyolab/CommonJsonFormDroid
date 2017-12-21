@@ -3,6 +3,10 @@ package au.com.tyo.json.android.interfaces;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
+import au.com.tyo.json.android.fragments.FormFragment;
+
 /**
  * Created by vijay on 5/16/15.
  */
@@ -19,4 +23,14 @@ public interface JsonApi {
     String getCount();
 
     boolean isEditable();
+
+    String formatDateTime(Date date);
+
+    FormFragment getJsonFormFragment();
+
+    String getPredefinedValue(String stepName, String key);
+
+    String getPredefinedValueMax(String stepName, String key);
+
+    String getPredefinedValueMin(String stepName, String key);
 }

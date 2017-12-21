@@ -4,6 +4,15 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
@@ -13,15 +22,6 @@ import au.com.tyo.json.android.widgets.ImagePickerFactory;
 import au.com.tyo.json.android.widgets.LabelFactory;
 import au.com.tyo.json.android.widgets.RadioButtonFactory;
 import au.com.tyo.json.android.widgets.SpinnerFactory;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by vijay on 5/19/15.
@@ -47,6 +47,10 @@ public class JsonFormInteractor {
 
     public static void registerWidget(String key, FormWidgetFactory factory) {
         map.put(key, factory);
+    }
+
+    public static void registerWidget(FormWidgetFactory factory) {
+        map.put(factory.getClass().getSimpleName(), factory);
     }
 
     public List<View> fetchFormElements(String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable) {

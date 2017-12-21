@@ -27,22 +27,28 @@ import org.json.JSONObject;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
+import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.utils.ValidationStatus;
 
 /**
  * Created by vijay on 24-05-2015.
  */
-public class EditTextFactory extends UserInputItemFactory {
+public class TitledEditTextFactory extends TitledItemFactory {
+
+    public static final String KEY = TitledEditTextFactory.class.getSimpleName();
+
+    private static final String TAG = TitledEditTextFactory.class.getSimpleName();
 
     public static final int MIN_LENGTH = 0;
-    public static final int MAX_LENGTH = 140;
+    public static final int MAX_LENGTH = 0;
 
     @Override
-    protected View createView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+    protected View getUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
         int minLength = MIN_LENGTH;
         int maxLength = MAX_LENGTH;
 
-        View v = createEditText(factory, parent, R.layout.item_edit_text, stepName, jsonObject, minLength, maxLength, listener);
+        View v = createEditText(factory, parent, R.layout.item_edit_text2, stepName, jsonObject, minLength, maxLength, listener);
+
         return v;
     }
 
