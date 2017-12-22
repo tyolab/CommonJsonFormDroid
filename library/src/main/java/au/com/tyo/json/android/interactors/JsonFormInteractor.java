@@ -16,6 +16,7 @@ import java.util.Map;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
+import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.widgets.CheckBoxFactory;
 import au.com.tyo.json.android.widgets.EditTextFactory;
 import au.com.tyo.json.android.widgets.ImagePickerFactory;
@@ -53,7 +54,7 @@ public class JsonFormInteractor {
         map.put(factory.getClass().getSimpleName(), factory);
     }
 
-    public List<View> fetchFormElements(String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable) {
+    public List<View> fetchFormElements(JsonApi jsonApi, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable) {
         Log.d(TAG, "fetchFormElements called");
         List<View> viewsFromJson = new ArrayList<>(5);
         try {
@@ -61,7 +62,7 @@ public class JsonFormInteractor {
             for (int i = 0; i < fields.length(); i++) {
                 JSONObject childJson = fields.getJSONObject(i);
                 try {
-                    List<View> views =  map.get(childJson.getString("type")).getViewsFromJson(stepName, context, childJson, listener, editable);
+                    List<View> views =  map.get(childJson.getString("type")).getViewsFromJson(jsonApi, stepName, context, childJson, listener, editable);
                     if (views.size() > 0) {
                         viewsFromJson.addAll(views);
                     }

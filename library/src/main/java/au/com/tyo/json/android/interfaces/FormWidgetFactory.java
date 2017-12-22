@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface FormWidgetFactory {
 
-    List<View> getViewsFromJson(String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception;
+    List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception;
 
 }

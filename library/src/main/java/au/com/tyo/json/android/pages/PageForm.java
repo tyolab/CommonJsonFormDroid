@@ -203,7 +203,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
 
     protected void loadFormData(Intent intent) {
-        json = intent.getStringExtra("json");
+        json = intent.getStringExtra(Constants.EXTRA_KEY_JSON);
     }
 
     protected void processData(Intent intent) {
@@ -214,12 +214,25 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     @Override
+    public void bindData() {
+        super.bindData();
+
+        if (getController().getParcel() != null && getController().getParcel() instanceof FormItem && getForm() == null) {
+            setForm((FormItem) getController().getParcel());
+            JsonForm jsonForm = form.toJsonForm();
+            json = jsonForm.toString();
+        }
+    }
+
+    @Override
     public void bindData(Intent intent) {
         super.bindData(intent);
 
-        processData(intent);
+        if (null == json) {
+            processData(intent);
 
-        loadFormData(intent);
+            loadFormData(intent);
+        }
 
         editable = intent.getBooleanExtra(Constants.EXTRA_KEY_EDITABLE, true);
     }

@@ -202,7 +202,7 @@ public class TitledDatePickerFactory extends TitledButtonFactory {
                                     timePicker.getCurrentMinute());
 
                             Date date = cal.getTime();
-                            String str = jsonApi.formatDateTime(date);
+                            String str = jsonApi.formatDateTime(key, date);
                             String jsonDate = SimpleDateUtils.toJSONDateString(date);
                             buttonText.setText(str);
                             listener.onValueChange(key, null, str);

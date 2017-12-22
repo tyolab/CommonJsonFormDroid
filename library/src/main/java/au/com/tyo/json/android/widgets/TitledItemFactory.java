@@ -36,7 +36,7 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
     protected abstract View getUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
 
     @Override
-    protected View createView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+    protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
         ViewGroup v = (ViewGroup) factory.inflate(R.layout.form_item_two_cols, parent, false);
 
         // 1st Column
@@ -44,7 +44,7 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
 
         // 2nd Column
         ViewGroup container = (ViewGroup) v.findViewById(R.id.frame2);
-        View child = getUserInputView(, factory, v, stepName, jsonObject, listener, editable);
+        View child = getUserInputView(jsonApi, factory, v, stepName, jsonObject, listener, editable);
         container.addView(child);
         return v;
     }

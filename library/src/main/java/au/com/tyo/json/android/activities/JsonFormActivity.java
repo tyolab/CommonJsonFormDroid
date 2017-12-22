@@ -5,14 +5,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import au.com.tyo.json.android.R;
-import au.com.tyo.json.android.constants.JsonFormConstants;
-import au.com.tyo.json.android.fragments.JsonFormFragment;
-import au.com.tyo.json.android.interfaces.JsonApi;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Date;
+
+import au.com.tyo.json.android.R;
+import au.com.tyo.json.android.constants.JsonFormConstants;
+import au.com.tyo.json.android.fragments.FormFragment;
+import au.com.tyo.json.android.fragments.JsonFormFragment;
+import au.com.tyo.json.android.interfaces.JsonApi;
+
+/**
+ * Please be aware, using this activity for json form is not fully implemented, particular when getting the form fragment
+ */
 
 public class JsonFormActivity extends AppCompatActivity implements JsonApi {
 
@@ -132,5 +139,30 @@ public class JsonFormActivity extends AppCompatActivity implements JsonApi {
     @Override
     public boolean isEditable() {
         return true;
+    }
+
+    @Override
+    public String formatDateTime(String key, Date date) {
+        return null;
+    }
+
+    @Override
+    public FormFragment getJsonFormFragment() {
+        return null;
+    }
+
+    @Override
+    public String getPredefinedValue(String stepName, String key) {
+        return null;
+    }
+
+    @Override
+    public String getPredefinedValueMax(String stepName, String key) {
+        return null;
+    }
+
+    @Override
+    public String getPredefinedValueMin(String stepName, String key) {
+        return null;
     }
 }

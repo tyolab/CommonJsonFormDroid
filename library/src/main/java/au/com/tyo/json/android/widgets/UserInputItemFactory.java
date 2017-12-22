@@ -31,6 +31,7 @@ import au.com.tyo.json.android.edittext.MinLengthValidator;
 import au.com.tyo.json.android.edittext.RequiredValidator;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
+import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
 /**
@@ -40,7 +41,7 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 public abstract class UserInputItemFactory extends CommonItemFactory implements FormWidgetFactory {
 
     @Override
-    public List<View> getViewsFromJson(String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception {
+    public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception {
 
         List<View> views = new ArrayList<>(1);
         LayoutInflater factory = LayoutInflater.from(context);
@@ -49,7 +50,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
         JsonMetadata metadata = new JsonMetadata(jsonObject);
         setViewTags(v, metadata);
 
-        View child = createView(factory, v, stepName, jsonObject, listener, editable);
+        View child = createView(jsonApi, factory, v, stepName, jsonObject, listener, editable);
         v.addView(child);
 
         views.add(v);
@@ -68,7 +69,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
         return (ViewGroup) factory.inflate(R.layout.form_row, null);
     }
 
-    protected abstract View createView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
+    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
 
     protected View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey) throws JSONException {
         View v = factory.inflate(R.layout.form_title, null);

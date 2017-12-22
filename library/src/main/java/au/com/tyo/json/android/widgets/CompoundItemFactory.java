@@ -4,11 +4,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import au.com.tyo.json.android.R;
-import au.com.tyo.json.android.interfaces.CommonListener;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import au.com.tyo.json.android.R;
+import au.com.tyo.json.android.interfaces.CommonListener;
+import au.com.tyo.json.android.interfaces.JsonApi;
 
 
 /**
@@ -18,11 +19,11 @@ import org.json.JSONObject;
 public abstract class CompoundItemFactory extends UserInputItemFactory {
 
     @Override
-    protected View createView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+    protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
         ViewGroup v = (ViewGroup) factory.inflate(R.layout.item_compound, null);
         createCompoundView(factory, v, stepName, jsonObject, listener, editable);
         return v;
     }
 
-    protected abstract void createCompoundView(LayoutInflater factory, ViewGroup v, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
+    protected abstract void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
 }

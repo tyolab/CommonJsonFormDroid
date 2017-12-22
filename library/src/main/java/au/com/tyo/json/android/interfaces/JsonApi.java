@@ -24,7 +24,7 @@ public interface JsonApi {
 
     boolean isEditable();
 
-    String formatDateTime(Date date);
+    String formatDateTime(String key, Date date);
 
     FormFragment getJsonFormFragment();
 
