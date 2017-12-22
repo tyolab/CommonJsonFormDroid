@@ -6,5 +6,7 @@
     android:background="@color/white"
     android:gravity="center_vertical"
     android:layout_gravity="center_vertical"
+    android:paddingLeft="@dimen/form_row_padding_left"
+    android:paddingRight="@dimen/form_row_padding_right"
     >
 </au.com.tyo.json.android.views.FormRow>

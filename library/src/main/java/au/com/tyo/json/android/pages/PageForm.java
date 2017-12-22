@@ -67,6 +67,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
      */
     public PageForm(T controller, Activity activity) {
         super(controller, activity);
+
+        setFormContainerId(R.id.content_view);
         this.form = null;
     }
 
@@ -253,8 +255,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
             // make sure we use the same data pointer when we load the data or save the data
             jsonFormFragment.setForm(getForm());
-            // not to do it here
-            // setResult(getForm());
+            jsonFormFragment.setJsonApi(this);
 
             replaceFragment(formContainerId, jsonFormFragment, FormFragment.FRAGMENT_JSON_FORM_TAG);
         }

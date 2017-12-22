@@ -37,7 +37,7 @@ public class ImageBoxFactory extends CompoundItemFactory {
     protected void createCompoundView(LayoutInflater factory, ViewGroup v, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
         String imageUrl = null;
 
-        CardBox cardBox = (CardBox) factory.inflate(R.layout.card_box, null);
+        CardBox cardBox = (CardBox) factory.inflate(R.layout.item_card_box, null);
 
         if (jsonObject.has("images")) {
             JSONArray array = jsonObject.getJSONArray("images");

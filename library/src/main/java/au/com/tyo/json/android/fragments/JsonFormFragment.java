@@ -107,7 +107,9 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
 
     @Override
     public void setActionBarTitle(String title) {
-        getSupportActionBar().setTitle(title);
+        ActionBar actionBar = getSupportActionBar();
+        if (null != actionBar)
+            actionBar.setTitle(title);
     }
 
     @Override
@@ -221,7 +223,9 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
 
     @Override
     public ActionBar getSupportActionBar() {
-        return ((JsonFormActivity) getActivity()).getSupportActionBar();
+        if (getActivity() instanceof JsonFormActivity)
+            return ((JsonFormActivity) getActivity()).getSupportActionBar();
+        return null;
     }
 
     @Override

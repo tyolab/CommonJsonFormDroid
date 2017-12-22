@@ -462,4 +462,12 @@ public class FormFragment extends JsonFormFragment {
     public void onDateWidgetClick(View v) {
         requestFocusForDummyView();
     }
+
+    public static FormFragment getFormFragment(String stepName) {
+        FormFragment jsonFormFragment = new FormFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("stepName", stepName);
+        jsonFormFragment.setArguments(bundle);
+        return jsonFormFragment;
+    }
 }
