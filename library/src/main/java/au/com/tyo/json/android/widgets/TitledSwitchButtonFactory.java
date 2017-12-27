@@ -38,7 +38,7 @@ public class TitledSwitchButtonFactory extends TitledItemFactory {
     public static final String KEY = TitledSwitchButtonFactory.class.getSimpleName();
 
     @Override
-    protected View getUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+    protected View createUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity) throws JSONException {
         String value = jsonObject.getString("value");
         final String key = jsonObject.getString("key");
         boolean checked = Boolean.parseBoolean(value);

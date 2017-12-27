@@ -75,7 +75,7 @@ public class TitledButtonFactory extends TitledItemFactory {
     }
 
     @Override
-    protected View getUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity) throws JSONException {
         final String key = jsonObject.getString("key");
 
         String text = null;

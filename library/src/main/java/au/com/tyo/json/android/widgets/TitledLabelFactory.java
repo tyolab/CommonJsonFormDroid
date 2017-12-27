@@ -37,11 +37,11 @@ public class TitledLabelFactory extends TitledItemFactory {
     private static final String TAG = TitledLabelFactory.class.getSimpleName();
 
     @Override
-    protected View getUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity) throws JSONException {
 
         View v = factory.inflate(R.layout.item_label, null);
 
-        bindUserInput(v, jsonObject);
+        bindUserInput(v, jsonObject, gravity);
 
         return v;
     }

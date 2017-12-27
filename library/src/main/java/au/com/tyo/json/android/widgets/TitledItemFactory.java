@@ -16,6 +16,7 @@
 
 package au.com.tyo.json.android.widgets;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,19 +34,30 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 
 public abstract class TitledItemFactory extends UserInputItemFactory {
 
-    protected abstract View getUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
+    protected abstract View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity) throws JSONException;
 
     @Override
     protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
-        ViewGroup v = (ViewGroup) factory.inflate(R.layout.form_item_two_cols, parent, false);
+        ViewGroup v;
 
-        // 1st Column
+        boolean vertical = false;
+        if (this instanceof CompoundItemFactory ||
+            jsonObject.has("orientation") && jsonObject.getString("orientation").equals("vertical")) {
+            v = (ViewGroup) factory.inflate(R.layout.form_item_two_rows, parent, false);
+            vertical = true;
+        }
+        else
+            v = (ViewGroup) factory.inflate(R.layout.form_item_two_cols, parent, false);
+
+        // 1st Column / Row
         bindTitle(v, jsonObject, "title");
 
-        // 2nd Column
+        // 2nd Column / Row
+        // if it is aligned vertically, we adjust form to the "left"
         ViewGroup container = (ViewGroup) v.findViewById(R.id.frame2);
-        View child = getUserInputView(jsonApi, factory, v, stepName, jsonObject, listener, editable);
+        View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, listener, editable, vertical ? Gravity.LEFT : Gravity.RIGHT);
         container.addView(child);
+
         return v;
     }
 }

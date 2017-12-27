@@ -5,7 +5,7 @@
     </style>
 
     <style name="JsonFormStyle.FieldTitle">
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
 

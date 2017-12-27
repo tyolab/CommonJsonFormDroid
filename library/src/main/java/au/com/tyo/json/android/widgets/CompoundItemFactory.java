@@ -16,10 +16,10 @@ import au.com.tyo.json.android.interfaces.JsonApi;
  * Created by Eric Tang (eric.tang@tyo.com.au) on 21/9/17.
  */
 
-public abstract class CompoundItemFactory extends UserInputItemFactory {
+public abstract class CompoundItemFactory extends TitledItemFactory {
 
     @Override
-    protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity) throws JSONException {
         ViewGroup v = (ViewGroup) factory.inflate(R.layout.item_compound, null);
         createCompoundView(factory, v, stepName, jsonObject, listener, editable);
         return v;

@@ -12,4 +12,5 @@
     <dimen name="extra_bottom_margin">16dp</dimen>
     <dimen name="form_row_padding_left">8dp</dimen>
     <dimen name="form_row_padding_right">2dp</dimen>
+    <dimen name="form_row_image_box_height">168dp</dimen>
 </resources>

@@ -1,6 +1,7 @@
 package au.com.tyo.json.android.widgets;
 
 import android.content.Context;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -79,17 +80,26 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
     }
 
     protected void bindTitle(View parent, JSONObject jsonObject, String titleKey) throws JSONException {
-        // 1st Column
         TextView titletext = (TextView) parent.findViewById(android.R.id.text1);
-        titletext.setText(jsonObject.getString(titleKey));
+        // 1st Column
+        if (jsonObject.has(titleKey))
+            titletext.setText(jsonObject.getString(titleKey));
+        else
+            titletext.setVisibility(View.GONE);
     }
 
-    protected void bindUserInput(View parent, JSONObject jsonObject) throws JSONException {
+    protected void bindUserInput(View parent, JSONObject jsonObject, int gravity) throws JSONException {
         View view = parent.findViewById(R.id.user_input);
         String value = jsonObject.getString("value");
         if (view instanceof android.widget.TextView) {
-            TextView inputTextView = (TextView) view;
-            inputTextView.setText(value);
+            android.widget.TextView inputTextView = (android.widget.TextView) view;
+
+            if (jsonObject.has("textStyle") && jsonObject.getString("textStyle").equalsIgnoreCase("html"))
+                inputTextView.setText(Html.fromHtml(value));
+            else
+                inputTextView.setText(value);
+
+            inputTextView.setGravity(gravity);
         }
         else if (view instanceof EditText) {
             EditText inputTextView = (EditText) view;

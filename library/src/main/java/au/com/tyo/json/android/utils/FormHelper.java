@@ -25,6 +25,7 @@ import au.com.tyo.json.JsonForm;
 import au.com.tyo.json.JsonFormField;
 import au.com.tyo.json.JsonFormFieldDatePicker;
 import au.com.tyo.json.JsonFormFieldEditText;
+import au.com.tyo.json.JsonFormFieldLabel;
 import au.com.tyo.json.JsonFormFieldSwitch;
 import au.com.tyo.json.JsonFormFieldTitledLabel;
 import au.com.tyo.json.JsonFormStep;
@@ -159,9 +160,18 @@ public class FormHelper {
         else {
             if (value instanceof Boolean)
                 field = createSwitchButton(key, newTitle, Boolean.parseBoolean(String.valueOf(value)));
-            else // for anything else it is just edit text
-                field = createTitledLabelField(key, newTitle, value != null ? value.toString() : "");
+            else { // for anything else it is just edit text
+                JsonFormFieldLabel labelField = (JsonFormFieldLabel) (field = createTitledLabelField(key, newTitle, value != null ? value.toString() : ""));
+
+                if (metaMap.containsKey(JsonForm.FORM_META_KEY_TEXT_STYLE))
+                    labelField.textStyle = (String) metaMap.get(JsonForm.FORM_META_KEY_TEXT_STYLE);
+            }
         }
+
+        if (metaMap.containsKey(JsonForm.FORM_META_KEY_ORIENTATION)) {
+            field.orientation = (String) metaMap.get(JsonForm.FORM_META_KEY_ORIENTATION);
+        }
+
         return field;
     }
 }

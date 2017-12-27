@@ -43,7 +43,7 @@ public class TitledEditTextFactory extends TitledItemFactory {
     public static final int MAX_LENGTH = 0;
 
     @Override
-    protected View getUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity) throws JSONException {
         int minLength = MIN_LENGTH;
         int maxLength = MAX_LENGTH;
 
