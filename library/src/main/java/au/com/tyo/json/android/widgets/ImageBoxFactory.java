@@ -49,7 +49,7 @@ public class ImageBoxFactory extends CompoundItemFactory {
                 cardBox.addPreviewItem(imageUrl);
             }
         }
-        else if (value instanceof JSONObject) {
+        else if (value instanceof String) {
             imageUrl = value.toString();
             cardBox.addPreviewItem(imageUrl);
         }

@@ -26,10 +26,12 @@ import au.com.tyo.json.JsonFormField;
 import au.com.tyo.json.JsonFormFieldDatePicker;
 import au.com.tyo.json.JsonFormFieldEditText;
 import au.com.tyo.json.JsonFormFieldSwitch;
+import au.com.tyo.json.JsonFormFieldTitledLabel;
 import au.com.tyo.json.JsonFormStep;
 import au.com.tyo.json.android.interactors.JsonFormInteractor;
 import au.com.tyo.json.android.widgets.ImageBoxFactory;
 import au.com.tyo.json.android.widgets.TitledEditTextFactory;
+import au.com.tyo.json.android.widgets.TitledLabelFactory;
 import au.com.tyo.json.android.widgets.TitledSwitchButtonFactory;
 
 import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
@@ -41,6 +43,7 @@ import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
 public class FormHelper {
 
     private static final TitledEditTextFactory titledTextFactory = new TitledEditTextFactory();
+    private static final TitledLabelFactory titledLabelFactory = new TitledLabelFactory();
     private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
     private static final ImageBoxFactory imageBoxFactory = new ImageBoxFactory();
 
@@ -53,6 +56,7 @@ public class FormHelper {
     }
 
     public static void registerWidgetFactories() {
+        JsonFormInteractor.registerWidget(titledLabelFactory);
         JsonFormInteractor.registerWidget(titledTextFactory);
         JsonFormInteractor.registerWidget(titledSwitchButtonFactory);
         JsonFormInteractor.registerWidget(imageBoxFactory);
@@ -62,6 +66,12 @@ public class FormHelper {
         JsonFormFieldEditText editText = new JsonFormFieldEditText(key, titledTextFactory.getClass().getSimpleName(), title, "");
         editText.value = text;
         return editText;
+    }
+
+    public static JsonFormFieldTitledLabel createTitledLabelField(String key, String title, String text) {
+        JsonFormFieldTitledLabel label = new JsonFormFieldTitledLabel(key, titledLabelFactory.getClass().getSimpleName(), title, "");
+        label.value = text;
+        return label;
     }
 
     public static JsonFormFieldDatePicker createDatePicker(JsonFormStep step, String key, String title, Date date, String hint) {
@@ -133,15 +143,24 @@ public class FormHelper {
         JsonFormField field = null;
         String key = null != keyConverter ? keyConverter.toKey(title) : title;
 
+        String newTitle;
+        if (metaMap.containsKey(JsonForm.FORM_META_KEY_I18N)) {
+            /// TODO
+            Map i18n = (Map) metaMap.get(JsonForm.FORM_META_KEY_I18N);
+            newTitle = (String) i18n.get("en");
+        }
+        else
+            newTitle = title;
+
         if (metaMap.containsKey(JsonForm.FORM_META_KEY_WIDGET)) {
             field = new JsonFormField(key, (String) metaMap.get(JsonForm.FORM_META_KEY_WIDGET));
             field.value = value != null ? value.toString() : "";
         }
         else {
             if (value instanceof Boolean)
-                field = createSwitchButton(key, title, Boolean.parseBoolean(String.valueOf(value)));
+                field = createSwitchButton(key, newTitle, Boolean.parseBoolean(String.valueOf(value)));
             else // for anything else it is just edit text
-                field = createTitledEditTextField(key, title, value != null ? value.toString() : "");
+                field = createTitledLabelField(key, newTitle, value != null ? value.toString() : "");
         }
         return field;
     }

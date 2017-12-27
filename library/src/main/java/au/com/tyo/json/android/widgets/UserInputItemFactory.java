@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.validation.RegexpValidator;
 import com.rey.material.util.ViewUtil;
+import com.rey.material.widget.EditText;
 import com.rey.material.widget.TextView;
 
 import org.json.JSONArray;
@@ -81,6 +82,21 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
         // 1st Column
         TextView titletext = (TextView) parent.findViewById(android.R.id.text1);
         titletext.setText(jsonObject.getString(titleKey));
+    }
+
+    protected void bindUserInput(View parent, JSONObject jsonObject) throws JSONException {
+        View view = parent.findViewById(R.id.user_input);
+        String value = jsonObject.getString("value");
+        if (view instanceof android.widget.TextView) {
+            TextView inputTextView = (TextView) view;
+            inputTextView.setText(value);
+        }
+        else if (view instanceof EditText) {
+            EditText inputTextView = (EditText) view;
+            inputTextView.setText(value);
+        }
+        else
+            throw new IllegalStateException("Unknown user input view type");
     }
 
     protected View createEditText(LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, final CommonListener listener) throws JSONException {
