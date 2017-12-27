@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-import au.com.tyo.json.FormItem;
+import au.com.tyo.json.FormBasicItem;
 import au.com.tyo.json.JsonForm;
 import au.com.tyo.json.JsonFormField;
 import au.com.tyo.json.JsonFormFieldDatePicker;
@@ -79,11 +79,11 @@ public class FormHelper {
         return switchButton;
     }
 
-    public static JsonForm createForm(FormItem data) {
+    public static JsonForm createForm(FormBasicItem data) {
         return createForm(data, null);
     }
 
-    public static JsonForm createForm(FormItem data, TitleToKey keyConverter) {
+    public static JsonForm createForm(FormBasicItem data, TitleToKey keyConverter) {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
 

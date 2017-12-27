@@ -247,8 +247,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
             load(json);
             FormFragment jsonFormFragment = createFragmentJsonForm();
 
-            if (editable && getForm().getFormState() == FormItem.FormState.NONE) {
-                getForm().setFormState(FormItem.FormState.NEW);
+            if (editable && getForm().getFormState() == FormItem.State.NONE) {
+                getForm().setFormState(FormItem.State.NEW);
             }
 
             jsonFormFragment.setEditable(editable);
@@ -333,8 +333,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     protected static boolean isNewForm(FormItem form) {
-        return form.getFormState() == FormItem.FormState.NEW
-                || form.getFormState() == FormItem.FormState.AUTO_FILLED;
+        return form.getFormState() == FormItem.State.NEW
+                || form.getFormState() == FormItem.State.AUTO_FILLED;
     }
 
     public void setFormEditable(boolean editable) {
@@ -348,7 +348,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
                 return; // if we fail the saving, we are not gonna change the editing state
         }
         else
-            getForm().setFormState(FormItem.FormState.UPDATING);
+            getForm().setFormState(FormItem.State.UPDATING);
 
         //
         setFormEditable(editable);
@@ -396,7 +396,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     protected void save() {
         if (!isNewForm())
-            getForm().setFormState(FormItem.FormState.UPDATED);
+            getForm().setFormState(FormItem.State.UPDATED);
 
         // need an explanation here
         if (exitAfterSaveAction())
