@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
+import au.com.tyo.json.FormItem;
 import au.com.tyo.json.JsonForm;
 import au.com.tyo.json.JsonFormField;
 import au.com.tyo.json.JsonFormFieldDatePicker;
@@ -27,6 +28,7 @@ import au.com.tyo.json.JsonFormFieldEditText;
 import au.com.tyo.json.JsonFormFieldSwitch;
 import au.com.tyo.json.JsonFormStep;
 import au.com.tyo.json.android.interactors.JsonFormInteractor;
+import au.com.tyo.json.android.widgets.ImageBoxFactory;
 import au.com.tyo.json.android.widgets.TitledEditTextFactory;
 import au.com.tyo.json.android.widgets.TitledSwitchButtonFactory;
 
@@ -38,12 +40,9 @@ import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
 
 public class FormHelper {
 
-    public static String FORM_META_KEY_I18N = "i18n";
-    public static String FORM_META_KEY_DATA_TYPE = "type";
-    public static String FORM_META_KEY_VISIBLE = "visible";
-
     private static final TitledEditTextFactory titledTextFactory = new TitledEditTextFactory();
     private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
+    private static final ImageBoxFactory imageBoxFactory = new ImageBoxFactory();
 
     public interface TitleToKey {
         String toKey(String title);
@@ -56,6 +55,7 @@ public class FormHelper {
     public static void registerWidgetFactories() {
         JsonFormInteractor.registerWidget(titledTextFactory);
         JsonFormInteractor.registerWidget(titledSwitchButtonFactory);
+        JsonFormInteractor.registerWidget(imageBoxFactory);
     }
 
     public static JsonFormFieldEditText createTitledEditTextField(String key, String title, String text) {
@@ -79,17 +79,15 @@ public class FormHelper {
         return switchButton;
     }
 
-    public static JsonForm createForm(Map data) {
-        return createForm(null, data);
+    public static JsonForm createForm(FormItem data) {
+        return createForm(data, null);
     }
 
-    public static JsonForm createForm(Map metaData, Map data) {
-        return createForm(metaData, data, null);
-    }
-
-    public static JsonForm createForm(Map metaDataMap, Map data, TitleToKey keyConverter) {
+    public static JsonForm createForm(FormItem data, TitleToKey keyConverter) {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
+
+        Map metaDataMap = data.getFormMetaDataMap();
 
         if (null != metaDataMap) {
             Set<Map.Entry<String, Object>> metaDataList = metaDataMap.entrySet();
@@ -98,45 +96,53 @@ public class FormHelper {
                 String key = entry.getKey();
 
                 Map metaMap = (Map) entry.getValue();
-                if (!((Boolean) metaMap.get(FORM_META_KEY_VISIBLE)))
+                if (!((Boolean) metaMap.get(JsonForm.FORM_META_KEY_VISIBLE)))
                     continue;
 
-                Object value = data.get(key);
+                Object value = data.getValue(key);
 
                 if (null == value)
                     continue;
 
-                addField(step, key, value, keyConverter);
+                addField(step, key, value, keyConverter, metaMap);
             }
         }
         else {
-            Set<Map.Entry<String, Object>> list = data.entrySet();
+            Map map = data.getFormKeyValueMap();
+            Set<Map.Entry<String, Object>> list = map.entrySet();
 
             for (Map.Entry<String, Object> entry : list) {
                 String key = entry.getKey();
                 Object value = entry.getValue();
 
-                addField(step, key, value, keyConverter);
+                addField(step, key, value, keyConverter, null);
             }
         }
 
         return form;
     }
 
-    private static void addField(JsonFormStep step, String key, Object value, TitleToKey keyConverter) {
-        JsonFormField field = createField(key, value, keyConverter);
+    private static void addField(JsonFormStep step, String key, Object value, TitleToKey keyConverter, Map metaMap) {
+        JsonFormField field = createField(key, value, keyConverter, metaMap);
 
         if (null != field)
             step.addField(field);
     }
 
-    public static JsonFormField createField(String title, Object value, TitleToKey keyConvertor) {
+    public static JsonFormField createField(String title, Object value, TitleToKey keyConverter, Map metaMap) {
         JsonFormField field = null;
-        String key = null != keyConvertor ? keyConvertor.toKey(title) : title;
-        if (value instanceof Boolean)
-            field = createSwitchButton(key, title, Boolean.parseBoolean(String.valueOf(value)));
-        else // for anything else it is just edit text
-            field = createTitledEditTextField(key, title, value != null ? value.toString() : "");
+        String key = null != keyConverter ? keyConverter.toKey(title) : title;
+
+        if (metaMap.containsKey(JsonForm.FORM_META_KEY_WIDGET)) {
+            field = new JsonFormField(key, (String) metaMap.get(JsonForm.FORM_META_KEY_WIDGET));
+            field.value = value != null ? value.toString() : "";
+        }
+        else {
+            if (value instanceof Boolean)
+                field = createSwitchButton(key, title, Boolean.parseBoolean(String.valueOf(value)));
+            else // for anything else it is just edit text
+                field = createTitledEditTextField(key, title, value != null ? value.toString() : "");
+        }
         return field;
     }
 }

@@ -39,13 +39,19 @@ public class ImageBoxFactory extends CompoundItemFactory {
 
         CardBox cardBox = (CardBox) factory.inflate(R.layout.item_card_box, null);
 
-        if (jsonObject.has("images")) {
-            JSONArray array = jsonObject.getJSONArray("images");
+        Object value = jsonObject.get("value");
+
+        if (value instanceof JSONArray) {
+            JSONArray array = (JSONArray) value;
 
             for (int i = 0; i < array.length(); ++i) {
                 imageUrl = array.getString(i);
                 cardBox.addPreviewItem(imageUrl);
             }
+        }
+        else if (value instanceof JSONObject) {
+            imageUrl = value.toString();
+            cardBox.addPreviewItem(imageUrl);
         }
 
         v.addView(cardBox);
