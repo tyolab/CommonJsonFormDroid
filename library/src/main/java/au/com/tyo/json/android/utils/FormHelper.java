@@ -38,6 +38,10 @@ import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
 
 public class FormHelper {
 
+    public static String FORM_META_KEY_I18N = "i18n";
+    public static String FORM_META_KEY_DATA_TYPE = "type";
+    public static String FORM_META_KEY_VISIBLE = "visible";
+
     private static final TitledEditTextFactory titledTextFactory = new TitledEditTextFactory();
     private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
 
@@ -76,26 +80,54 @@ public class FormHelper {
     }
 
     public static JsonForm createForm(Map data) {
-        return createForm(data, null);
+        return createForm(null, data);
     }
 
-    public static JsonForm createForm(Map data, TitleToKey keyConverter) {
+    public static JsonForm createForm(Map metaData, Map data) {
+        return createForm(metaData, data, null);
+    }
+
+    public static JsonForm createForm(Map metaDataMap, Map data, TitleToKey keyConverter) {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
 
-        Set<Map.Entry<String, Object>> list = data.entrySet();
+        if (null != metaDataMap) {
+            Set<Map.Entry<String, Object>> metaDataList = metaDataMap.entrySet();
 
-        for (Map.Entry<String, Object> entry : list) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
+            for (Map.Entry<String, Object> entry : metaDataList) {
+                String key = entry.getKey();
 
-            JsonFormField field = createField(key, value, keyConverter);
+                Map metaMap = (Map) entry.getValue();
+                if (!((Boolean) metaMap.get(FORM_META_KEY_VISIBLE)))
+                    continue;
 
-            if (null != field)
-                step.addField(field);
+                Object value = data.get(key);
+
+                if (null == value)
+                    continue;
+
+                addField(step, key, value, keyConverter);
+            }
+        }
+        else {
+            Set<Map.Entry<String, Object>> list = data.entrySet();
+
+            for (Map.Entry<String, Object> entry : list) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                addField(step, key, value, keyConverter);
+            }
         }
 
         return form;
+    }
+
+    private static void addField(JsonFormStep step, String key, Object value, TitleToKey keyConverter) {
+        JsonFormField field = createField(key, value, keyConverter);
+
+        if (null != field)
+            step.addField(field);
     }
 
     public static JsonFormField createField(String title, Object value, TitleToKey keyConvertor) {
