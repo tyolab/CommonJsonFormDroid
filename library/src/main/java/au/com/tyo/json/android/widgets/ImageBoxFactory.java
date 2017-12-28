@@ -39,10 +39,10 @@ public class ImageBoxFactory extends CompoundItemFactory {
         String imageUrl = null;
 
         View container = factory.inflate(R.layout.item_image_box, null);
-        container.setClickable(true);
-        container.setOnClickListener(listener);
 
         CardBox cardBox = (CardBox) container.findViewById(R.id.user_input);
+        cardBox.setClickable(true);
+        cardBox.setOnClickListener(listener);
 
         Object value = jsonObject.get("value");
 
