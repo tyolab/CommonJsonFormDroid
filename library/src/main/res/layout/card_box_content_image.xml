@@ -15,12 +15,10 @@
   ~  limitations under the License.
   -->
 
-<au.com.tyo.common.ui.CardBox xmlns:android="http://schemas.android.com/apk/res/android"
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="4dp"
-    >
-
-    <include layout="@layout/card_box_content" />
-
-</au.com.tyo.common.ui.CardBox>
+    android:scaleType="fitStart"
+    android:adjustViewBounds="true"
+    android:id="@+id/box_image_view"
+    />

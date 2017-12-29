@@ -99,10 +99,13 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        mMenu = menu;
-        menu.clear();
-        inflater.inflate(R.menu.menu_toolbar, menu);
-        presenter.setUpToolBar();
+
+        if (getActivity() instanceof JsonFormActivity) {
+            mMenu = menu;
+            menu.clear();
+            inflater.inflate(R.menu.menu_toolbar, menu);
+            presenter.setUpToolBar();
+        }
     }
 
     @Override
