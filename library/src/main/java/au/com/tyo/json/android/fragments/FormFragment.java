@@ -52,7 +52,7 @@ public class FormFragment extends JsonFormFragment {
 
     private FormItem                    form;
 
-    private JsonFormExtensionPresenter formPresenter;
+    private JsonFormExtensionPresenter  formPresenter;
 
     public static class FieldMetadata {
         public int index;

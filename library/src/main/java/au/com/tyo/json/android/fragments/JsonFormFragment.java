@@ -129,6 +129,8 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
 
     @Override
     public void onClick(View v) {
+        mJsonApi.onFieldClick(v);
+
         presenter.onClick(v);
 
         hideKeyBoard();

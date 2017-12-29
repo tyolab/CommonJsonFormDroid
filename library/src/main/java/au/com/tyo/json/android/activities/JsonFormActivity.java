@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -164,5 +165,10 @@ public class JsonFormActivity extends AppCompatActivity implements JsonApi {
     @Override
     public String getPredefinedValueMin(String stepName, String key) {
         return null;
+    }
+
+    @Override
+    public void onFieldClick(View v) {
+        // no ops
     }
 }
