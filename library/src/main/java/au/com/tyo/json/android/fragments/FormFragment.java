@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import au.com.tyo.json.Object;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;

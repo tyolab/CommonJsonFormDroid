@@ -233,7 +233,19 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         super.bindData();
 
         if (getController().getParcel() != null && getForm() == null) {
-            setForm((Object) getController().getParcel());
+            if (getController().getParcel() instanceof Map) {
+                Map map = (Map) getController().getParcel();
+                if (map.containsKey(Constants.DATA)) {
+                    setForm(map.get(Constants.DATA));
+
+                    if (map.containsKey(Constants.EXTRA_KEY_EDITABLE))
+                        editable = (boolean) map.get(Constants.EXTRA_KEY_EDITABLE);
+                }
+                else
+                    setForm(map);
+            }
+            else if (getController().getParcel() instanceof FormItem)
+                setForm((FormItem) getController().getParcel());
         }
     }
 
@@ -450,4 +462,5 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     public JsonForm getJsonForm() {
         return jsonForm;
     }
+
 }
