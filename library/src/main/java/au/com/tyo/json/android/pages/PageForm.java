@@ -27,15 +27,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import au.com.tyo.app.Constants;
 import au.com.tyo.app.Controller;
 import au.com.tyo.app.ui.page.Page;
 import au.com.tyo.json.FormItem;
+import au.com.tyo.json.FormState;
 import au.com.tyo.json.JsonForm;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.fragments.FormFragment;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.utils.FormHelper;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 20/12/17.
@@ -58,7 +62,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     private                 boolean             exitAfterSaveAction = true;
     private                 boolean             errorHandled = false;
 
-    private                 FormItem            form;
+    private                 Object              form;
+    private                 JsonForm            jsonForm;
 
     /**
      *
@@ -72,11 +77,11 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         this.form = null;
     }
 
-    public FormItem getForm() {
+    public Object getForm() {
         return form;
     }
 
-    public void setForm(FormItem form) {
+    public void setForm(Object form) {
         this.form = form;
     }
 
@@ -160,7 +165,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         }
     }
 
-    protected void onFieldDataDirty(String key, String childKey, Object value) {
+    protected void onFieldDataDirty(String key, String childKey, java.lang.Object value) {
         setDirty(true);
         getJsonFormFragment().onValueChange(key, childKey, value);
     }
@@ -210,7 +215,15 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     protected void processData(Intent intent) {
         if (null != getForm()) {
-            JsonForm jsonForm = form.toJsonForm();
+            if (form != null) {
+                if (form instanceof FormItem)
+                    jsonForm = ((FormItem) form).toJsonForm();
+                else if (form instanceof Map)
+                    jsonForm = FormHelper.createForm((Map) form);
+                else
+                    throw new IllegalStateException("Form data must be derived from a Map class or implemented FormItem interface");
+            }
+
             intent.putExtra(Constants.EXTRA_KEY_JSON, jsonForm.toString());
         }
     }
@@ -219,10 +232,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     public void bindData() {
         super.bindData();
 
-        if (getController().getParcel() != null && getController().getParcel() instanceof FormItem && getForm() == null) {
-            setForm((FormItem) getController().getParcel());
-            JsonForm jsonForm = form.toJsonForm();
-            json = jsonForm.toString();
+        if (getController().getParcel() != null && getForm() == null) {
+            setForm((Object) getController().getParcel());
         }
     }
 
@@ -247,8 +258,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
             load(json);
             FormFragment jsonFormFragment = createFragmentJsonForm();
 
-            if (editable && getForm().getFormState() == FormItem.State.NONE) {
-                getForm().setFormState(FormItem.State.NEW);
+            if (editable && getJsonForm().getFormState() == FormState.State.NONE) {
+                getJsonForm().setFormState(FormState.State.NEW);
             }
 
             jsonFormFragment.setEditable(editable);
@@ -329,12 +340,12 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     protected boolean isNewForm() {
-        return isNewForm(getForm());
+        return isNewForm(getJsonForm());
     }
 
-    protected static boolean isNewForm(FormItem form) {
-        return form.getFormState() == FormItem.State.NEW
-                || form.getFormState() == FormItem.State.AUTO_FILLED;
+    protected static boolean isNewForm(JsonForm form) {
+        return form.getFormState() == FormState.State.NEW
+                || form.getFormState() == FormState.State.AUTO_FILLED;
     }
 
     public void setFormEditable(boolean editable) {
@@ -348,7 +359,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
                 return; // if we fail the saving, we are not gonna change the editing state
         }
         else
-            getForm().setFormState(FormItem.State.UPDATING);
+            getJsonForm().setFormState(FormState.State.UPDATING);
 
         //
         setFormEditable(editable);
@@ -396,7 +407,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     protected void save() {
         if (!isNewForm())
-            getForm().setFormState(FormItem.State.UPDATED);
+            jsonForm.setFormState(FormState.State.UPDATED);
 
         // need an explanation here
         if (exitAfterSaveAction())
@@ -407,7 +418,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         setDirty(false);
     }
 
-    protected abstract void saveFormData(FormItem form);
+    protected abstract void saveFormData(Object form);
 
     @Override
     public boolean isEditable() {
@@ -435,4 +446,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     public abstract void onFormClick(Context context, String key, String text);
+
+    public JsonForm getJsonForm() {
+        return jsonForm;
+    }
 }

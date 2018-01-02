@@ -16,11 +16,15 @@
 
 package au.com.tyo.json.android.utils;
 
+import android.text.TextUtils;
+
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import au.com.tyo.json.FormBasicItem;
+import au.com.tyo.json.FormObject;
 import au.com.tyo.json.JsonForm;
 import au.com.tyo.json.JsonFormField;
 import au.com.tyo.json.JsonFormFieldDatePicker;
@@ -48,8 +52,45 @@ public class FormHelper {
     private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
     private static final ImageBoxFactory imageBoxFactory = new ImageBoxFactory();
 
-    public interface TitleToKey {
+    public interface TitleKeyConverter {
         String toKey(String title);
+        String toTitle(String key);
+    }
+
+    public static class DefaultTitleKeyConverter implements TitleKeyConverter {
+
+        @Override
+        public String toKey(String title) {
+            if (TextUtils.isEmpty(title))
+                return null;
+
+            if (title.length() == 1)
+                return title.toLowerCase();
+
+            String temp = title.replaceAll(" ", "");
+            return Character.toLowerCase(temp.charAt(0)) + temp.substring(1);
+        }
+
+        @Override
+        public String toTitle(String key) {
+            StringBuffer buffer = new StringBuffer();
+
+            if (key != null && key.length() > 0) {
+                char pre = key.charAt(0);
+                pre = Character.toUpperCase(pre);
+                buffer.append(pre);
+
+                for (int i = 1; i < key.length(); ) {
+                    char cur = key.charAt(i);
+                    if (Character.isUpperCase(cur))
+                        buffer.append(" ");
+
+                    buffer.append(cur);
+                    ++i;
+                }
+            }
+            return buffer.toString();
+        }
     }
 
     static {
@@ -94,13 +135,15 @@ public class FormHelper {
         return createForm(data, null);
     }
 
-    public static JsonForm createForm(FormBasicItem data, TitleToKey keyConverter) {
-        JsonForm form = new JsonForm();
-        JsonFormStep step = form.createNewStep();
+    public static JsonForm createForm(FormBasicItem data, TitleKeyConverter keyConverter) {
+        JsonForm form;
 
         Map metaDataMap = data.getFormMetaDataMap();
 
         if (null != metaDataMap) {
+            form = new JsonForm();
+            JsonFormStep step = form.createNewStep();
+
             Set<Map.Entry<String, Object>> metaDataList = metaDataMap.entrySet();
 
             for (Map.Entry<String, Object> entry : metaDataList) {
@@ -120,27 +163,46 @@ public class FormHelper {
         }
         else {
             Map map = data.getFormKeyValueMap();
-            Set<Map.Entry<String, Object>> list = map.entrySet();
-
-            for (Map.Entry<String, Object> entry : list) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-
-                addField(step, key, value, keyConverter, null);
-            }
+            form = createForm(map, keyConverter);
         }
 
         return form;
     }
 
-    private static void addField(JsonFormStep step, String key, Object value, TitleToKey keyConverter, Map metaMap) {
+    public static JsonForm createForm(Map map) {
+        return createForm(map, null);
+    }
+
+    public static JsonForm createForm(Map map, TitleKeyConverter keyConverter) {
+        JsonForm form = new JsonForm();
+        JsonFormStep step = form.createNewStep();
+
+        Set<Map.Entry<String, Object>> list = map.entrySet();
+
+        for (Map.Entry<String, Object> entry : list) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            addField(step, key, value, keyConverter, null);
+        }
+
+        return form;
+    }
+
+    public static JsonForm createForm(FormObject data, TitleKeyConverter keyConverter) {
+        JsonForm form = new JsonForm();
+        JsonFormStep step = form.createNewStep();
+        return form;
+    }
+
+    private static void addField(JsonFormStep step, String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
         JsonFormField field = createField(key, value, keyConverter, metaMap);
 
         if (null != field)
             step.addField(field);
     }
 
-    public static JsonFormField createField(String title, Object value, TitleToKey keyConverter, Map metaMap) {
+    public static JsonFormField createField(String title, Object value, TitleKeyConverter keyConverter, Map metaMap) {
         JsonFormField field = null;
         String key = null != keyConverter ? keyConverter.toKey(title) : title;
 
@@ -149,6 +211,14 @@ public class FormHelper {
             /// TODO
             Map i18n = (Map) metaMap.get(JsonForm.FORM_META_KEY_I18N);
             newTitle = (String) i18n.get("en");
+
+            String lang = Locale.getDefault().getLanguage();
+            if (lang.length() > 1) {
+                String chars = lang.substring(0, 2);
+                String localTitle = (String) i18n.get(chars);
+                if (!TextUtils.isEmpty(localTitle))
+                    newTitle = localTitle;
+            }
         }
         else
             newTitle = title;

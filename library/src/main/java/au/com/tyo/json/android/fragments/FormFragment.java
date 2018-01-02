@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import au.com.tyo.json.FormItem;
+import au.com.tyo.json.Object;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
@@ -50,14 +50,14 @@ public class FormFragment extends JsonFormFragment {
     private int                         grayColor;
     private ColorStateList              fieldTextColors;
 
-    private FormItem                    form;
+    private Object form;
 
     private JsonFormExtensionPresenter  formPresenter;
 
     public static class FieldMetadata {
         public int index;
         public boolean required;
-        public Object value;
+        public java.lang.Object value;
         public boolean visible;
 
         public FieldMetadata(int i, boolean required) {
@@ -72,11 +72,11 @@ public class FormFragment extends JsonFormFragment {
         }
     }
 
-    public FormItem getForm() {
+    public Object getForm() {
         return form;
     }
 
-    public void setForm(FormItem form) {
+    public void setForm(Object form) {
         this.form = form;
     }
 
@@ -134,11 +134,11 @@ public class FormFragment extends JsonFormFragment {
         return false; // let the parent page to deal with ith
     }
 
-    public void updateForm(String targetKey, Object result) {
+    public void updateForm(String targetKey, java.lang.Object result) {
         String text = null;
         if (result instanceof String)
             text = (String) result;
-        else if (result instanceof Object)
+        else if (result instanceof java.lang.Object)
             text = result.toString();
 
         if (null == text)
@@ -373,7 +373,7 @@ public class FormFragment extends JsonFormFragment {
         }
     }
 
-    public void addUserInputValueToMetadata(String key, String childKey, Object value) {
+    public void addUserInputValueToMetadata(String key, String childKey, java.lang.Object value) {
         FieldMetadata metaData = getFieldMetaData(key);
 
         if (childKey == null) {
@@ -388,7 +388,7 @@ public class FormFragment extends JsonFormFragment {
             if (metaData.value instanceof Set)
                 set = (Set) metaData.value;
             else {
-                Object v = metaData.value;
+                java.lang.Object v = metaData.value;
                 set = new HashSet();
                 metaData.value = set;
                 set.add(v);
@@ -412,7 +412,7 @@ public class FormFragment extends JsonFormFragment {
     }
 
     @Override
-    public void onValueChange(String parentKey, String childKey, Object value) {
+    public void onValueChange(String parentKey, String childKey, java.lang.Object value) {
         addUserInputValueToMetadata(parentKey, childKey, value);
     }
 
