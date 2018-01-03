@@ -210,22 +210,13 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
 
     protected void loadFormData(Intent intent) {
-        json = intent.getStringExtra(Constants.EXTRA_KEY_JSON);
+        if (null == json)
+            json = intent.getStringExtra(Constants.EXTRA_KEY_JSON);
     }
 
     protected void processData(Intent intent) {
-        if (null != getForm()) {
-            if (form != null) {
-                if (form instanceof FormItem)
-                    jsonForm = ((FormItem) form).toJsonForm();
-                else if (form instanceof Map)
-                    jsonForm = FormHelper.createForm((Map) form);
-                else
-                    throw new IllegalStateException("Form data must be derived from a Map class or implemented FormItem interface");
-            }
-
+        if (null != jsonForm)
             intent.putExtra(Constants.EXTRA_KEY_JSON, jsonForm.toString());
-        }
     }
 
     @Override
@@ -254,6 +245,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         super.bindData(intent);
 
         if (null == json) {
+            createJsonForm();
+
             processData(intent);
 
             loadFormData(intent);
@@ -262,26 +255,42 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         editable = intent.getBooleanExtra(Constants.EXTRA_KEY_EDITABLE, true);
     }
 
+    private void createJsonForm() {
+        if (null != getForm()) {
+            if (form != null) {
+                if (form instanceof FormItem)
+                    jsonForm = ((FormItem) form).toJsonForm();
+                else if (form instanceof Map)
+                    jsonForm = FormHelper.createForm((Map) form);
+                else
+                    throw new IllegalStateException("Form data must be derived from a Map class or implemented FormItem interface");
+            }
+        }
+    }
+
     @Override
     public void onDataBound() {
         super.onDataBound();
 
-        if (null != json) {
-            load(json);
-            FormFragment jsonFormFragment = createFragmentJsonForm();
-
-            if (editable && getJsonForm().getFormState() == FormState.State.NONE) {
-                getJsonForm().setFormState(FormState.State.NEW);
-            }
-
-            jsonFormFragment.setEditable(editable);
-
-            // make sure we use the same data pointer when we load the data or save the data
-            jsonFormFragment.setForm(getForm());
-            jsonFormFragment.setJsonApi(this);
-
-            replaceFragment(formContainerId, jsonFormFragment, FormFragment.FRAGMENT_JSON_FORM_TAG);
+        if (null == json) {
+            createJsonForm();
+            json = jsonForm.toString();
         }
+
+        load(json);
+        FormFragment jsonFormFragment = createFragmentJsonForm();
+
+        if (editable && getJsonForm().getFormState() == FormState.State.NONE) {
+            getJsonForm().setFormState(FormState.State.NEW);
+        }
+
+        jsonFormFragment.setEditable(editable);
+
+        // make sure we use the same data pointer when we load the data or save the data
+        jsonFormFragment.setForm(getForm());
+        jsonFormFragment.setJsonApi(this);
+
+        replaceFragment(formContainerId, jsonFormFragment, FormFragment.FRAGMENT_JSON_FORM_TAG);
     }
 
     public FormFragment getJsonFormFragment() {
