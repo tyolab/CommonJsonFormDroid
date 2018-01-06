@@ -198,9 +198,6 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
             }
         }
 
-        editText.setMaxCharacters(maxLength);
-        editText.setMinCharacters(minLength);
-
         // add filters
         InputFilter[] editFilters = editText.getFilters();
         Set<InputFilter> newFilters = new HashSet<InputFilter>();
@@ -208,6 +205,12 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
 
         for (InputFilter filter : editFilters)
             newFilters.add(filter);
+
+        if (maxLength > 0) {
+            editText.setMaxCharacters(maxLength);
+            newFilters.add(new InputFilter.LengthFilter(maxLength));
+        }
+        editText.setMinCharacters(minLength);
 
         Set<Integer> inputTypes = new HashSet<>();
 

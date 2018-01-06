@@ -462,7 +462,7 @@ public class FormFragment extends JsonFormFragment {
         requestFocusForDummyView();
     }
 
-    public static FormFragment getFormFragment(String stepName) {
+    public static JsonFormFragment getFormFragment(String stepName) {
         FormFragment jsonFormFragment = new FormFragment();
         Bundle bundle = new Bundle();
         bundle.putString("stepName", stepName);
