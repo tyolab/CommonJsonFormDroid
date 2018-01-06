@@ -27,8 +27,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
+import au.com.tyo.android.utils.SimpleDateUtils;
 import au.com.tyo.app.Constants;
 import au.com.tyo.app.Controller;
 import au.com.tyo.app.ui.page.Page;
@@ -167,7 +170,41 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     protected void onFieldDataDirty(String key, String childKey, java.lang.Object value) {
         setDirty(true);
+
+        // update the value in metadata for form validation
         getJsonFormFragment().onValueChange(key, childKey, value);
+
+        // update the field value in the form object
+        setFieldValue(key, childKey, value);
+    }
+
+    protected void setFieldValue(String key, String childKey, Object value) {
+        if (form instanceof Map) {
+            Map map = (Map) form;
+
+            if (null != childKey) {
+                Map map2 = (Map) map.get(key);
+                if (null == map2) {
+                    map2 = new HashMap();
+                    map.put(key, map2);
+                }
+                map2.put(childKey, value);
+            }
+            else
+                map.put(key, value);
+        }
+        else if (form instanceof FormItem) {
+            FormItem formItem = (FormItem) form;
+            formItem.setValue(key, childKey, value);
+        }
+    }
+
+    protected Object getFormFieldValueFromMetaData(String key) {
+        return getFormFieldValueFromMetaData(key, null);
+    }
+
+    protected Object getFormFieldValueFromMetaData(String key, String childKey) {
+        return getJsonFormFragment().getValue(key, childKey);
     }
 
     @Override
@@ -479,4 +516,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         return jsonForm;
     }
 
+    @Override
+    public String formatDateTime(String key, Date date) {
+        return SimpleDateUtils.toSlashDelimAussieDate(date);
+    }
 }
