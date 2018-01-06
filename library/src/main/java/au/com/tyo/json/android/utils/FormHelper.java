@@ -32,6 +32,7 @@ import au.com.tyo.json.JsonFormFieldEditText;
 import au.com.tyo.json.JsonFormFieldLabel;
 import au.com.tyo.json.JsonFormFieldSwitch;
 import au.com.tyo.json.JsonFormFieldTitledLabel;
+import au.com.tyo.json.JsonFormFieldWithTitleAndHint;
 import au.com.tyo.json.JsonFormStep;
 import au.com.tyo.json.android.interactors.JsonFormInteractor;
 import au.com.tyo.json.android.widgets.ImageBoxFactory;
@@ -155,8 +156,11 @@ public class FormHelper {
 
                 Object value = data.getValue(key);
 
-                if (null == value)
-                    continue;
+                /**
+                 * Not necessary to check null value
+                 */
+//                if (null == value)
+//                    continue;
 
                 addField(step, key, value, keyConverter, metaMap);
             }
@@ -224,7 +228,10 @@ public class FormHelper {
             newTitle = title;
 
         if (metaMap.containsKey(JsonForm.FORM_META_KEY_WIDGET)) {
-            field = new JsonFormField(key, (String) metaMap.get(JsonForm.FORM_META_KEY_WIDGET));
+            field = new JsonFormFieldWithTitleAndHint(key,
+                    (String) metaMap.get(JsonForm.FORM_META_KEY_WIDGET),
+                    newTitle,
+                    metaMap.containsKey(JsonForm.FORM_META_KEY_HINT) ? (String) metaMap.get(JsonForm.FORM_META_KEY_HINT) : "");
             field.value = value != null ? value.toString() : "";
         }
         else {

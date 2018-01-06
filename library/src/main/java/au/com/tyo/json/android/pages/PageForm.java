@@ -340,8 +340,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     private void createMenuItemEditSave(MenuInflater menuInflater, Menu menu) {
-        // TODO
-        // implement this function
+        menuInflater.inflate(R.menu.one_only, menu);
     }
 
     @Override
@@ -354,10 +353,18 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     protected void setEditOrSave() {
-        // if (editable)
-            // setMenuItemSave();
-        // else
-            // setMenuItemNumberTwo();
+         if (editable)
+             setMenuItemSave();
+         else
+             setMenuItemEdit();
+    }
+
+    private void setMenuItemSave() {
+         getActionBarMenu().setMenuTitle(R.id.menuItemOne,"Save");
+    }
+
+    private void setMenuItemEdit() {
+        getActionBarMenu().setMenuTitle(R.id.menuItemOne, "Edit");
     }
 
     protected boolean isNewForm() {
