@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -519,5 +520,14 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     @Override
     public String formatDateTime(String key, Date date) {
         return SimpleDateUtils.toSlashDelimAussieDate(date);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.menuItemOne) {
+            saveAndFinish();
+            return true;
+        }
+        return false;
     }
 }
