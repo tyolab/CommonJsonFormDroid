@@ -377,9 +377,9 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     @Override
-    public boolean onCreateOptionsMenu(MenuInflater menuInflater, Menu menu) {
-        createMenuItemEditSave(menuInflater, menu);
-        return super.onCreateOptionsMenu(menuInflater, menu);
+    protected void createMenu(MenuInflater menuInflater, Menu menu) {
+       super.createMenu(menuInflater, menu);
+       createMenuItemEditSave(menuInflater, menu);
     }
 
     private void createMenuItemEditSave(MenuInflater menuInflater, Menu menu) {
