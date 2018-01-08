@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,7 +64,11 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     private                 boolean             dirty;
 
-    private                 boolean             exitAfterSaveAction = true;
+    /**
+     * By default we save data in the background thread, so we can't exit activity
+     * until data is saved
+     */
+    private                 boolean             exitAfterSaveAction = false;
     private                 boolean             errorHandled = false;
 
     private                 Object              form;
@@ -196,7 +201,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         }
         else if (form instanceof FormItem) {
             FormItem formItem = (FormItem) form;
-            formItem.setValue(key, childKey, value);
+            formItem.put(key, value);
         }
     }
 
@@ -471,15 +476,48 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     protected abstract void onFormCheckFailed();
 
+    protected void saveInBackgroundThread() {
+        startBackgroundTask();
+    }
+
+    @Override
+    public void run() {
+        saveInternal();
+    }
+
+    @Override
+    protected void onPageBackgroundTaskFinished() {
+        super.onPageBackgroundTaskFinished();
+
+        showDataSavedMessage();
+
+        finish();
+    }
+
+    protected void showDataSavedMessage() {
+        Toast.makeText(getActivity(), R.string.data_saved, Toast.LENGTH_SHORT);
+    }
+
     protected void save() {
+        save(!exitAfterSaveAction());
+    }
+
+    protected void save(boolean inBackgroudThread) {
+        if (inBackgroudThread)
+            saveInBackgroundThread();
+        else
+            saveInternal();
+    }
+
+    private void saveInternal() {
         if (!isNewForm())
             jsonForm.setFormState(FormState.State.UPDATED);
+
+        saveFormData(getForm());
 
         // need an explanation here
         if (exitAfterSaveAction())
             setResult(getForm());
-
-        saveFormData(getForm());
 
         setDirty(false);
     }
