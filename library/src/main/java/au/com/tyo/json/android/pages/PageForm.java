@@ -402,11 +402,11 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
              setMenuItemEdit();
     }
 
-    private void setMenuItemSave() {
+    protected void setMenuItemSave() {
          getActionBarMenu().setMenuTitle(R.id.menuItemOne,"Save");
     }
 
-    private void setMenuItemEdit() {
+    protected void setMenuItemEdit() {
         getActionBarMenu().setMenuTitle(R.id.menuItemOne, "Edit");
     }
 
