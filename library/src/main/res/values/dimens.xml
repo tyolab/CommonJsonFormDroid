@@ -13,4 +13,6 @@
     <dimen name="form_row_padding_left">8dp</dimen>
     <dimen name="form_row_padding_right">2dp</dimen>
     <dimen name="form_row_image_box_height">168dp</dimen>
+    <dimen name="form_row_min_height">48dp</dimen>
+    <dimen name="edit_text_min_length">12dp</dimen>
 </resources>

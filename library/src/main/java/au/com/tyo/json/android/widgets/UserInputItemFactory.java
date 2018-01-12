@@ -113,7 +113,9 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
         View v = factory.inflate(
                 resId, parent, false);
         MaterialEditText editText = (MaterialEditText) v.findViewById(R.id.user_input);
-        editText.setHint(jsonObject.getString("hint"));
+
+        if (jsonObject.has("hint"))
+            editText.setHint(jsonObject.getString("hint"));
         //editText.setFloatingLabelText(jsonObject.getString("hint"));
 
         // no no, we don't need it, the id should be "id/user_input"

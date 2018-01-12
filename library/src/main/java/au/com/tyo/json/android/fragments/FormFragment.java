@@ -410,6 +410,11 @@ public class FormFragment extends JsonFormFragment {
         }
     }
 
+    public Object getValue(String key, String childKey) {
+        FieldMetadata metaData = getFieldMetaData(key);
+        return metaData.value;
+    }
+
     @Override
     public void onValueChange(String parentKey, String childKey, java.lang.Object value) {
         addUserInputValueToMetadata(parentKey, childKey, value);

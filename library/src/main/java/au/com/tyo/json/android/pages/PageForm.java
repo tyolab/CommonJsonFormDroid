@@ -22,13 +22,18 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
+import au.com.tyo.android.utils.SimpleDateUtils;
 import au.com.tyo.app.Constants;
 import au.com.tyo.app.Controller;
 import au.com.tyo.app.ui.page.Page;
@@ -59,7 +64,11 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     private                 boolean             dirty;
 
-    private                 boolean             exitAfterSaveAction = true;
+    /**
+     * By default we save data in the background thread, so we can't exit activity
+     * until data is saved
+     */
+    private                 boolean             exitAfterSaveAction = false;
     private                 boolean             errorHandled = false;
 
     private                 Object              form;
@@ -167,7 +176,41 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     protected void onFieldDataDirty(String key, String childKey, java.lang.Object value) {
         setDirty(true);
+
+        // update the value in metadata for form validation
         getJsonFormFragment().onValueChange(key, childKey, value);
+
+        // update the field value in the form object
+        setFieldValue(key, childKey, value);
+    }
+
+    protected void setFieldValue(String key, String childKey, Object value) {
+        if (form instanceof Map) {
+            Map map = (Map) form;
+
+            if (null != childKey) {
+                Map map2 = (Map) map.get(key);
+                if (null == map2) {
+                    map2 = new HashMap();
+                    map.put(key, map2);
+                }
+                map2.put(childKey, value);
+            }
+            else
+                map.put(key, value);
+        }
+        else if (form instanceof FormItem) {
+            FormItem formItem = (FormItem) form;
+            formItem.put(key, value);
+        }
+    }
+
+    protected Object getFormFieldValueFromMetaData(String key) {
+        return getFormFieldValueFromMetaData(key, null);
+    }
+
+    protected Object getFormFieldValueFromMetaData(String key, String childKey) {
+        return getJsonFormFragment().getValue(key, childKey);
     }
 
     @Override
@@ -334,14 +377,13 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     @Override
-    public boolean onCreateOptionsMenu(MenuInflater menuInflater, Menu menu) {
-        createMenuItemEditSave(menuInflater, menu);
-        return super.onCreateOptionsMenu(menuInflater, menu);
+    protected void createMenu(MenuInflater menuInflater, Menu menu) {
+       super.createMenu(menuInflater, menu);
+       createMenuItemEditSave(menuInflater, menu);
     }
 
     private void createMenuItemEditSave(MenuInflater menuInflater, Menu menu) {
-        // TODO
-        // implement this function
+        menuInflater.inflate(R.menu.one_only, menu);
     }
 
     @Override
@@ -354,10 +396,18 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     protected void setEditOrSave() {
-        // if (editable)
-            // setMenuItemSave();
-        // else
-            // setMenuItemNumberTwo();
+         if (editable)
+             setMenuItemSave();
+         else
+             setMenuItemEdit();
+    }
+
+    protected void setMenuItemSave() {
+         getActionBarMenu().setMenuTitle(R.id.menuItemOne,"Save");
+    }
+
+    protected void setMenuItemEdit() {
+        getActionBarMenu().setMenuTitle(R.id.menuItemOne, "Edit");
     }
 
     protected boolean isNewForm() {
@@ -426,15 +476,48 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     protected abstract void onFormCheckFailed();
 
+    protected void saveInBackgroundThread() {
+        startBackgroundTask();
+    }
+
+    @Override
+    public void run() {
+        saveInternal();
+    }
+
+    @Override
+    protected void onPageBackgroundTaskFinished() {
+        super.onPageBackgroundTaskFinished();
+
+        showDataSavedMessage();
+
+        finish();
+    }
+
+    protected void showDataSavedMessage() {
+        Toast.makeText(getActivity(), R.string.data_saved, Toast.LENGTH_SHORT);
+    }
+
     protected void save() {
+        save(!exitAfterSaveAction());
+    }
+
+    protected void save(boolean inBackgroudThread) {
+        if (inBackgroudThread)
+            saveInBackgroundThread();
+        else
+            saveInternal();
+    }
+
+    private void saveInternal() {
         if (!isNewForm())
             jsonForm.setFormState(FormState.State.UPDATED);
+
+        saveFormData(getForm());
 
         // need an explanation here
         if (exitAfterSaveAction())
             setResult(getForm());
-
-        saveFormData(getForm());
 
         setDirty(false);
     }
@@ -472,4 +555,17 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         return jsonForm;
     }
 
+    @Override
+    public String formatDateTime(String key, Date date) {
+        return SimpleDateUtils.toSlashDelimAussieDate(date);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.menuItemOne) {
+            saveAndFinish();
+            return true;
+        }
+        return false;
+    }
 }
