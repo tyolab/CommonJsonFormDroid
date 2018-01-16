@@ -37,4 +37,6 @@ public interface JsonApi {
     String getPredefinedValueMin(String stepName, String key);
 
     void onFieldClick(View v);
+
+    void onFieldValueClear(String key);
 }

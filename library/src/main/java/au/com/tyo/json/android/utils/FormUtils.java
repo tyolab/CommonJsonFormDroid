@@ -49,7 +49,7 @@ public class FormUtils {
     public static void setKeyTypeTags(View v, JSONObject jsonObject) throws JSONException {
         v.setTag(R.id.key, jsonObject.getString("key"));
         v.setTag(R.id.type, jsonObject.getString("type"));
-        v.setTag(R.id.required, jsonObject.getBoolean("required"));
+        v.setTag(R.id.required, jsonObject.getInt("required"));
     }
 
     public static void formatView(View v, String key, String type) {

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<au.com.tyo.json.android.views.OptionalButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
+    android:layout_gravity="center_vertical|right"
+    android:layout_centerVertical="true"
+    android:id="@+id/btn_clearable"
+    >
+
+    <include layout="@layout/button_clear"
+        android:id="@+id/btn_clear"
+        android:layout_width="@dimen/button_height"
+        android:layout_height="@dimen/button_width"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"
+        android:layout_marginLeft="3dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_go"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+        android:clickable="false"
+        android:background="@android:color/transparent"
+        android:focusable="false"
+        android:contentDescription=""
+        android:id="@+id/btn_go"
+        android:layout_marginRight="@dimen/form_button_margin_right"
+        android:layout_marginEnd="@dimen/form_button_margin_right"
+        />
+
+</au.com.tyo.json.android.views.OptionalButton>

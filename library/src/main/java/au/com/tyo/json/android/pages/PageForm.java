@@ -568,4 +568,23 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         }
         return false;
     }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        //
+        if (data != null) {
+            String key = getCurrentKey();
+            Object result = getActivityResult(data);
+            if (null != result) {
+                boolean ret = onValueReceived(key, result);
+                if (ret)
+                    return true;
+            }
+        }
+        return super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    protected boolean onValueReceived(String key, Object result) {
+        return false;
+    }
 }

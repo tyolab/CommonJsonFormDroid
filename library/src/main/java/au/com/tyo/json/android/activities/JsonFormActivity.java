@@ -171,4 +171,9 @@ public class JsonFormActivity extends AppCompatActivity implements JsonApi {
     public void onFieldClick(View v) {
         // no ops
     }
+
+    @Override
+    public void onFieldValueClear(String key) {
+        // no ops
+    }
 }

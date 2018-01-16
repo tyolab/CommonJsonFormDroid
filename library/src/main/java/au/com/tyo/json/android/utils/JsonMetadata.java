@@ -13,11 +13,11 @@ public class JsonMetadata {
     public String   type;
     public String   subtype;
     public int      intType;
-    public boolean  required;
+    public int      required;
 
     public JsonMetadata(JSONObject jsonObject) throws JSONException {
         key = jsonObject.getString("key");
         type = jsonObject.getString("type");
-        required = jsonObject.getBoolean("required");
+        required = jsonObject.getInt("required");
     }
 }

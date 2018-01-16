@@ -30,6 +30,9 @@ import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
 import au.com.tyo.utils.StringUtils;
 
+import static au.com.tyo.json.JsonFormField.VALUE_OPTIONAL;
+import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
+
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 19/7/17.
  */
@@ -55,11 +58,11 @@ public class FormFragment extends JsonFormFragment {
 
     public static class FieldMetadata {
         public int index;
-        public boolean required;
+        public int required; // -1 nullable, 0 optional, 1 required
         public java.lang.Object value;
         public boolean visible;
 
-        public FieldMetadata(int i, boolean required) {
+        public FieldMetadata(int i, int required) {
             this();
             this.index = i;
             this.required = required;
@@ -135,26 +138,50 @@ public class FormFragment extends JsonFormFragment {
 
     public void updateForm(String targetKey, java.lang.Object result) {
         String text = null;
-        if (result instanceof String)
-            text = (String) result;
-        else if (result instanceof java.lang.Object)
-            text = result.toString();
+        if (null != result) {
+            if (result instanceof String)
+                text = (String) result;
+            else if (result instanceof java.lang.Object)
+                text = result.toString();
+        }
 
-        if (null == text)
-            return;
+        // it can be null
+        // if (null == text)
+        //    return;
 
-        updateFormFieldText(targetKey, text);
+        updateFormField(targetKey, text);
     }
 
-    protected void updateFormFieldText(String targetKey, String text) {
+    protected void updateFormField(String targetKey, String text) {
         onValueChange(targetKey, null, text);
 
         View view = getViewByKey(targetKey);
+        int required = (int) view.getTag(R.id.required);
+
+        View userInputView = view.findViewById(R.id.user_input);
+
+        // show the optional button if it is
+        if (required == VALUE_OPTIONAL) {
+            ButtonContainer optionalButton = null;
+            if (userInputView instanceof ButtonContainer)
+                optionalButton = (ButtonContainer) userInputView;;
+
+            if (null != optionalButton) {
+                if (TextUtils.isEmpty(text)) {
+                    optionalButton.getClearableButton().hideClearButton();
+                }
+                else {
+                    optionalButton.getClearableButton().showClearButton();
+                }
+            }
+        }
+
+        // update the text
         if (null != view) {
             View v = view.findViewById(R.id.button_text);
 
             if (null == v)
-                v = view.findViewById(R.id.user_input);
+                v = userInputView;
 
             if (v instanceof TextView) {
                 TextView button = (TextView) v;
@@ -173,7 +200,7 @@ public class FormFragment extends JsonFormFragment {
             String key = (String) view.getTag(R.id.key);
 
             FieldMetadata metadata = getFieldMetaData(key);
-            boolean required = (boolean) view.getTag(R.id.required);
+            int required = (int) view.getTag(R.id.required);
             metadata.required = required;
             metadata.index = i;
 
@@ -276,7 +303,7 @@ public class FormFragment extends JsonFormFragment {
             String key = entry.getKey();
             FieldMetadata md = entry.getValue();
 
-            if (!md.required || !md.visible)
+            if (VALUE_REQUIRED != md.required || !md.visible)
                 continue;
 
             if (md.value instanceof String ) {
@@ -372,7 +399,7 @@ public class FormFragment extends JsonFormFragment {
         }
     }
 
-    public void addUserInputValueToMetadata(String key, String childKey, java.lang.Object value) {
+    public FieldMetadata addUserInputValueToMetadata(String key, String childKey, java.lang.Object value) {
         FieldMetadata metaData = getFieldMetaData(key);
 
         if (childKey == null) {
@@ -408,6 +435,8 @@ public class FormFragment extends JsonFormFragment {
             else
                 set.remove(childKey);
         }
+
+        return metaData;
     }
 
     public Object getValue(String key, String childKey) {
@@ -417,7 +446,8 @@ public class FormFragment extends JsonFormFragment {
 
     @Override
     public void onValueChange(String parentKey, String childKey, java.lang.Object value) {
-        addUserInputValueToMetadata(parentKey, childKey, value);
+        FieldMetadata metadata = addUserInputValueToMetadata(parentKey, childKey, value);
+
     }
 
     @Override
