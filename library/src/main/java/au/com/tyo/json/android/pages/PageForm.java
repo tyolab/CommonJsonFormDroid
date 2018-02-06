@@ -300,14 +300,17 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     private void createJsonForm() {
         if (null != getForm()) {
-            if (form != null) {
-                if (form instanceof FormItem)
-                    jsonForm = ((FormItem) form).toJsonForm();
-                else if (form instanceof Map)
-                    jsonForm = FormHelper.createForm((Map) form);
-                else
-                    throw new IllegalStateException("Form data must be derived from a Map class or implemented FormItem interface");
-            }
+            if (form instanceof FormItem)
+                jsonForm = ((FormItem) form).toJsonForm();
+            else if (form instanceof Map)
+                jsonForm = FormHelper.createForm((Map) form);
+            else
+                throw new IllegalStateException("Form data must be derived from a Map class or implemented FormItem interface");
+        }
+
+        if (jsonForm == null) {
+            jsonForm = new JsonForm("");
+            jsonForm.createNewStep();
         }
     }
 
