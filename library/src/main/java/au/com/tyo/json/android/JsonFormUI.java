@@ -27,9 +27,9 @@ import au.com.tyo.app.ui.UIBase;
  * Created by Eric Tang (eric.tang@tyo.com.au) on 2/1/18.
  */
 
-public class JsonFormUI extends UIBase {
+public class JsonFormUI<ControllerType extends Controller> extends UIBase<ControllerType> {
 
-    public JsonFormUI(Controller controller) {
+    public JsonFormUI(ControllerType controller) {
         super(controller);
     }
 

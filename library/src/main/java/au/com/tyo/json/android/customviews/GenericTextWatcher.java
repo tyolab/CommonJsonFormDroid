@@ -1,6 +1,6 @@
 package au.com.tyo.json.android.customviews;
 
-import android.support.v7.widget.TintContextWrapper;
+import android.support.v7.internal.widget.TintContextWrapper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
