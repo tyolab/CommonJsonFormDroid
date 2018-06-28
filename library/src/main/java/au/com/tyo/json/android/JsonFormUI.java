@@ -27,13 +27,14 @@ import au.com.tyo.app.ui.UIBase;
  * Created by Eric Tang (eric.tang@tyo.com.au) on 2/1/18.
  */
 
-public class JsonFormUI<ControllerType extends Controller> extends UIBase<ControllerType> {
+public class JsonFormUI<ControllerType extends Controller> extends UIBase<ControllerType> implements FormUI {
 
     public JsonFormUI(ControllerType controller) {
         super(controller);
     }
 
-    public void editForm(Class activityClass, Object data) {
+    @Override
+    public void editForm(Class activityClass, Object data, boolean editable) {
         Map map;
 
         if (data instanceof Map)
@@ -44,8 +45,18 @@ public class JsonFormUI<ControllerType extends Controller> extends UIBase<Contro
             map.put(Constants.DATA, data);
         }
 
-        map.put(Constants.EXTRA_KEY_EDITABLE, true);
+        map.put(Constants.EXTRA_KEY_EDITABLE, editable);
 
         gotoPageWithData(activityClass, map);
+    }
+
+    @Override
+    public void showForm(Class activityClass, Object data) {
+        editForm(activityClass, data, false);
+    }
+
+    @Override
+    public void editForm(Class activityClass, Object data) {
+        editForm(activityClass, data, true);
     }
 }
