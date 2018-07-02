@@ -19,8 +19,7 @@ package au.com.tyo.json.android.widgets;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.rey.material.widget.Switch;
+import android.widget.Switch;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,16 +52,27 @@ public class TitledSwitchButtonFactory extends TitledItemFactory {
         }
 
         switchButton.setChecked(checked);
-        switchButton.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+        switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(Switch view, boolean checked) {
+            public void onClick(View v) {
                 try {
+                    boolean checked = ((Switch) v).isChecked();
                     jsonApi.writeValue(stepName, key, String.valueOf(checked));
                 } catch (JSONException e) {
 
                 }
             }
         });
+//        switchButton.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(Switch view, boolean checked) {
+//                try {
+//                    jsonApi.writeValue(stepName, key, String.valueOf(checked));
+//                } catch (JSONException e) {
+//
+//                }
+//            }
+//        });
 
         setViewTags(switchButton, jsonObject);
         return v;
