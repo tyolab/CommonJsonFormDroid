@@ -74,10 +74,10 @@ public class JsonFormExtensionPresenter extends JsonFormFragmentPresenter {
             String key = (String) view.getTag(R.id.key);
             if (view instanceof MaterialEditText) {
                 MaterialEditText editText = (MaterialEditText) view;
-                ValidationStatus validationStatus = EditTextFactory.validate(editText);
-                if (!validationStatus.isValid()) {
-                    return validationStatus;
-                }
+//                ValidationStatus validationStatus = EditTextFactory.validate(editText);
+//                if (!validationStatus.isValid()) {
+//                    return validationStatus;
+//                }
             }
         }
         return new ValidationStatus(true, null);

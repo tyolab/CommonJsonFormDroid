@@ -20,8 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.rengwuxian.materialedittext.MaterialEditText;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +33,8 @@ import au.com.tyo.json.android.utils.ValidationStatus;
  */
 public class EditTextFactory extends UserInputItemFactory {
 
+    public static int WIDGET_EDIT_TEXT_RESOURCE = R.layout.item_edit_text;
+
     public static final int MIN_LENGTH = 0;
     public static final int MAX_LENGTH = 140;
 
@@ -43,16 +43,16 @@ public class EditTextFactory extends UserInputItemFactory {
         int minLength = MIN_LENGTH;
         int maxLength = MAX_LENGTH;
 
-        View v = createEditText(factory, parent, R.layout.item_edit_text, stepName, jsonObject, minLength, maxLength, listener);
+        View v = createEditText(factory, parent, WIDGET_EDIT_TEXT_RESOURCE, stepName, jsonObject, minLength, maxLength, listener);
         return v;
     }
 
-    public static ValidationStatus validate(MaterialEditText editText) {
-        boolean validate = editText.validate();
-        if(!validate) {
-            return new ValidationStatus(false, editText.getError().toString());
-        }
-        return new ValidationStatus(true, null);
-    }
+//    public static ValidationStatus validate(MaterialEditText editText) {
+//        boolean validate = editText.validate();
+//        if(!validate) {
+//            return new ValidationStatus(false, editText.getError().toString());
+//        }
+//        return new ValidationStatus(true, null);
+//    }
 
 }

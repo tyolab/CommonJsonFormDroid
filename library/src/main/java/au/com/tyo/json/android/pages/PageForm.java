@@ -91,7 +91,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     public PageForm(T controller, Activity activity) {
         super(controller, activity);
 
-        setFormContainerId(R.id.content_view);
+        setFormContainerId(au.com.tyo.app.R.id.content_view);
         this.form = null;
     }
 
@@ -311,8 +311,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
                 if (map.containsKey(Constants.DATA) || map.containsKey(Constants.EXTRA_KEY_EDITABLE)) {
                     setForm(map.get(Constants.DATA));
 
-                    if (map.containsKey(Constants.EXTRA_KEY_EDITABLE))
-                        editable = (boolean) map.get(Constants.EXTRA_KEY_EDITABLE);
+                    editable = map.containsKey(Constants.EXTRA_KEY_EDITABLE) ? (boolean) map.get(Constants.EXTRA_KEY_EDITABLE) : true;
                 }
                 else
                     setForm(map);
@@ -326,15 +325,20 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     public void bindData(Intent intent) {
         super.bindData(intent);
 
-        if (null == json) {
+        /**
+         * If we pass the data via intent we stick with the parcelable object
+         */
+        if (null == json && intent.hasExtra(Constants.DATA)) {
+            setForm(intent.getParcelableExtra(Constants.DATA));
+
             createJsonForm();
 
             processData(intent);
 
             loadFormData(intent);
-        }
 
-        editable = intent.getBooleanExtra(Constants.EXTRA_KEY_EDITABLE, true);
+            editable = intent.getBooleanExtra(Constants.EXTRA_KEY_EDITABLE, true);
+        }
     }
 
     private void createJsonForm() {

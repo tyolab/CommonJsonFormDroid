@@ -187,7 +187,20 @@ public class FormHelper {
             String key = entry.getKey();
             Object value = entry.getValue();
 
-            addField(step, key, value, keyConverter, null);
+            /**
+             * Form Category
+             */
+            if (value instanceof Map) {
+                Set<Map.Entry> set = ((Map) value).entrySet();
+                for (Map.Entry entry1 : set) {
+                    String subkey = (String) entry1.getKey();
+                    Object subvalue = entry1.getValue();
+
+                    addField(step, subkey, subvalue, keyConverter, null);
+                }
+            }
+            else
+                addField(step, key, value, keyConverter, null);
         }
 
         return form;
@@ -211,7 +224,7 @@ public class FormHelper {
         String key = null != keyConverter ? keyConverter.toKey(title) : title;
 
         String newTitle;
-        if (metaMap.containsKey(JsonForm.FORM_META_KEY_I18N)) {
+        if (null != metaMap && metaMap.containsKey(JsonForm.FORM_META_KEY_I18N)) {
             /// TODO
             Map i18n = (Map) metaMap.get(JsonForm.FORM_META_KEY_I18N);
             newTitle = (String) i18n.get("en");
@@ -227,7 +240,7 @@ public class FormHelper {
         else
             newTitle = title;
 
-        if (metaMap.containsKey(JsonForm.FORM_META_KEY_WIDGET)) {
+        if (null != metaMap && metaMap.containsKey(JsonForm.FORM_META_KEY_WIDGET)) {
             field = new JsonFormFieldWithTitleAndHint(key,
                     (String) metaMap.get(JsonForm.FORM_META_KEY_WIDGET),
                     newTitle,
@@ -238,14 +251,16 @@ public class FormHelper {
             if (value instanceof Boolean)
                 field = createSwitchButton(key, newTitle, Boolean.parseBoolean(String.valueOf(value)));
             else { // for anything else it is just edit text
-                JsonFormFieldLabel labelField = (JsonFormFieldLabel) (field = createTitledLabelField(key, newTitle, value != null ? value.toString() : ""));
+                JsonFormFieldEditText labelField = createTitledEditTextField(key, newTitle, value != null ? value.toString() : "");
 
-                if (metaMap.containsKey(JsonForm.FORM_META_KEY_TEXT_STYLE))
-                    labelField.textStyle = (String) metaMap.get(JsonForm.FORM_META_KEY_TEXT_STYLE);
+                // JsonFormFieldLabel labelField = (JsonFormFieldLabel) (field = createTitledLabelField(key, newTitle, value != null ? value.toString() : ""));
+//                if (metaMap.containsKey(JsonForm.FORM_META_KEY_TEXT_STYLE))
+//                    labelField.textStyle = (String) metaMap.get(JsonForm.FORM_META_KEY_TEXT_STYLE);
+                field = labelField;
             }
         }
 
-        if (metaMap.containsKey(JsonForm.FORM_META_KEY_ORIENTATION)) {
+        if (null != metaMap && metaMap.containsKey(JsonForm.FORM_META_KEY_ORIENTATION)) {
             field.orientation = (String) metaMap.get(JsonForm.FORM_META_KEY_ORIENTATION);
         }
 

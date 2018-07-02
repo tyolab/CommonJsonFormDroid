@@ -6,7 +6,17 @@
 
     <style name="JsonFormStyle.FieldTitle">
         <item name="android:textSize">18sp</item>
+        <!--
         <item name="android:textColor">@color/black</item>
+        -->
     </style>
+
+    <style name="AppStyle.Form.Row">
+        <!--
+        <item name="android:background">@android:color/transparent</item>
+        -->
+    </style>
+
+    <style name="AppStyle.Form"></style>
 
 </resources>

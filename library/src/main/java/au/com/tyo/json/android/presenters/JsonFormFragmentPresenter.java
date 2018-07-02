@@ -105,10 +105,10 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
             String key = (String) childAt.getTag(R.id.key);
             if (childAt instanceof MaterialEditText) {
                 MaterialEditText editText = (MaterialEditText) childAt;
-                ValidationStatus validationStatus = EditTextFactory.validate(editText);
-                if (!validationStatus.isValid()) {
-                    return validationStatus;
-                }
+                // ValidationStatus validationStatus = EditTextFactory.validate(editText);
+//                if (!validationStatus.isValid()) {
+//                    return validationStatus;
+//                }
                 getView().writeValue(mStepName, key, editText.getText().toString());
             } else if (childAt instanceof ImageView) {
                 ValidationStatus validationStatus = ImagePickerFactory.validate((ImageView) childAt);

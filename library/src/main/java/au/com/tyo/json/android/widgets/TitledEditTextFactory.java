@@ -20,20 +20,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.rengwuxian.materialedittext.MaterialEditText;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
-import au.com.tyo.json.android.utils.ValidationStatus;
 
 /**
  * Created by vijay on 24-05-2015.
  */
 public class TitledEditTextFactory extends TitledItemFactory {
+
+    public static int WIDGET_EDIT_TEXT_RESOURCE = R.layout.item_titled_edit_text;
 
     public static final String KEY = TitledEditTextFactory.class.getSimpleName();
 
@@ -47,17 +46,17 @@ public class TitledEditTextFactory extends TitledItemFactory {
         int minLength = MIN_LENGTH;
         int maxLength = MAX_LENGTH;
 
-        View v = createEditText(factory, parent, R.layout.item_edit_text2, stepName, jsonObject, minLength, maxLength, listener);
+        View v = createEditText(factory, parent, WIDGET_EDIT_TEXT_RESOURCE, stepName, jsonObject, minLength, maxLength, listener);
 
         return v;
     }
 
-    public static ValidationStatus validate(MaterialEditText editText) {
-        boolean validate = editText.validate();
-        if(!validate) {
-            return new ValidationStatus(false, editText.getError().toString());
-        }
-        return new ValidationStatus(true, null);
-    }
+//    public static ValidationStatus validate(MaterialEditText editText) {
+//        boolean validate = editText.validate();
+//        if(!validate) {
+//            return new ValidationStatus(false, editText.getError().toString());
+//        }
+//        return new ValidationStatus(true, null);
+//    }
 
 }

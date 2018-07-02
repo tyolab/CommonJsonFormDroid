@@ -37,8 +37,15 @@ public class JsonFormUI<ControllerType extends Controller> extends UIBase<Contro
     public void editForm(Class activityClass, Object data, boolean editable) {
         Map map;
 
-        map = new HashMap();
-        map.put(Constants.DATA, data);
+        if (data instanceof Map &&
+                (((Map) data).containsKey(Constants.DATA)/* ||
+                ((Map) data).containsKey(Constants.EXTRA_KEY_EDITABLE)*/)) {
+            map = (Map) data;
+        }
+        else {
+            map = new HashMap();
+            map.put(Constants.DATA, data);
+        }
         map.put(Constants.EXTRA_KEY_EDITABLE, editable);
 
         gotoPageWithData(activityClass, map);
