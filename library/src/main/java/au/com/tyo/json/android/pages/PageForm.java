@@ -19,25 +19,32 @@ package au.com.tyo.json.android.pages;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import au.com.tyo.android.utils.SimpleDateUtils;
+import au.com.tyo.app.CommonAppData;
 import au.com.tyo.app.Constants;
 import au.com.tyo.app.Controller;
+import au.com.tyo.app.api.JSON;
 import au.com.tyo.app.ui.page.Page;
 import au.com.tyo.json.FormItem;
+import au.com.tyo.json.FormMetaData;
 import au.com.tyo.json.FormState;
 import au.com.tyo.json.JsonForm;
 import au.com.tyo.json.android.R;
@@ -73,6 +80,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     private                 Object              form;
     private                 JsonForm            jsonForm;
+    private                 FormMetaData        formMetaData;
+    private                 String              formMetaAssetJsonFile;
 
     /**
      *
@@ -86,12 +95,42 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         this.form = null;
     }
 
+    /**
+     * load the form meta data from asset file from
+     *
+     * @param context
+     */
+    private void loadFormMetaData(Context context) {
+        if (formMetaAssetJsonFile == null)
+            throw new IllegalStateException("Unknown form meta data file in assets folder: jflib");
+
+        String metaDataJson = CommonAppData.assetToString(context, "jflib" + File.separator + formMetaAssetJsonFile);
+        if (!TextUtils.isEmpty(metaDataJson))
+            formMetaData = JSON.getGson().fromJson(metaDataJson, FormMetaData.class);
+    }
+
     public Object getForm() {
         return form;
     }
 
     public void setForm(Object form) {
         this.form = form;
+    }
+
+    public FormMetaData getFormMetaData() {
+        return formMetaData;
+    }
+
+    public void setFormMetaData(FormMetaData formMetaData) {
+        this.formMetaData = formMetaData;
+    }
+
+    public String getFormMetaAssetJsonFile() {
+        return formMetaAssetJsonFile;
+    }
+
+    public void setFormMetaAssetJsonFile(String formMetaAssetJsonFile) {
+        this.formMetaAssetJsonFile = formMetaAssetJsonFile;
     }
 
     /**
@@ -269,7 +308,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         if (getController().getParcel() != null && getForm() == null) {
             if (getController().getParcel() instanceof Map) {
                 Map map = (Map) getController().getParcel();
-                if (map.containsKey(Constants.DATA)) {
+                if (map.containsKey(Constants.DATA) || map.containsKey(Constants.EXTRA_KEY_EDITABLE)) {
                     setForm(map.get(Constants.DATA));
 
                     if (map.containsKey(Constants.EXTRA_KEY_EDITABLE))
@@ -505,8 +544,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         save(!exitAfterSaveAction());
     }
 
-    protected void save(boolean inBackgroudThread) {
-        if (inBackgroudThread)
+    protected void save(boolean inBackgroundThread) {
+        if (inBackgroundThread)
             saveInBackgroundThread();
         else
             saveInternal();
