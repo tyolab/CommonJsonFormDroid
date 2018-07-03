@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import au.com.tyo.android.utils.ResourceUtils;
 import au.com.tyo.android.utils.SimpleDateUtils;
 import au.com.tyo.app.CommonAppData;
 import au.com.tyo.app.Constants;
@@ -57,7 +58,7 @@ import au.com.tyo.json.android.utils.FormHelper;
  * Created by Eric Tang (eric.tang@tyo.com.au) on 20/12/17.
  */
 
-public abstract class PageForm<T extends Controller> extends Page<T>  implements JsonApi {
+public abstract class PageForm<T extends Controller> extends Page<T>  implements JsonApi, FormHelper.TitleKeyConverter {
 
     private static final    String              TAG = "PageForm";
 
@@ -77,6 +78,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
      */
     private                 boolean             exitAfterSaveAction = false;
     private                 boolean             errorHandled = false;
+    private                 boolean             sortFormNeeded = false;
 
     private                 Object              form;
     private                 JsonForm            jsonForm;
@@ -93,6 +95,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
         setFormContainerId(au.com.tyo.app.R.id.content_view);
         this.form = null;
+        this.formMetaData = null;
+        this.formMetaAssetJsonFile = null;
     }
 
     /**
@@ -100,13 +104,19 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
      *
      * @param context
      */
-    private void loadFormMetaData(Context context) {
-        if (formMetaAssetJsonFile == null)
-            throw new IllegalStateException("Unknown form meta data file in assets folder: jflib");
+    public void loadFormMetaData(Context context) {
+        if (formMetaAssetJsonFile != null) {
+            //throw new IllegalStateException("Unknown form meta data file in assets folder: jflib");
 
-        String metaDataJson = CommonAppData.assetToString(context, "jflib" + File.separator + formMetaAssetJsonFile);
-        if (!TextUtils.isEmpty(metaDataJson))
-            formMetaData = JSON.getGson().fromJson(metaDataJson, FormMetaData.class);
+            try {
+                String metaDataJson = CommonAppData.assetToString(context, "jflib" + File.separator + formMetaAssetJsonFile);
+                if (!TextUtils.isEmpty(metaDataJson))
+                    formMetaData = JSON.getGson().fromJson(metaDataJson, FormMetaData.class);
+            }
+            catch (Exception ex) {
+                Log.e(TAG, "loading json form metadata error: " + formMetaAssetJsonFile, ex);
+            }
+        }
     }
 
     public Object getForm() {
@@ -115,6 +125,14 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     public void setForm(Object form) {
         this.form = form;
+    }
+
+    public boolean isSortFormNeeded() {
+        return sortFormNeeded;
+    }
+
+    public void setSortFormNeeded(boolean sortFormNeeded) {
+        this.sortFormNeeded = sortFormNeeded;
     }
 
     public FormMetaData getFormMetaData() {
@@ -342,11 +360,14 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     }
 
     private void createJsonForm() {
+
+        loadFormMetaData(getActivity());
+
         if (null != getForm()) {
             if (form instanceof FormItem)
                 jsonForm = ((FormItem) form).toJsonForm();
             else if (form instanceof Map)
-                jsonForm = FormHelper.createForm((Map) form);
+                jsonForm = FormHelper.createForm((Map) form, this, formMetaData, sortFormNeeded);
             else
                 throw new IllegalStateException("Form data must be derived from a Map class or implemented FormItem interface");
         }
@@ -632,5 +653,21 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     protected boolean onValueReceived(String key, Object result) {
         return false;
+    }
+
+    @Override
+    public String toKey(String key) {
+        return key;
+    }
+
+    /**
+     * Can be overridden in the meta json as in assets/jflib/form.xxxx.json
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public String toTitle(String key) {
+        return ResourceUtils.getStringByIdName(getActivity(), key);
     }
 }

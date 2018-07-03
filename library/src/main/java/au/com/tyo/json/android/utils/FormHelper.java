@@ -23,6 +23,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import au.com.tyo.android.utils.ResourceUtils;
+import au.com.tyo.json.DataJson;
 import au.com.tyo.json.FormBasicItem;
 import au.com.tyo.json.FormObject;
 import au.com.tyo.json.JsonForm;
@@ -132,11 +134,11 @@ public class FormHelper {
         return switchButton;
     }
 
-    public static JsonForm createForm(FormBasicItem data) {
-        return createForm(data, null);
+    public static JsonForm createForm(FormBasicItem data, boolean sortFormNeeded) {
+        return createForm(data, null, sortFormNeeded);
     }
 
-    public static JsonForm createForm(FormBasicItem data, TitleKeyConverter keyConverter) {
+    public static JsonForm createForm(FormBasicItem data, TitleKeyConverter keyConverter, boolean sortFormNeeded) {
         JsonForm form;
 
         Map metaDataMap = data.getFormMetaDataMap();
@@ -167,17 +169,21 @@ public class FormHelper {
         }
         else {
             Map map = data.getFormKeyValueMap();
-            form = createForm(map, keyConverter);
+            form = createForm(map, keyConverter, sortFormNeeded);
         }
 
         return form;
     }
 
-    public static JsonForm createForm(Map map) {
-        return createForm(map, null);
+    public static JsonForm createForm(Map map, boolean sortForm) {
+        return createForm(map, null, sortForm);
     }
 
-    public static JsonForm createForm(Map map, TitleKeyConverter keyConverter) {
+    public static JsonForm createForm(Map map, TitleKeyConverter keyConverter, boolean sortForm) {
+        return createForm(map, keyConverter, null, sortForm);
+    }
+
+    public static JsonForm createForm(Map map, TitleKeyConverter keyConverter, Map metaMap, boolean sortForm) {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
 
@@ -196,12 +202,15 @@ public class FormHelper {
                     String subkey = (String) entry1.getKey();
                     Object subvalue = entry1.getValue();
 
-                    addField(step, subkey, subvalue, keyConverter, null);
+                    addField(step, subkey, subvalue, keyConverter, metaMap);
                 }
             }
             else
-                addField(step, key, value, keyConverter, null);
+                addField(step, key, value, keyConverter, metaMap);
         }
+
+        if (sortForm)
+            form.sort();
 
         return form;
     }
@@ -219,14 +228,18 @@ public class FormHelper {
             step.addField(field);
     }
 
-    public static JsonFormField createField(String title, Object value, TitleKeyConverter keyConverter, Map metaMap) {
+    public static JsonFormField createField(String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
         JsonFormField field = null;
-        String key = null != keyConverter ? keyConverter.toKey(title) : title;
+        String fieldKey = null != keyConverter ? keyConverter.toKey(key) : key;
+        if (null == fieldKey)
+            fieldKey = key;
 
         String newTitle;
-        if (null != metaMap && metaMap.containsKey(JsonForm.FORM_META_KEY_I18N)) {
+        Map subMetaMap = (Map) metaMap.get(key);
+
+        if (null != subMetaMap && subMetaMap.containsKey(JsonForm.FORM_META_KEY_I18N)) {
             /// TODO
-            Map i18n = (Map) metaMap.get(JsonForm.FORM_META_KEY_I18N);
+            Map i18n = (Map) subMetaMap.get(JsonForm.FORM_META_KEY_I18N);
             newTitle = (String) i18n.get("en");
 
             String lang = Locale.getDefault().getLanguage();
@@ -237,21 +250,24 @@ public class FormHelper {
                     newTitle = localTitle;
             }
         }
-        else
-            newTitle = title;
+        else {
+            newTitle = null != keyConverter ? keyConverter.toTitle(key) : key;
+            if (null == newTitle)
+                newTitle = key;
+        }
 
-        if (null != metaMap && metaMap.containsKey(JsonForm.FORM_META_KEY_WIDGET)) {
-            field = new JsonFormFieldWithTitleAndHint(key,
-                    (String) metaMap.get(JsonForm.FORM_META_KEY_WIDGET),
+        if (null != subMetaMap && subMetaMap.containsKey(JsonForm.FORM_META_KEY_WIDGET)) {
+            field = new JsonFormFieldWithTitleAndHint(fieldKey,
+                    (String) subMetaMap.get(JsonForm.FORM_META_KEY_WIDGET),
                     newTitle,
-                    metaMap.containsKey(JsonForm.FORM_META_KEY_HINT) ? (String) metaMap.get(JsonForm.FORM_META_KEY_HINT) : "");
+                    subMetaMap.containsKey(JsonForm.FORM_META_KEY_HINT) ? (String) subMetaMap.get(JsonForm.FORM_META_KEY_HINT) : "");
             field.value = value != null ? value.toString() : "";
         }
         else {
             if (value instanceof Boolean)
-                field = createSwitchButton(key, newTitle, Boolean.parseBoolean(String.valueOf(value)));
+                field = createSwitchButton(fieldKey, newTitle, Boolean.parseBoolean(String.valueOf(value)));
             else { // for anything else it is just edit text
-                JsonFormFieldEditText labelField = createTitledEditTextField(key, newTitle, value != null ? value.toString() : "");
+                JsonFormFieldEditText labelField = createTitledEditTextField(fieldKey, newTitle, value != null ? value.toString() : "");
 
                 // JsonFormFieldLabel labelField = (JsonFormFieldLabel) (field = createTitledLabelField(key, newTitle, value != null ? value.toString() : ""));
 //                if (metaMap.containsKey(JsonForm.FORM_META_KEY_TEXT_STYLE))
@@ -260,8 +276,18 @@ public class FormHelper {
             }
         }
 
-        if (null != metaMap && metaMap.containsKey(JsonForm.FORM_META_KEY_ORIENTATION)) {
-            field.orientation = (String) metaMap.get(JsonForm.FORM_META_KEY_ORIENTATION);
+        if (null != subMetaMap) {
+            if (subMetaMap.containsKey(JsonForm.FORM_META_KEY_ORIENTATION))
+                field.orientation = (String) subMetaMap.get(JsonForm.FORM_META_KEY_ORIENTATION);
+
+            if (subMetaMap.containsKey(JsonForm.FORM_META_KEY_VISIBLE))
+                field.visible = String.valueOf(subMetaMap.get(JsonForm.FORM_META_KEY_VISIBLE));
+
+            if (subMetaMap.containsKey(JsonForm.FORM_META_KEY_DATA_TYPE))
+                field.type = (String) subMetaMap.get(JsonForm.FORM_META_KEY_DATA_TYPE);
+
+            if (subMetaMap.containsKey(JsonForm.FORM_META_KEY_DISPLAY_ORDER))
+                field.display_order = DataJson.getInt(subMetaMap, (JsonForm.FORM_META_KEY_DISPLAY_ORDER));
         }
 
         return field;

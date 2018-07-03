@@ -28,7 +28,7 @@ public abstract class FormBase extends FormObject implements FormItem {
 
     @Override
     public JsonForm toJsonForm() {
-        return FormHelper.createForm(this);
+        return FormHelper.createForm(this, null);
     }
 
 }
