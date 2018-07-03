@@ -241,6 +241,28 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         setFieldValue(key, childKey, value);
     }
 
+    public static void setFieldValueInternal(Map map, String key, Object value) {
+        Object oldValue = map.get(key);
+        if (null != oldValue) {
+            // Only worry these two types initially
+            if (oldValue instanceof Boolean) {
+                Boolean b;
+                if (value instanceof String)
+                    b = Boolean.parseBoolean((String) value);
+                else if (value instanceof Boolean)
+                    b = (Boolean) value;
+                else
+                    b = Boolean.parseBoolean(value.toString());
+                map.put(key, b);
+            }
+            else if (oldValue instanceof String) {
+                map.put(key, value.toString());
+            }
+            else
+                map.put(key, value);
+        }
+    }
+
     protected void setFieldValue(String key, String childKey, Object value) {
         if (form instanceof Map) {
             Map map = (Map) form;
@@ -251,14 +273,14 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
                     map2 = new HashMap();
                     map.put(key, map2);
                 }
-                map2.put(childKey, value);
+                setFieldValueInternal(map2, childKey, value);
             }
             else
-                map.put(key, value);
+                setFieldValueInternal(map, key, value);
         }
         else if (form instanceof FormItem) {
             FormItem formItem = (FormItem) form;
-            formItem.put(key, value);
+            setFieldValueInternal(formItem, key, value);
         }
     }
 

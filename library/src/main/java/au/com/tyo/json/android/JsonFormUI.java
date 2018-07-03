@@ -16,12 +16,18 @@
 
 package au.com.tyo.json.android;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import au.com.tyo.app.Constants;
 import au.com.tyo.app.Controller;
 import au.com.tyo.app.ui.UIBase;
+
+import static au.com.tyo.app.Constants.REQUEST_NONE;
+import static au.com.tyo.app.Constants.REQUEST_SOMETHING;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 2/1/18.
@@ -34,7 +40,7 @@ public class JsonFormUI<ControllerType extends Controller> extends UIBase<Contro
     }
 
     @Override
-    public void editForm(Class activityClass, Object data, boolean editable) {
+    public void editForm(Class activityClass, Object data, boolean editable, boolean needResult) {
         Map map;
 
         if (data instanceof Map &&
@@ -48,16 +54,16 @@ public class JsonFormUI<ControllerType extends Controller> extends UIBase<Contro
         }
         map.put(Constants.EXTRA_KEY_EDITABLE, editable);
 
-        gotoPageWithData(activityClass, map);
+        gotoPageWithData(activityClass, map, data instanceof Parcelable || data instanceof Serializable ? false : true, needResult ? REQUEST_SOMETHING : REQUEST_NONE, null);
     }
 
     @Override
-    public void showForm(Class activityClass, Object data) {
-        editForm(activityClass, data, false);
+    public void showForm(Class activityClass, Object data, boolean needResult) {
+        editForm(activityClass, data, false, needResult);
     }
 
     @Override
-    public void editForm(Class activityClass, Object data) {
-        editForm(activityClass, data, true);
+    public void editForm(Class activityClass, Object data, boolean needResult) {
+        editForm(activityClass, data, true, needResult);
     }
 }
