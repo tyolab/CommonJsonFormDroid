@@ -60,6 +60,47 @@ public class FormHelper {
         String toTitle(String key);
     }
 
+    public static class GeneralTitleKeyConverter implements TitleKeyConverter {
+
+        @Override
+        public String toKey(String title) {
+            String[] tokens = title.split(" -_");
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < tokens.length; ++i) {
+                if (TextUtils.isEmpty(tokens[i]))
+                    continue;
+
+                if (i > 0)
+                    sb.append('-');
+
+                sb.append(tokens[i].toLowerCase());
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public String toTitle(String key) {
+            String[] tokens = key.split("-_");
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < tokens.length; ++i) {
+                if (TextUtils.isEmpty(tokens[i]))
+                    continue;
+
+                if (i > 0)
+                    sb.append(' ');
+
+                sb.append(tokens[i].substring(0, 1));
+                sb.append(tokens[i].substring(1));
+            }
+            return sb.toString();
+        }
+    }
+
+    /**
+     * The default title/key converter
+     */
+    private static TitleKeyConverter generalTitleConverter = new GeneralTitleKeyConverter();
+
     public static class DefaultTitleKeyConverter implements TitleKeyConverter {
 
         @Override
@@ -175,14 +216,44 @@ public class FormHelper {
         return form;
     }
 
-    public static JsonForm createForm(Map map, boolean sortForm) {
-        return createForm(map, null, sortForm);
+    /**
+     *
+     * @param map
+     * @return
+     */
+    public static JsonForm createForm(Map map) {
+        return createForm(map, false);
     }
 
+    /**
+     *
+     * @param map
+     * @param sortForm
+     * @return
+     */
+    public static JsonForm createForm(Map map, boolean sortForm) {
+        return createForm(map, generalTitleConverter, sortForm);
+    }
+
+    /**
+     *
+     * @param map
+     * @param keyConverter
+     * @param sortForm
+     * @return
+     */
     public static JsonForm createForm(Map map, TitleKeyConverter keyConverter, boolean sortForm) {
         return createForm(map, keyConverter, null, sortForm);
     }
 
+    /**
+     *
+     * @param map
+     * @param keyConverter
+     * @param metaMap
+     * @param sortForm
+     * @return
+     */
     public static JsonForm createForm(Map map, TitleKeyConverter keyConverter, Map metaMap, boolean sortForm) {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
@@ -215,12 +286,26 @@ public class FormHelper {
         return form;
     }
 
+    /**
+     *
+     * @param data
+     * @param keyConverter
+     * @return
+     */
     public static JsonForm createForm(FormObject data, TitleKeyConverter keyConverter) {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
         return form;
     }
 
+    /**
+     *
+     * @param step
+     * @param key
+     * @param value
+     * @param keyConverter
+     * @param metaMap
+     */
     private static void addField(JsonFormStep step, String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
         JsonFormField field = createField(key, value, keyConverter, metaMap);
 
@@ -228,6 +313,14 @@ public class FormHelper {
             step.addField(field);
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     * @param keyConverter
+     * @param metaMap
+     * @return
+     */
     public static JsonFormField createField(String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
         JsonFormField field = null;
         String fieldKey = null != keyConverter ? keyConverter.toKey(key) : key;

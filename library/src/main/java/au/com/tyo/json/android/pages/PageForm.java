@@ -400,29 +400,34 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         }
     }
 
+    /**
+     * Create form json string, and set the form fragment to the page
+     */
     @Override
     public void onDataBound() {
         super.onDataBound();
 
-        if (null == json) {
+        if (null == json && null != form) {
             createJsonForm();
             json = jsonForm.toString();
         }
 
-        load(json);
-        FormFragment jsonFormFragment = createFragmentJsonForm();
+        if (null != json) {
+            load(json);
+            FormFragment jsonFormFragment = createFragmentJsonForm();
 
-        if (editable && getJsonForm().getFormState() == FormState.State.NONE) {
-            getJsonForm().setFormState(FormState.State.NEW);
+            if (editable && getJsonForm().getFormState() == FormState.State.NONE) {
+                getJsonForm().setFormState(FormState.State.NEW);
+            }
+
+            jsonFormFragment.setEditable(editable);
+
+            // make sure we use the same data pointer when we load the data or save the data
+            jsonFormFragment.setForm(getForm());
+            jsonFormFragment.setJsonApi(this);
+
+            replaceFragment(formContainerId, jsonFormFragment, FormFragment.FRAGMENT_JSON_FORM_TAG);
         }
-
-        jsonFormFragment.setEditable(editable);
-
-        // make sure we use the same data pointer when we load the data or save the data
-        jsonFormFragment.setForm(getForm());
-        jsonFormFragment.setJsonApi(this);
-
-        replaceFragment(formContainerId, jsonFormFragment, FormFragment.FRAGMENT_JSON_FORM_TAG);
     }
 
     public FormFragment getJsonFormFragment() {
