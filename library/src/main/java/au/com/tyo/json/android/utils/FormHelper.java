@@ -23,7 +23,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import au.com.tyo.android.utils.ResourceUtils;
 import au.com.tyo.json.DataJson;
 import au.com.tyo.json.FormBasicItem;
 import au.com.tyo.json.FormObject;
@@ -31,7 +30,6 @@ import au.com.tyo.json.JsonForm;
 import au.com.tyo.json.JsonFormField;
 import au.com.tyo.json.JsonFormFieldDatePicker;
 import au.com.tyo.json.JsonFormFieldEditText;
-import au.com.tyo.json.JsonFormFieldLabel;
 import au.com.tyo.json.JsonFormFieldSwitch;
 import au.com.tyo.json.JsonFormFieldTitledLabel;
 import au.com.tyo.json.JsonFormFieldWithTitleAndHint;
@@ -89,7 +87,7 @@ public class FormHelper {
                 if (i > 0)
                     sb.append(' ');
 
-                sb.append(tokens[i].substring(0, 1));
+                sb.append(tokens[i].substring(0, 1).toUpperCase());
                 sb.append(tokens[i].substring(1));
             }
             return sb.toString();
@@ -328,7 +326,11 @@ public class FormHelper {
             fieldKey = key;
 
         String newTitle;
-        Map subMetaMap = (Map) metaMap.get(key);
+
+        Map subMetaMap = null;
+
+        if (null != metaMap)
+            subMetaMap = (Map) metaMap.get(key);
 
         if (null != subMetaMap && subMetaMap.containsKey(JsonForm.FORM_META_KEY_I18N)) {
             /// TODO

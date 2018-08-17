@@ -26,8 +26,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.gson.reflect.TypeToken;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -125,6 +123,10 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
 
     public void setForm(Object form) {
         this.form = form;
+    }
+
+    public void setJsonForm(JsonForm jsonForm) {
+        this.jsonForm = jsonForm;
     }
 
     public boolean isSortFormNeeded() {
@@ -394,10 +396,10 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
                 throw new IllegalStateException("Form data must be derived from a Map class or implemented FormItem interface");
         }
 
-        if (jsonForm == null) {
-            jsonForm = new JsonForm("");
-            jsonForm.createNewStep();
-        }
+//        if (jsonForm == null) {
+//            jsonForm = new JsonForm("");
+//            jsonForm.createNewStep();
+//        }
     }
 
     /**
@@ -407,10 +409,11 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     public void onDataBound() {
         super.onDataBound();
 
-        if (null == json && null != form) {
+        if (null == json && null != form)
             createJsonForm();
+
+        if (null != jsonForm)
             json = jsonForm.toString();
-        }
 
         if (null != json) {
             load(json);
