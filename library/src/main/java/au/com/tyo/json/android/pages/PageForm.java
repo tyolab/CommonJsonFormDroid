@@ -83,6 +83,8 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     private                 FormMetaData        formMetaData;
     private                 String              formMetaAssetJsonFile;
 
+    private                 boolean             menuEditRequired;
+
     /**
      *
      * @param controller
@@ -95,6 +97,7 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
         this.form = null;
         this.formMetaData = null;
         this.formMetaAssetJsonFile = null;
+        this.menuEditRequired = true;
     }
 
     /**
@@ -115,6 +118,14 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
                 Log.e(TAG, "loading json form metadata error: " + formMetaAssetJsonFile, ex);
             }
         }
+    }
+
+    public boolean isMenuEditRequired() {
+        return menuEditRequired;
+    }
+
+    public void setMenuEditRequired(boolean menuEditRequired) {
+        this.menuEditRequired = menuEditRequired;
     }
 
     public Object getForm() {
@@ -476,7 +487,9 @@ public abstract class PageForm<T extends Controller> extends Page<T>  implements
     @Override
     protected void createMenu(MenuInflater menuInflater, Menu menu) {
        super.createMenu(menuInflater, menu);
-       createMenuItemEditSave(menuInflater, menu);
+
+       if (isMenuEditRequired())
+           createMenuItemEditSave(menuInflater, menu);
     }
 
     private void createMenuItemEditSave(MenuInflater menuInflater, Menu menu) {
