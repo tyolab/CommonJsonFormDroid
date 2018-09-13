@@ -25,6 +25,7 @@ import java.util.Map;
 import au.com.tyo.app.Constants;
 import au.com.tyo.app.Controller;
 import au.com.tyo.app.ui.UIBase;
+import au.com.tyo.app.ui.page.Page;
 
 import static au.com.tyo.app.Constants.REQUEST_NONE;
 import static au.com.tyo.app.Constants.REQUEST_SOMETHING;
@@ -54,7 +55,7 @@ public class JsonFormUI<ControllerType extends Controller> extends UIBase<Contro
         }
         map.put(Constants.EXTRA_KEY_EDITABLE, editable);
 
-        gotoPageWithData(activityClass, map, data instanceof Parcelable || data instanceof Serializable ? false : true, needResult ? REQUEST_SOMETHING : REQUEST_NONE, null);
+        gotoPageWithData((Page) getCurrentPage(), activityClass, map, data instanceof Parcelable || data instanceof Serializable ? false : true, needResult ? REQUEST_SOMETHING : REQUEST_NONE, null);
     }
 
     @Override
