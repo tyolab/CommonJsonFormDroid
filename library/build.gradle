@@ -1,13 +1,20 @@
 apply plugin: 'com.android.library'
+
+
+project.ext {
+    MINIMUM_SDK_VERSION = 14
+    TARGET_SDK_VERSION = 28
+    COMPILE_SDK_VERSION = 28
+    TOOLS_VERSION = "28.0.2"
+}
+
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.2'
+    compileSdkVersion COMPILE_SDK_VERSION
+    buildToolsVersion TOOLS_VERSION
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion MINIMUM_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
