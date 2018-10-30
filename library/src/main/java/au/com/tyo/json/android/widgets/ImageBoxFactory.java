@@ -16,29 +16,23 @@
 
 package au.com.tyo.json.android.widgets;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import au.com.tyo.common.ui.CardBox;
-import au.com.tyo.json.android.R;
-import au.com.tyo.json.android.interfaces.CommonListener;
-
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 22/12/17.
  */
 
-public class ImageBoxFactory extends CompoundItemFactory {
+public abstract class ImageBoxFactory extends CompoundItemFactory {
 
+    /**
+     * For those who need cardbox widget, just comment off the following
+     * and include both CommandUiLib and CommonFormDroid libraries in the gradle file
+     */
+        /*
     @Override
     protected void createCompoundView(LayoutInflater factory, ViewGroup v, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
         String imageUrl = null;
 
         View container = factory.inflate(R.layout.item_image_box, null);
+
 
         CardBox cardBox = (CardBox) container.findViewById(R.id.user_input);
         cardBox.setClickable(true);
@@ -54,12 +48,12 @@ public class ImageBoxFactory extends CompoundItemFactory {
                 cardBox.addPreviewItem(imageUrl);
             }
         }
-        else if (value instanceof String) {
+        else {
             imageUrl = value.toString();
             cardBox.addPreviewItem(imageUrl);
         }
 
         v.addView(container);
     }
-
+    */
 }

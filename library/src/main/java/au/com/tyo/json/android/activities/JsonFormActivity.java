@@ -22,7 +22,7 @@ import au.com.tyo.json.android.interfaces.JsonApi;
  * Please be aware, using this activity for json form is not fully implemented, particular when getting the form fragment
  */
 
-public class JsonFormActivity extends AppCompatActivity implements JsonApi {
+public abstract class JsonFormActivity extends AppCompatActivity implements JsonApi {
 
     private static final String TAG = "JsonFormActivity";
 
@@ -137,6 +137,7 @@ public class JsonFormActivity extends AppCompatActivity implements JsonApi {
         outState.putString("jsonState", mJSONObject.toString());
     }
 
+    /*
     @Override
     public boolean isEditable() {
         return true;
@@ -176,4 +177,6 @@ public class JsonFormActivity extends AppCompatActivity implements JsonApi {
     public void onFieldValueClear(String key) {
         // no ops
     }
+    */
+
 }

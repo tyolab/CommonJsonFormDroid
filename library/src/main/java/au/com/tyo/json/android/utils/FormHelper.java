@@ -51,7 +51,7 @@ public class FormHelper {
     private static final TitledEditTextFactory titledTextFactory = new TitledEditTextFactory();
     private static final TitledLabelFactory titledLabelFactory = new TitledLabelFactory();
     private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
-    private static final ImageBoxFactory imageBoxFactory = new ImageBoxFactory();
+    // private static final ImageBoxFactory imageBoxFactory = new ImageBoxFactory();
 
     public interface TitleKeyConverter {
         String toKey(String title);
@@ -143,7 +143,7 @@ public class FormHelper {
         JsonFormInteractor.registerWidget(titledLabelFactory);
         JsonFormInteractor.registerWidget(titledTextFactory);
         JsonFormInteractor.registerWidget(titledSwitchButtonFactory);
-        JsonFormInteractor.registerWidget(imageBoxFactory);
+        // JsonFormInteractor.registerWidget(imageBoxFactory);
     }
 
     public static JsonFormFieldEditText createTitledEditTextField(String key, String title, String text) {

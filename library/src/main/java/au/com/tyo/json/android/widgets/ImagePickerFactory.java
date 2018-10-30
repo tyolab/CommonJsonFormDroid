@@ -50,7 +50,7 @@ public class ImagePickerFactory extends CompoundItemFactory {
 
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setLayoutParams(getLayoutParams(MATCH_PARENT, dpToPixels(context, 200), 0, 0, 0, (int) context
-                .getResources().getDimension(R.dimen.default_bottom_margin)));
+                .getResources().getDimension(R.dimen.form_default_bottom_margin)));
         String imagePath = jsonObject.optString("value");
         if (!TextUtils.isEmpty(imagePath)) {
             imageView.setTag(R.id.imagePath, imagePath);
@@ -60,7 +60,7 @@ public class ImagePickerFactory extends CompoundItemFactory {
         Button uploadButton = new Button(context);
         uploadButton.setText(jsonObject.getString("uploadButtonText"));
         uploadButton.setLayoutParams(getLayoutParams(WRAP_CONTENT, WRAP_CONTENT, 0, 0, 0, (int) context
-                .getResources().getDimension(R.dimen.default_bottom_margin)));
+                .getResources().getDimension(R.dimen.form_default_bottom_margin)));
         uploadButton.setOnClickListener(listener);
         uploadButton.setTag(R.id.key, jsonObject.getString("key"));
         uploadButton.setTag(R.id.type, jsonObject.getString("type"));

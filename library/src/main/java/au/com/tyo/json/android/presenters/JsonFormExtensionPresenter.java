@@ -23,11 +23,10 @@ import android.widget.LinearLayout;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-import au.com.tyo.app.ui.page.Page;
+import au.com.tyo.android.utils.ActivityUtils;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.fragments.FormFragment;
 import au.com.tyo.json.android.utils.ValidationStatus;
-import au.com.tyo.json.android.widgets.EditTextFactory;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 31/7/17.
@@ -47,7 +46,7 @@ public class JsonFormExtensionPresenter extends JsonFormFragmentPresenter {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && null != data) {
             FormFragment fragmentJsonForm = (FormFragment) getView();
-            Object result = Page.getActivityResult(data);
+            Object result = ActivityUtils.getActivityResult(data);
             fragmentJsonForm.updateForm(getCurrentKey(), result);
         }
     }

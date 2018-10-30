@@ -39,4 +39,8 @@ public interface JsonApi {
     void onFieldClick(View v);
 
     void onFieldValueClear(String key);
+
+    CommonListener getFormOnClickListenerByName(String listenerMethodStr);
+
+    CommonListener getFormOnClickListenerByKey(String key, String text);
 }
