@@ -38,13 +38,16 @@ import au.com.tyo.json.android.utils.JsonMetadata;
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
  */
 
-public abstract class UserInputItemFactory extends CommonItemFactory implements FormWidgetFactory {
+public abstract class UserInputItemFactory extends CommonItemFactory {
+
+    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
 
     @Override
     public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception {
 
         List<View> views = new ArrayList<>(1);
         LayoutInflater factory = LayoutInflater.from(context);
+
         ViewGroup v = createViewContainer(factory);
 
         JsonMetadata metadata = new JsonMetadata(jsonObject);
@@ -68,8 +71,6 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
     protected ViewGroup createViewContainer(LayoutInflater factory) {
         return (ViewGroup) factory.inflate(R.layout.form_row, null);
     }
-
-    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
 
     protected View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey) throws JSONException {
         View v = factory.inflate(R.layout.form_title, null);
