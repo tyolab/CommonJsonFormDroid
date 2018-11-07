@@ -2,7 +2,10 @@ package au.com.tyo.json.android.interactors;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
@@ -76,27 +80,36 @@ public class JsonFormInteractor {
             }
             catch (Exception ex) {}
 
+            LayoutInflater factory = LayoutInflater.from(context);
+            ViewGroup viewGroup = (ViewGroup) factory.inflate(R.layout.form_group, null);
             if (null != groups)
                 for (int i = 0; i < groups.length(); i++) {
                     JSONObject childJson = groups.getJSONObject(i);
                     try {
-                        createFieldViews(jsonApi, stepName, context, childJson, listener, editable);
+                        List<View> views = createFieldViews(jsonApi, stepName, context, childJson, listener, editable);
+                        for (View view : views)
+                            viewGroup.addView(view);
+
                     } catch (Exception e) {
                         Log.e(TAG,
                                 "Exception occurred in making group view at index : " + i + " : Exception is : "
                                         + e.getMessage());
                     }
                 }
+
+            viewsFromJson.add(viewGroup);
         } catch (JSONException e) {
             Log.e(TAG, "Json exception occurred : " + e.getMessage());
         }
         return  viewsFromJson;
     }
 
-    private Collection<? extends View> createFieldViews(JsonApi jsonApi, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable) {
+    private List<View> createFieldViews(JsonApi jsonApi, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable) {
         List<View> viewsFromJson = new ArrayList<>(5);
         try {
             JSONArray fields = null;
+
+            LayoutInflater factory = LayoutInflater.from(context);
 
             try {
                 fields = parentJson.getJSONArray("fields");
@@ -108,8 +121,14 @@ public class JsonFormInteractor {
                     JSONObject childJson = fields.getJSONObject(i);
                     try {
                         List<View> views =  map.get(childJson.getString("type")).getViewsFromJson(jsonApi, stepName, context, childJson, listener, editable);
+
                         if (views.size() > 0) {
-                            viewsFromJson.addAll(views);
+                           viewsFromJson.addAll(views);
+                        }
+
+                        if (i > 0) {
+                            View separator = factory.inflate(R.layout.form_separator, null);
+                            viewsFromJson.add(separator);
                         }
                     } catch (Exception e) {
                         Log.e(TAG,

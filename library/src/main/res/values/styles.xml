@@ -50,4 +50,16 @@
         <item name="textSize">@dimen/form_default_text_size</item>
     </style>
 
+    <style name="AppStyle.Form.Group">
+
+    </style>
+
+    <style name="AppStyle.Form.Separator">
+        <item name="android:background">@color/light_grey</item>
+        <item name="android:layout_height">@dimen/form_default_separator_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingLeft">@dimen/form_default_separator_padding_left</item>
+        <item name="android:paddingRight">@dimen/form_default_separator_padding_right</item>
+    </style>
+
 </resources>

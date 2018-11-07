@@ -19,11 +19,16 @@ package au.com.tyo.json.android.utils;
 import android.text.TextUtils;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import au.com.tyo.json.DataJson;
+import au.com.tyo.json.JsonFormGroup;
+import au.com.tyo.json.android.widgets.CommonItemFactory;
+import au.com.tyo.json.android.widgets.UserProvidedViewFactory;
+import au.com.tyo.json.util.DataFormEx;
+import au.com.tyo.json.util.DataJson;
 import au.com.tyo.json.FormBasicItem;
 import au.com.tyo.json.FormObject;
 import au.com.tyo.json.JsonForm;
@@ -35,7 +40,6 @@ import au.com.tyo.json.JsonFormFieldTitledLabel;
 import au.com.tyo.json.JsonFormFieldWithTitleAndHint;
 import au.com.tyo.json.JsonFormStep;
 import au.com.tyo.json.android.interactors.JsonFormInteractor;
-import au.com.tyo.json.android.widgets.ImageBoxFactory;
 import au.com.tyo.json.android.widgets.TitledEditTextFactory;
 import au.com.tyo.json.android.widgets.TitledLabelFactory;
 import au.com.tyo.json.android.widgets.TitledSwitchButtonFactory;
@@ -51,6 +55,7 @@ public class FormHelper {
     private static final TitledEditTextFactory titledTextFactory = new TitledEditTextFactory();
     private static final TitledLabelFactory titledLabelFactory = new TitledLabelFactory();
     private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
+    private static final UserProvidedViewFactory userProvidedViewFactory = new UserProvidedViewFactory();
     // private static final ImageBoxFactory imageBoxFactory = new ImageBoxFactory();
 
     public interface TitleKeyConverter {
@@ -143,7 +148,11 @@ public class FormHelper {
         JsonFormInteractor.registerWidget(titledLabelFactory);
         JsonFormInteractor.registerWidget(titledTextFactory);
         JsonFormInteractor.registerWidget(titledSwitchButtonFactory);
-        // JsonFormInteractor.registerWidget(imageBoxFactory);
+        JsonFormInteractor.registerWidget(userProvidedViewFactory);
+    }
+
+    public static String getWidgetName(CommonItemFactory factory) {
+        return factory.getClass().getCanonicalName();
     }
 
     public static JsonFormFieldEditText createTitledEditTextField(String key, String title, String text) {
@@ -256,30 +265,38 @@ public class FormHelper {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
 
-        Set<Map.Entry<String, Object>> list = map.entrySet();
+        if (map instanceof DataFormEx) {
+            DataFormEx formMap = (DataFormEx) map;
+            form.title = formMap.getTitle();
 
-        for (Map.Entry<String, Object> entry : list) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
+            List groups = formMap.getGroups();
 
-            /**
-             * Form Category
-             */
-            if (value instanceof Map) {
-                Set<Map.Entry> set = ((Map) value).entrySet();
-                for (Map.Entry entry1 : set) {
-                    String subkey = (String) entry1.getKey();
-                    Object subvalue = entry1.getValue();
-
-                    addField(step, subkey, subvalue, keyConverter, metaMap);
-                }
-            }
-            else
-                addField(step, key, value, keyConverter, metaMap);
         }
+        else {
+            Set<Map.Entry<String, Object>> list = map.entrySet();
 
-        if (sortForm)
-            form.sort();
+            for (Map.Entry<String, Object> entry : list) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                /**
+                 * Form Category
+                 */
+                if (value instanceof Map) {
+                    Set<Map.Entry> set = ((Map) value).entrySet();
+                    for (Map.Entry entry1 : set) {
+                        String subkey = (String) entry1.getKey();
+                        Object subvalue = entry1.getValue();
+
+                        addField(step, subkey, subvalue, keyConverter, metaMap);
+                    }
+                } else
+                    addField(step, key, value, keyConverter, metaMap);
+            }
+
+            if (sortForm)
+                form.sort();
+        }
 
         return form;
     }
@@ -294,6 +311,33 @@ public class FormHelper {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
         return form;
+    }
+
+    /**
+     *
+     * @param step
+     * @param key
+     * @param value
+     * @param keyConverter
+     * @param metaMap
+     */
+    private static void addGroup(JsonFormStep step, String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
+        JsonFormGroup group = createGroup(key, value, keyConverter, metaMap);
+
+        if (null != group)
+            step.addGroup(group);
+    }
+
+    /**
+     *
+     * @param key
+     * @param value
+     * @param keyConverter
+     * @param metaMap
+     * @return
+     */
+    private static JsonFormGroup createGroup(String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
+        return new JsonFormGroup()
     }
 
     /**

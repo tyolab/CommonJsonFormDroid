@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ######################### OPTIONS ########################
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    ##########################################################
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/form_group_padding_left"
+    android:paddingRight="@dimen/form_group_padding_right"
+    style="@style/AppStyle.Form.Group"
+    >
+</LinearLayout>

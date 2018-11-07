@@ -17,7 +17,7 @@ import org.json.JSONObject;
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
  */
 
-abstract class CommonItemFactory implements FormWidgetFactory {
+public abstract class CommonItemFactory implements FormWidgetFactory {
 
     protected void setViewTags(View v, JSONObject jsonObject) throws JSONException {
         setViewTags(v, new JsonMetadata(jsonObject));
