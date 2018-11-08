@@ -25,7 +25,9 @@ import java.util.Map;
 import java.util.Set;
 
 import au.com.tyo.json.JsonFormGroup;
+import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.widgets.CommonItemFactory;
+import au.com.tyo.json.android.widgets.GroupTitleFactory;
 import au.com.tyo.json.android.widgets.UserProvidedViewFactory;
 import au.com.tyo.json.util.DataFormEx;
 import au.com.tyo.json.util.DataJson;
@@ -51,6 +53,8 @@ import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
  */
 
 public class FormHelper {
+
+    private static final String TAG = "FormHelper";
 
     private static final TitledEditTextFactory titledTextFactory = new TitledEditTextFactory();
     private static final TitledLabelFactory titledLabelFactory = new TitledLabelFactory();
@@ -149,6 +153,8 @@ public class FormHelper {
         JsonFormInteractor.registerWidget(titledTextFactory);
         JsonFormInteractor.registerWidget(titledSwitchButtonFactory);
         JsonFormInteractor.registerWidget(userProvidedViewFactory);
+
+        JsonFormInteractor.registerWidget(GroupTitleFactory.class);
     }
 
     public static String getWidgetName(CommonItemFactory factory) {
@@ -180,6 +186,16 @@ public class FormHelper {
         JsonFormFieldSwitch switchButton = new JsonFormFieldSwitch(key, titledSwitchButtonFactory.getClass().getSimpleName(), title);
         switchButton.value = String.valueOf(initValue);
         return switchButton;
+    }
+
+    public static <T extends FormWidgetFactory> JsonFormField createFieldWidget(String key, Class<T> factoryClass, Object value) {
+        createFieldWidget(key, factoryClass.getSimpleName(), value);
+    }
+
+    public static JsonFormField createFieldWidget(String key, String type, Object value) {
+        JsonFormField formField = new JsonFormField(key, type);
+        formField.value = value;
+        return formField;
     }
 
     public static JsonForm createForm(FormBasicItem data, boolean sortFormNeeded) {
@@ -264,6 +280,8 @@ public class FormHelper {
     public static JsonForm createForm(Map map, TitleKeyConverter keyConverter, Map metaMap, boolean sortForm) {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
+        if (keyConverter == null)
+            keyConverter = generalTitleConverter;
 
         if (map instanceof DataFormEx) {
             DataFormEx formMap = (DataFormEx) map;
@@ -271,6 +289,27 @@ public class FormHelper {
 
             List groups = formMap.getGroups();
 
+            for (int i = 0; i < groups.size(); ++i) {
+                Map groupMap = (Map) groups.get(i);
+
+                JsonFormGroup jsonFormGroup = createGroup();
+                if (groupMap instanceof DataFormEx.FormGroup) {
+                    DataFormEx.FormGroup formGroup = (DataFormEx.FormGroup) groupMap;
+
+                    if (formGroup.isShowingGroupTitle()) {
+                        JsonFormField titleField = createFieldWidget(keyConverter.toKey(formGroup.getTitle()), GroupTitleFactory.class, formGroup.getTitle());
+                        jsonFormGroup.addField(titleField);
+                    }
+
+                    for (int j = 0; j < formGroup.size(); ++j) {
+
+                    }
+                }
+                else
+                    mapToField(jsonFormGroup, groupMap, keyConverter, metaMap);
+
+                step.addGroup(jsonFormGroup);
+            }
         }
         else {
             Set<Map.Entry<String, Object>> list = map.entrySet();
@@ -283,14 +322,9 @@ public class FormHelper {
                  * Form Category
                  */
                 if (value instanceof Map) {
-                    Set<Map.Entry> set = ((Map) value).entrySet();
-                    for (Map.Entry entry1 : set) {
-                        String subkey = (String) entry1.getKey();
-                        Object subvalue = entry1.getValue();
-
-                        addField(step, subkey, subvalue, keyConverter, metaMap);
-                    }
-                } else
+                    mapToField(step, (Map) value, keyConverter, metaMap);
+                }
+                else
                     addField(step, key, value, keyConverter, metaMap);
             }
 
@@ -299,6 +333,23 @@ public class FormHelper {
         }
 
         return form;
+    }
+
+    /**
+     *
+     *  @param jsonFormGroup
+     * @param map
+     * @param keyConverter
+     * @param metaMap
+     */
+    private static void mapToField(JsonFormGroup jsonFormGroup, Map map, TitleKeyConverter keyConverter, Map metaMap) {
+        Set<Map.Entry> set = ((Map) map).entrySet();
+        for (Map.Entry entry1 : set) {
+            String subkey = (String) entry1.getKey();
+            Object subvalue = entry1.getValue();
+
+            addField(jsonFormGroup, subkey, subvalue, keyConverter, metaMap);
+        }
     }
 
     /**
@@ -315,14 +366,9 @@ public class FormHelper {
 
     /**
      *
-     * @param step
-     * @param key
-     * @param value
-     * @param keyConverter
-     * @param metaMap
      */
-    private static void addGroup(JsonFormStep step, String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
-        JsonFormGroup group = createGroup(key, value, keyConverter, metaMap);
+    private static void addGroup(JsonFormStep step) {
+        JsonFormGroup group = createGroup();
 
         if (null != group)
             step.addGroup(group);
@@ -330,14 +376,10 @@ public class FormHelper {
 
     /**
      *
-     * @param key
-     * @param value
-     * @param keyConverter
-     * @param metaMap
      * @return
      */
-    private static JsonFormGroup createGroup(String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
-        return new JsonFormGroup()
+    private static JsonFormGroup createGroup() {
+        return new JsonFormGroup();
     }
 
     /**
@@ -348,7 +390,7 @@ public class FormHelper {
      * @param keyConverter
      * @param metaMap
      */
-    private static void addField(JsonFormStep step, String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
+    private static void addField(JsonFormGroup step, String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
         JsonFormField field = createField(key, value, keyConverter, metaMap);
 
         if (null != field)

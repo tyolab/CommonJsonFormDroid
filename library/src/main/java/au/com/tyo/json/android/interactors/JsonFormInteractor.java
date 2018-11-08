@@ -35,9 +35,9 @@ import au.com.tyo.json.android.widgets.SpinnerFactory;
  */
 public class JsonFormInteractor {
 
-    private static final String                     TAG               = "JsonFormInteractor";
-    private static final Map<String, FormWidgetFactory>    map = new HashMap<>();
-    private static final JsonFormInteractor         INSTANCE          = new JsonFormInteractor();
+    private static final String                             TAG               = "JsonFormInteractor";
+    private static final Map<String, FormWidgetFactory>    map                = new HashMap<>();
+    private static final JsonFormInteractor                INSTANCE           = new JsonFormInteractor();
 
     private JsonFormInteractor() {
         registerWidgets();
@@ -59,6 +59,16 @@ public class JsonFormInteractor {
 
     public static void registerWidget(FormWidgetFactory factory) {
         map.put(factory.getClass().getSimpleName(), factory);
+    }
+
+    public static <T extends FormWidgetFactory> void registerWidget(Class<T> factory) {
+        try {
+            map.put(factory.getClass().getSimpleName(), factory.newInstance());
+        } catch (InstantiationException e) {
+            Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
+        } catch (IllegalAccessException e) {
+            Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
+        }
     }
 
     public List<View> fetchFormElements(JsonApi jsonApi, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable) {
