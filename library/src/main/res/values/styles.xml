@@ -6,9 +6,7 @@
 
     <style name="JsonFormStyle.FieldTitle">
         <item name="android:textSize">18sp</item>
-        <!--
         <item name="android:textColor">@color/black</item>
-        -->
     </style>
 
     <style name="AppStyle.Form.Row">
@@ -60,6 +58,10 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:paddingLeft">@dimen/form_default_separator_padding_left</item>
         <item name="android:paddingRight">@dimen/form_default_separator_padding_right</item>
+    </style>
+
+    <style name="AppStyle.Form.EditText">
+        <item name="android:background">@null</item>
     </style>
 
 </resources>

@@ -200,8 +200,12 @@ public class FormFragment extends JsonFormFragment {
             String key = (String) view.getTag(R.id.key);
 
             FieldMetadata metadata = getFieldMetaData(key);
-            int required = (int) view.getTag(R.id.required);
-            metadata.required = required;
+
+            if (null != view.getTag(R.id.required)) {
+                int required = (int) view.getTag(R.id.required);
+                metadata.required = required;
+            }
+
             metadata.index = i;
 
             if (!isEditable())

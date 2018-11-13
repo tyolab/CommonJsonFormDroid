@@ -189,7 +189,7 @@ public class FormHelper {
     }
 
     public static <T extends FormWidgetFactory> JsonFormField createFieldWidget(String key, Class<T> factoryClass, Object value) {
-        createFieldWidget(key, factoryClass.getSimpleName(), value);
+        return createFieldWidget(key, factoryClass.getSimpleName(), value);
     }
 
     public static JsonFormField createFieldWidget(String key, String type, Object value) {
@@ -202,6 +202,13 @@ public class FormHelper {
         return createForm(data, null, sortFormNeeded);
     }
 
+    /**
+     *
+     * @param data
+     * @param keyConverter
+     * @param sortFormNeeded
+     * @return
+     */
     public static JsonForm createForm(FormBasicItem data, TitleKeyConverter keyConverter, boolean sortFormNeeded) {
         JsonForm form;
 
@@ -224,9 +231,9 @@ public class FormHelper {
 
                 /**
                  * Not necessary to check null value
+                 *
+                 * the field value can be null
                  */
-//                if (null == value)
-//                    continue;
 
                 addField(step, key, value, keyConverter, metaMap);
             }
@@ -296,13 +303,15 @@ public class FormHelper {
                 if (groupMap instanceof DataFormEx.FormGroup) {
                     DataFormEx.FormGroup formGroup = (DataFormEx.FormGroup) groupMap;
 
-                    if (formGroup.isShowingGroupTitle()) {
+                    if (formGroup.isShowingGroupTitle() && null != formGroup.getTitle()) {
                         JsonFormField titleField = createFieldWidget(keyConverter.toKey(formGroup.getTitle()), GroupTitleFactory.class, formGroup.getTitle());
                         jsonFormGroup.addField(titleField);
                     }
 
                     for (int j = 0; j < formGroup.size(); ++j) {
-
+                        String keyStr = formGroup.getKey(j);
+                        String value = (String) formGroup.get(j); // all value are stored as String during form creation
+                        addField(jsonFormGroup, keyStr, value, keyConverter, metaMap);
                     }
                 }
                 else
@@ -447,7 +456,8 @@ public class FormHelper {
         else {
             if (value instanceof Boolean)
                 field = createSwitchButton(fieldKey, newTitle, Boolean.parseBoolean(String.valueOf(value)));
-            else { // for anything else it is just edit text
+            else {
+                // for anything else it is just edit text, and it is not editable by default
                 JsonFormFieldEditText labelField = createTitledEditTextField(fieldKey, newTitle, value != null ? value.toString() : "");
 
                 // JsonFormFieldLabel labelField = (JsonFormFieldLabel) (field = createTitledLabelField(key, newTitle, value != null ? value.toString() : ""));
