@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
-import au.com.tyo.json.android.utils.ValidationStatus;
 
 /**
  * Created by vijay on 24-05-2015.
@@ -43,7 +42,7 @@ public class EditTextFactory extends UserInputItemFactory {
         int minLength = MIN_LENGTH;
         int maxLength = MAX_LENGTH;
 
-        View v = createEditText(factory, parent, WIDGET_EDIT_TEXT_RESOURCE, stepName, jsonObject, minLength, maxLength, listener);
+        View v = createEditText(jsonApi, factory, parent, WIDGET_EDIT_TEXT_RESOURCE, stepName, jsonObject, minLength, maxLength, listener);
         return v;
     }
 

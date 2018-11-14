@@ -8,10 +8,13 @@ import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rey.material.util.ViewUtil;
@@ -30,7 +33,6 @@ import au.com.tyo.json.JsonFormFieldFilter;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.GenericTextWatcher;
 import au.com.tyo.json.android.interfaces.CommonListener;
-import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
@@ -49,11 +51,14 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
         LayoutInflater factory = LayoutInflater.from(context);
 
         ViewGroup v = createViewContainer(factory);
+        RelativeLayout.LayoutParams layoutParams = (new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
 
         JsonMetadata metadata = new JsonMetadata(jsonObject);
         setViewTags(v, metadata);
 
         View child = createView(jsonApi, factory, v, stepName, jsonObject, listener, editable);
+        child.setLayoutParams(layoutParams);
         v.addView(child);
 
         views.add(v);
@@ -110,10 +115,14 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @SuppressLint("ResourceType")
-    protected View createEditText(LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, final CommonListener listener) throws JSONException {
+    protected View createEditText(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, final CommonListener listener) throws JSONException {
         View v = factory.inflate(
                 resId, parent, false);
         EditText editText = (EditText) v.findViewById(R.id.user_input);
+
+        if (jsonObject.has("editable")) {
+            editText.setEnabled(jsonObject.getBoolean("editable"));
+        }
 
         if (jsonObject.has("hint"))
             editText.setHint(jsonObject.getString("hint"));
@@ -294,7 +303,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
             // be careful, setRawInputType doesn't work on the CAP_SETENNCES and CAP_WORDS
             editText.setInputType(types);
         }
-        editText.addTextChangedListener(new GenericTextWatcher(stepName, editText));
+        editText.addTextChangedListener(new GenericTextWatcher(jsonApi, stepName, editText));
 
         editText.setOnFocusChangeListener(listener);
         return v;

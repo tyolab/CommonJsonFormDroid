@@ -19,7 +19,7 @@ public class GapFactory extends CommonItemFactory {
         List<View> views = new ArrayList<>(1);
 
         LayoutInflater factory = LayoutInflater.from(context);
-        views.add(factory.inflate(R.layout.form_gap, null));
+        views.add(factory.inflate(R.layout.form_group_divider, null));
 
         return views;
     }

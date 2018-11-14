@@ -46,7 +46,7 @@ public class TitledEditTextFactory extends TitledItemFactory {
         int minLength = MIN_LENGTH;
         int maxLength = MAX_LENGTH;
 
-        View v = createEditText(factory, parent, WIDGET_EDIT_TEXT_RESOURCE, stepName, jsonObject, minLength, maxLength, listener);
+        View v = createEditText(jsonApi, factory, parent, WIDGET_EDIT_TEXT_RESOURCE, stepName, jsonObject, minLength, maxLength, listener);
 
         return v;
     }

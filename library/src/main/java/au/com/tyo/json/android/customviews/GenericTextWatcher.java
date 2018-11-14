@@ -20,10 +20,10 @@ public class GenericTextWatcher implements TextWatcher {
 
     protected JsonApi api;
 
-    public GenericTextWatcher(String stepName, View view) {
+    public GenericTextWatcher(JsonApi jsonApi, String stepName, View view) {
         mView = view;
         mStepName = stepName;
-        api = null;
+        api = jsonApi;
     }
 
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -37,7 +37,7 @@ public class GenericTextWatcher implements TextWatcher {
             String text = editable.toString().trim();
             String key = (String) mView.getTag(R.id.key);
 
-            // never do it, we need to catch the empty text too
+            // don't it, we need to catch the empty text too
             // if (text.length() > 0) {
                 if (null == api) {
 
@@ -47,7 +47,7 @@ public class GenericTextWatcher implements TextWatcher {
                         TintContextWrapper tintContextWrapper = (TintContextWrapper) mView.getContext();
                         api = (JsonApi) tintContextWrapper.getBaseContext();
                     } else {
-                        throw new RuntimeException("Could not fetch context");
+                        throw new RuntimeException("Could not get json api interface");
                     }
                 }
 

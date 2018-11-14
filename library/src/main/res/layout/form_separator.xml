@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<View xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/AppStyle.Form.Separator"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/form_default_separator_container_height"
+    android:paddingTop="1dp"
+    android:paddingBottom="1dp"
+    android:layout_gravity="center_vertical"
     >
+    <View
+        style="@style/AppStyle.Form.Separator"
+        android:id="@+id/field_separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/form_default_separator_height"
+        >
 
-</View>
+    </View>
+</FrameLayout>
