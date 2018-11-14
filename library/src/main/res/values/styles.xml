@@ -79,4 +79,10 @@
         <item name="android:minHeight">@dimen/form_default_group_gap_height</item>
     </style>
 
+    <style name="AppStyle.Form.Main">
+        <!--
+        <item name="android:padding">8dp</item>
+        -->
+    </style>
+
 </resources>

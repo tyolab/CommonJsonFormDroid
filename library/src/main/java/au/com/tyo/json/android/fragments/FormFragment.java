@@ -25,6 +25,7 @@ import java.util.Set;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.RadioButton;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
@@ -37,7 +38,7 @@ import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
  * Created by Eric Tang (eric.tang@tyo.com.au) on 19/7/17.
  */
 
-public class FormFragment extends JsonFormFragment {
+public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
     public static final String          FRAGMENT_JSON_FORM_TAG = "FormFragment";
 
@@ -56,11 +57,12 @@ public class FormFragment extends JsonFormFragment {
 
     private JsonFormExtensionPresenter  formPresenter;
 
-    public static class FieldMetadata {
+    static class FieldMetadata {
         public int index;
         public int required; // -1 nullable, 0 optional, 1 required
         public java.lang.Object value;
         public boolean visible;
+        public View view;
 
         public FieldMetadata(int i, int required) {
             this();
@@ -112,6 +114,8 @@ public class FormFragment extends JsonFormFragment {
 
         grayColor = getActivity().getResources().getColor(R.color.grey);
         fieldTextColors = getActivity().getResources().getColorStateList(R.color.field_text_colors);
+
+        setMetaDataWatcher(this);
     }
 
     @Override
@@ -209,8 +213,13 @@ public class FormFragment extends JsonFormFragment {
             metadata.index = i;
 
             if (!isEditable())
-                setFormRowEditable(view, false);
+                setFormRowEditable(metadata.view, false);
         }
+    }
+
+    @Override
+    public void setUserInputView(String key, View v) {
+        getFieldMetaData(key).view = v;
     }
 
     private FieldMetadata getFieldMetaData(String key) {
@@ -253,6 +262,9 @@ public class FormFragment extends JsonFormFragment {
     }
 
     private void setFormRowEditable(View view, boolean editable) {
+        if (null == view)
+            return;
+
         View inputView = view.findViewById(R.id.user_input);
 
         if (null != inputView) {

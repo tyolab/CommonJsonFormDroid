@@ -20,6 +20,7 @@ import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.widgets.CheckBoxFactory;
 import au.com.tyo.json.android.widgets.EditTextFactory;
 import au.com.tyo.json.android.widgets.GapFactory;
@@ -69,19 +70,19 @@ public class JsonFormInteractor {
         }
     }
 
-    public List<View> fetchFormElements(JsonApi jsonApi, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable) {
+    public List<View> fetchFormElements(JsonApi jsonApi, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) {
         Log.d(TAG, "fetchFormElements called");
         List<View> viewsFromJson = new ArrayList<>(5);
 
         LayoutInflater factory = LayoutInflater.from(context);
 
-        viewsFromJson.addAll(createFieldViews(jsonApi, factory, stepName, context, parentJson, listener, editable));
-        viewsFromJson.addAll(createGroupViews(jsonApi, factory, stepName, context, parentJson, listener, editable));
+        viewsFromJson.addAll(createFieldViews(jsonApi, factory, stepName, context, parentJson, listener, editable, metaDataWatcher));
+        viewsFromJson.addAll(createGroupViews(jsonApi, factory, stepName, context, parentJson, listener, editable, metaDataWatcher));
 
         return viewsFromJson;
     }
 
-    private List<? extends View> createGroupViews(JsonApi jsonApi, LayoutInflater factory, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable) {
+    private List<? extends View> createGroupViews(JsonApi jsonApi, LayoutInflater factory, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) {
         List<View> viewsFromJson = new ArrayList<>();
         try {
             JSONArray groups = null;
@@ -102,7 +103,7 @@ public class JsonFormInteractor {
                     ViewGroup viewGroup = (ViewGroup) factory.inflate(R.layout.form_group, null);
                     JSONObject childJson = groups.getJSONObject(i);
                     try {
-                        List<View> views = createFieldViews(jsonApi, factory, stepName, context, childJson, listener, editable);
+                        List<View> views = createFieldViews(jsonApi, factory, stepName, context, childJson, listener, editable, metaDataWatcher);
                         for (View view : views)
                             viewGroup.addView(view);
 
@@ -120,7 +121,7 @@ public class JsonFormInteractor {
         return  viewsFromJson;
     }
 
-    private List<View> createFieldViews(JsonApi jsonApi, LayoutInflater factory, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable) {
+    private List<View> createFieldViews(JsonApi jsonApi, LayoutInflater factory, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) {
         List<View> viewsFromJson = new ArrayList<>();
         try {
             JSONArray fields = null;
@@ -136,7 +137,7 @@ public class JsonFormInteractor {
                 for (int i = 0; i < fields.length(); i++) {
                     JSONObject childJson = fields.getJSONObject(i);
                     try {
-                        List<View> views =  map.get(childJson.getString("type")).getViewsFromJson(jsonApi, stepName, context, childJson, listener, editable);
+                        List<View> views =  map.get(childJson.getString("type")).getViewsFromJson(jsonApi, stepName, context, childJson, listener, editable, metaDataWatcher);
 
                         if (i > 0) {
                             View separator = factory.inflate(R.layout.form_separator, null);

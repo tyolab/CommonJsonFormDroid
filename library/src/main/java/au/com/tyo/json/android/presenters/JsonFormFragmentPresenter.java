@@ -28,6 +28,7 @@ import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.fragments.JsonFormFragment;
 import au.com.tyo.json.android.interactors.JsonFormInteractor;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.mvp.MvpBasePresenter;
 import au.com.tyo.json.android.utils.ImageUtils;
 import au.com.tyo.json.android.utils.ValidationStatus;
@@ -51,7 +52,7 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
     private String mCurrentKey;
     private JsonFormInteractor mJsonFormInteractor = JsonFormInteractor.getInstance();
 
-    public void addFormElements(JsonApi jsonApi, boolean editable) {
+    public void addFormElements(JsonApi jsonApi, boolean editable, MetaDataWatcher metaDataWatcher) {
         mStepName = getView().getArguments().getString("stepName");
         JSONObject step = getView().getStep(mStepName);
         try {
@@ -60,7 +61,7 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
             e.printStackTrace();
         }
         List<View> views = mJsonFormInteractor.fetchFormElements(jsonApi, mStepName, getView().getContext(),
-                mStepDetails, getView().getCommonListener(), editable);
+                mStepDetails, getView().getCommonListener(), editable, metaDataWatcher);
         getView().addFormElements(views);
     }
 

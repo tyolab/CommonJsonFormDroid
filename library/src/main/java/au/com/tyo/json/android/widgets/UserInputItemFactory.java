@@ -8,12 +8,10 @@ import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,6 +32,7 @@ import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.GenericTextWatcher;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
 /**
@@ -42,10 +41,10 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public abstract class UserInputItemFactory extends CommonItemFactory {
 
-    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
+    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
-    public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception {
+    public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
 
         List<View> views = new ArrayList<>(1);
         LayoutInflater factory = LayoutInflater.from(context);
@@ -57,7 +56,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
         JsonMetadata metadata = new JsonMetadata(jsonObject);
         setViewTags(v, metadata);
 
-        View child = createView(jsonApi, factory, v, stepName, jsonObject, listener, editable);
+        View child = createView(jsonApi, factory, v, stepName, jsonObject, listener, editable, metaDataWatcher);
         child.setLayoutParams(layoutParams);
         v.addView(child);
 

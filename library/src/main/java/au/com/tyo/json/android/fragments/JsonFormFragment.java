@@ -33,6 +33,7 @@ import au.com.tyo.json.android.activities.JsonFormActivity;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.mvp.MvpFragment;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.JsonFormFragmentView;
@@ -48,6 +49,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     private Menu                mMenu;
     private JsonApi             mJsonApi;
     private boolean             keyboardHidden = true;
+    private MetaDataWatcher     metaDataWatcher;
 
     public void setJsonApi(JsonApi jsonApi) {
         this.mJsonApi = jsonApi;
@@ -89,8 +91,16 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (null !=mJsonApi)
-            presenter.addFormElements(mJsonApi, mJsonApi.isEditable());
+        if (null != mJsonApi)
+            presenter.addFormElements(mJsonApi, mJsonApi.isEditable(), getMetaDataWatcher());
+    }
+
+    public MetaDataWatcher getMetaDataWatcher() {
+        return metaDataWatcher;
+    }
+
+    public void setMetaDataWatcher(MetaDataWatcher metaDataWatcher) {
+        this.metaDataWatcher = metaDataWatcher;
     }
 
     @Override

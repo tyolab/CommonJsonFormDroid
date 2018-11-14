@@ -31,6 +31,8 @@
     <dimen name="form_row_padding_right">0dp</dimen>
     <dimen name="form_row_image_box_height">168dp</dimen>
     <dimen name="form_row_min_height">48dp</dimen>
+    <dimen name="form_row_padding_top">12dp</dimen>
+    <dimen name="form_row_padding_bottom">12dp</dimen>
 
     <!-- GROUP -->
     <dimen name="form_default_group_gap_height">40dp</dimen>
@@ -39,7 +41,5 @@
     <dimen name="form_default_separator_height">1dp</dimen>
     <dimen name="form_default_separator_padding_right">3dp</dimen>
     <dimen name="form_default_separator_padding_left">3dp</dimen>
-    <dimen name="form_row_padding_top">0dp</dimen>
-    <dimen name="form_row_padding_bottom">0dp</dimen>
     <dimen name="form_default_separator_container_height">3dp</dimen>
 </resources>

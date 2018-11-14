@@ -8,6 +8,7 @@ import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 
 import org.json.JSONObject;
 
@@ -25,7 +26,7 @@ import static au.com.tyo.json.android.utils.FormUtils.getTextViewWith;
 public class LabelFactory implements FormWidgetFactory {
 
     @Override
-    public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception {
+    public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
         List<View> views = new ArrayList<>(1);
         LinearLayout.LayoutParams layoutParams = getLayoutParams(WRAP_CONTENT, WRAP_CONTENT, 0, 0, 0, (int) context
                 .getResources().getDimension(R.dimen.form_default_bottom_margin));

@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 
 /**
  * Created by vijay on 24-05-2015.
@@ -42,7 +43,7 @@ public class TitledEditTextFactory extends TitledItemFactory {
     public static final int MAX_LENGTH = 0;
 
     @Override
-    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity) throws JSONException {
+    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
         int minLength = MIN_LENGTH;
         int maxLength = MAX_LENGTH;
 

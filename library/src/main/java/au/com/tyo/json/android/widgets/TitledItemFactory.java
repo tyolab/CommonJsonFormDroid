@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 21/9/17.
@@ -34,10 +35,10 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 
 public abstract class TitledItemFactory extends UserInputItemFactory {
 
-    protected abstract View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity) throws JSONException;
+    protected abstract View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
-    protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
+    protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException {
         ViewGroup v;
 
         boolean vertical = false;
@@ -55,7 +56,7 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         // 2nd Column / Row
         // if it is aligned vertically, we adjust form to the "left"
         ViewGroup container = (ViewGroup) v.findViewById(R.id.frame2);
-        View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, listener, editable, vertical ? Gravity.LEFT : Gravity.RIGHT);
+        View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, listener, editable, vertical ? Gravity.LEFT : Gravity.RIGHT, metaDataWatcher);
         container.addView(child);
 
         return v;

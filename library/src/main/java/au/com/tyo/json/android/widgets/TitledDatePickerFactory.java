@@ -40,6 +40,7 @@ import au.com.tyo.json.android.R;
 import au.com.tyo.android.utils.SimpleDateUtils;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.utils.StringUtils;
 
 import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
@@ -65,8 +66,8 @@ public class TitledDatePickerFactory extends TitledButtonFactory {
     }
 
     @Override
-    protected View createUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, final JSONObject jsonObject, final CommonListener listener, boolean editable, int gravity) throws JSONException {
-        View view = super.createUserInputView(jsonApi, factory, parent, stepName, jsonObject, listener, editable, gravity);
+    protected View createUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, final JSONObject jsonObject, final CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
+        View view = super.createUserInputView(jsonApi, factory, parent, stepName, jsonObject, listener, editable, gravity, metaDataWatcher);
         String dateString = jsonObject.getString("text");
         final String key = jsonObject.getString("key");
         final String title = jsonObject.getString("title");
