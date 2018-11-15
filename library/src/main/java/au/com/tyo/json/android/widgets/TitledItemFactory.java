@@ -35,6 +35,10 @@ import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 
 public abstract class TitledItemFactory extends UserInputItemFactory {
 
+    public TitledItemFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     protected abstract View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
@@ -57,6 +61,14 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         // if it is aligned vertically, we adjust form to the "left"
         ViewGroup container = (ViewGroup) v.findViewById(R.id.frame2);
         View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, listener, editable, vertical ? Gravity.LEFT : Gravity.RIGHT, metaDataWatcher);
+
+        View userInputView = child.findViewById(R.id.user_input);
+        final String keyStr = jsonObject.getString("key");
+        if (null != userInputView)
+            metaDataWatcher.setUserInputView(keyStr, userInputView);
+        else
+            metaDataWatcher.setUserInputView(keyStr, child);
+
         container.addView(child);
 
         return v;

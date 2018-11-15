@@ -37,6 +37,14 @@ public class TitledLabelFactory extends TitledItemFactory {
 
     private static final String TAG = TitledLabelFactory.class.getSimpleName();
 
+    public TitledLabelFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
+    public TitledLabelFactory() {
+        super(TitledLabelFactory.class.getSimpleName());
+    }
+
     @Override
     protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
 

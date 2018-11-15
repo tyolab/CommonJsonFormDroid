@@ -29,6 +29,10 @@ import static au.com.tyo.json.android.utils.FormUtils.getLayoutParams;
  */
 public class ImagePickerFactory extends CompoundItemFactory {
 
+    public ImagePickerFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     @Override
     protected void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
         Context context = parent.getContext();

@@ -41,6 +41,10 @@ public class TitledButtonFactory extends TitledItemFactory {
 
     private static final String TAG = TitledButtonFactory.class.getSimpleName();
 
+    public TitledButtonFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     protected void setupOnClickListener(final CommonListener listener, final View button) {
         // don't need to get the listener this way
         // if (listenerMethodStr != null)

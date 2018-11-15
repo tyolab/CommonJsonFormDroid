@@ -10,8 +10,18 @@ import java.util.List;
 /**
  * Created by vijay on 24-05-2015.
  */
-public interface FormWidgetFactory {
+public abstract class FormWidgetFactory {
 
-    List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception;
+    private String widgetKey;
+
+    public FormWidgetFactory(String widgetKey) {
+        this.widgetKey = widgetKey;
+    }
+
+    public String getWidgetKey() {
+        return widgetKey;
+    }
+
+    public abstract List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception;
 
 }

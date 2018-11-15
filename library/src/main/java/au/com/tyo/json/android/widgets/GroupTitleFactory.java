@@ -15,13 +15,22 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 
 public class GroupTitleFactory extends CommonItemFactory {
+
+    public GroupTitleFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     @Override
     public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
         List<View> views = new ArrayList<>(1);
 
         LayoutInflater factory = LayoutInflater.from(context);
-        views.add(factory.inflate(R.layout.item_group_title, null));
 
+        View v = factory.inflate(R.layout.item_group_title, null);
+
+        bindTitle(v, jsonObject, "value");
+
+        views.add(v);
         return views;
     }
 }

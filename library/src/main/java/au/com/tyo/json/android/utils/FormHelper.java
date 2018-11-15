@@ -60,6 +60,7 @@ public class FormHelper {
     private static final TitledLabelFactory titledLabelFactory = new TitledLabelFactory();
     private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
     private static final UserProvidedViewFactory userProvidedViewFactory = new UserProvidedViewFactory();
+
     // private static final ImageBoxFactory imageBoxFactory = new ImageBoxFactory();
 
     public interface TitleKeyConverter {
@@ -107,6 +108,10 @@ public class FormHelper {
      * The default title/key converter
      */
     private static TitleKeyConverter generalTitleConverter = new GeneralTitleKeyConverter();
+
+    public static TitleKeyConverter getGeneralTitleKeyConverter() {
+        return generalTitleConverter;
+    }
 
     public static class DefaultTitleKeyConverter implements TitleKeyConverter {
 
@@ -293,6 +298,9 @@ public class FormHelper {
         if (map instanceof DataFormEx) {
             DataFormEx formMap = (DataFormEx) map;
             form.title = formMap.getTitle();
+
+            step.header = formMap.getHeader();
+            step.footer = formMap.getFooter();
 
             List groups = formMap.getGroups();
 

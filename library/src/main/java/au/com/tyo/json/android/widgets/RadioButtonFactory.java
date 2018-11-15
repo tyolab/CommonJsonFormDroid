@@ -36,6 +36,10 @@ import au.com.tyo.json.android.interfaces.CommonListener;
  */
 public class RadioButtonFactory extends CompoundItemFactory {
 
+    public RadioButtonFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     @Override
     protected void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
 

@@ -25,7 +25,11 @@ import fr.ganfra.materialspinner.MaterialSpinner;
 /**
  * Created by nipun on 30/05/15.
  */
-public class SpinnerFactory implements FormWidgetFactory {
+public class SpinnerFactory extends CommonItemFactory {
+
+    public SpinnerFactory(String widgetKey) {
+        super(widgetKey);
+    }
 
     @Override
     public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {

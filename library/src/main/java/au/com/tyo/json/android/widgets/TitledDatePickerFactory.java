@@ -56,6 +56,10 @@ public class TitledDatePickerFactory extends TitledButtonFactory {
 
     private static final String TAG = "TitledDatePickerFactory";
 
+    public TitledDatePickerFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     private void setDatePickerMinMax(DatePicker datePicker, long finalMax, long finalMin) {
 
         if (finalMax > -1)

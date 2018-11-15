@@ -42,6 +42,14 @@ public class TitledEditTextFactory extends TitledItemFactory {
     public static final int MIN_LENGTH = 0;
     public static final int MAX_LENGTH = 0;
 
+    public TitledEditTextFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
+    public TitledEditTextFactory() {
+        super(TitledEditTextFactory.class.getSimpleName());
+    }
+
     @Override
     protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
         int minLength = MIN_LENGTH;

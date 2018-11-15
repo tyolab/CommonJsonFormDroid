@@ -21,6 +21,9 @@ package au.com.tyo.json.android.widgets;
  */
 
 public abstract class ImageBoxFactory extends CompoundItemFactory {
+    public ImageBoxFactory(String widgetKey) {
+        super(widgetKey);
+    }
 
     /**
      * For those who need cardbox widget, just comment off the following

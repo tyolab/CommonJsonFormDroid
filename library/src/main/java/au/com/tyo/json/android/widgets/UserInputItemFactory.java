@@ -41,6 +41,10 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public abstract class UserInputItemFactory extends CommonItemFactory {
 
+    public UserInputItemFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
@@ -72,26 +76,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
         return views;
     }
 
-    protected ViewGroup createViewContainer(LayoutInflater factory) {
-        return (ViewGroup) factory.inflate(R.layout.form_row, null);
-    }
-
-    protected View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey) throws JSONException {
-        View v = factory.inflate(R.layout.form_title, null);
-        bindTitle(v, jsonObject, titleKey);
-        return v;
-    }
-
-    protected void bindTitle(View parent, JSONObject jsonObject, String titleKey) throws JSONException {
-        TextView titletext = (TextView) parent.findViewById(android.R.id.text1);
-        // 1st Column
-        if (jsonObject.has(titleKey))
-            titletext.setText(jsonObject.getString(titleKey));
-        else
-            titletext.setVisibility(View.GONE);
-    }
-
-    protected void bindUserInput(View parent, JSONObject jsonObject, int gravity) throws JSONException {
+        protected void bindUserInput(View parent, JSONObject jsonObject, int gravity) throws JSONException {
         View view = parent.findViewById(R.id.user_input);
         String value = jsonObject.getString("value");
         if (view instanceof android.widget.TextView) {

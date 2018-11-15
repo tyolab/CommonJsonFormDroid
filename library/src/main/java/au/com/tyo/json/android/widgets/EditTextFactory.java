@@ -38,6 +38,10 @@ public class EditTextFactory extends UserInputItemFactory {
     public static final int MIN_LENGTH = 0;
     public static final int MAX_LENGTH = 140;
 
+    public EditTextFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     @Override
     protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException {
         int minLength = MIN_LENGTH;

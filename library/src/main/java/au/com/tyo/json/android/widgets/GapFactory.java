@@ -15,6 +15,11 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 
 public class GapFactory extends CommonItemFactory {
+
+    public GapFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     @Override
     public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
         List<View> views = new ArrayList<>(1);

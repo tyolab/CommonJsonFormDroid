@@ -15,6 +15,14 @@ import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 
 public class UserProvidedViewFactory extends CommonItemFactory {
 
+    public UserProvidedViewFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
+    public UserProvidedViewFactory() {
+        super(UserProvidedViewFactory.class.getSimpleName());
+    }
+
     @Override
     public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
         List<View> views = new ArrayList<>(1);

@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,7 @@ import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.widgets.CheckBoxFactory;
 import au.com.tyo.json.android.widgets.EditTextFactory;
 import au.com.tyo.json.android.widgets.GapFactory;
+import au.com.tyo.json.android.widgets.GroupTitleFactory;
 import au.com.tyo.json.android.widgets.ImagePickerFactory;
 import au.com.tyo.json.android.widgets.LabelFactory;
 import au.com.tyo.json.android.widgets.RadioButtonFactory;
@@ -43,13 +46,13 @@ public class JsonFormInteractor {
     }
 
     private void registerWidgets() {
-        map.put(JsonFormConstants.EDIT_TEXT, new EditTextFactory());
-        map.put(JsonFormConstants.LABEL, new LabelFactory());
-        map.put(JsonFormConstants.CHECK_BOX, new CheckBoxFactory());
-        map.put(JsonFormConstants.RADIO_BUTTON, new RadioButtonFactory());
-        map.put(JsonFormConstants.CHOOSE_IMAGE, new ImagePickerFactory());
-        map.put(JsonFormConstants.SPINNER, new SpinnerFactory());
-        map.put(JsonFormConstants.GAP, new GapFactory());
+        registerWidget(new EditTextFactory(JsonFormConstants.EDIT_TEXT));
+        registerWidget(new LabelFactory(JsonFormConstants.LABEL));
+        registerWidget(new CheckBoxFactory(JsonFormConstants.CHECK_BOX));
+        registerWidget(new RadioButtonFactory(JsonFormConstants.RADIO_BUTTON));
+        registerWidget(new ImagePickerFactory(JsonFormConstants.CHOOSE_IMAGE));
+        registerWidget(new SpinnerFactory(JsonFormConstants.SPINNER));
+        registerWidget(new GapFactory(JsonFormConstants.GAP));
     }
 
     public static void registerWidget(String key, FormWidgetFactory factory) {
@@ -57,15 +60,28 @@ public class JsonFormInteractor {
     }
 
     public static void registerWidget(FormWidgetFactory factory) {
-        map.put(factory.getClass().getSimpleName(), factory);
+        map.put(factory.getWidgetKey(), factory);
     }
 
+    /**
+     * Using factory class name as key
+     *
+     * @param factory
+     * @param <T>
+     */
     public static <T extends FormWidgetFactory> void registerWidget(Class<T> factory) {
         try {
-            map.put(factory.getClass().getSimpleName(), factory.newInstance());
+            Constructor ctor = factory.getConstructor(String.class);
+            FormWidgetFactory instance = (FormWidgetFactory) ctor.newInstance(new Object[]{factory.getSimpleName()});
+
+            registerWidget(instance);
         } catch (InstantiationException e) {
             Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
         } catch (IllegalAccessException e) {
+            Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
+        } catch (NoSuchMethodException e) {
+            Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
+        } catch (InvocationTargetException e) {
             Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
         }
     }
@@ -76,10 +92,42 @@ public class JsonFormInteractor {
 
         LayoutInflater factory = LayoutInflater.from(context);
 
+        View view;
+        view = createHeaderView(factory, parentJson);
+
+        if (null != view)
+            viewsFromJson.add(view);
+
         viewsFromJson.addAll(createFieldViews(jsonApi, factory, stepName, context, parentJson, listener, editable, metaDataWatcher));
         viewsFromJson.addAll(createGroupViews(jsonApi, factory, stepName, context, parentJson, listener, editable, metaDataWatcher));
 
+        view = createFooterView(factory, parentJson);
+        if (null != view)
+            viewsFromJson.add(view);
+
         return viewsFromJson;
+    }
+
+    private View createFooterView(LayoutInflater factory, JSONObject parentJson) {
+        return createStaticView("footer", factory, parentJson);
+    }
+
+    private View createHeaderView(LayoutInflater factory, JSONObject parentJson) {
+        return createStaticView("header", factory, parentJson);
+    }
+
+    private View createStaticView(String name, LayoutInflater factory, JSONObject parentJson) {
+        JSONObject jsonObject = null;
+        View view = null;
+        try {
+            jsonObject = parentJson.getJSONObject(name);
+
+            if (jsonObject.has("value"))
+                view = factory.inflate(jsonObject.getInt("value"), null);
+
+        } catch (JSONException e) {
+        }
+        return view;
     }
 
     private List<? extends View> createGroupViews(JsonApi jsonApi, LayoutInflater factory, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) {
@@ -133,19 +181,24 @@ public class JsonFormInteractor {
             }
             catch (Exception ex) {}
 
-            if (null != fields)
+            if (null != fields) {
+                int count = 0;
                 for (int i = 0; i < fields.length(); i++) {
                     JSONObject childJson = fields.getJSONObject(i);
                     try {
-                        List<View> views =  map.get(childJson.getString("type")).getViewsFromJson(jsonApi, stepName, context, childJson, listener, editable, metaDataWatcher);
+                        FormWidgetFactory widgetFactory = map.get(childJson.getString("type"));
 
-                        if (i > 0) {
+                        if (count > 0) {
                             View separator = factory.inflate(R.layout.form_separator, null);
                             viewsFromJson.add(separator);
                         }
 
+                        List<View> views = widgetFactory.getViewsFromJson(jsonApi, stepName, context, childJson, listener, editable, metaDataWatcher);
+                        if (!widgetFactory.getWidgetKey().equals(GroupTitleFactory.class.getSimpleName()))
+                            ++count;
+
                         if (views.size() > 0) {
-                           viewsFromJson.addAll(views);
+                            viewsFromJson.addAll(views);
                         }
 
                     } catch (Exception e) {
@@ -154,6 +207,7 @@ public class JsonFormInteractor {
                                         + e.getMessage());
                     }
                 }
+            }
         } catch (JSONException e) {
             Log.e(TAG, "Json exception occurred : " + e.getMessage());
         }

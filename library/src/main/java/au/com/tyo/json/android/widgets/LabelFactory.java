@@ -23,7 +23,11 @@ import static au.com.tyo.json.android.utils.FormUtils.getTextViewWith;
 /**
  * Created by vijay on 24-05-2015.
  */
-public class LabelFactory implements FormWidgetFactory {
+public class LabelFactory extends CommonItemFactory {
+
+    public LabelFactory(String widgetKey) {
+        super(widgetKey);
+    }
 
     @Override
     public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
