@@ -56,7 +56,7 @@
     </style>
 
     <style name="AppStyle.Form.Separator">
-        <item name="android:background">@color/light_grey</item>
+        <item name="android:background">@color/colorFormFieldSeparator</item>
 
         <!--
         <item name="android:layout_width">match_parent</item>

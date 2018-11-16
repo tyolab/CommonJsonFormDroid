@@ -57,8 +57,10 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
         RelativeLayout.LayoutParams layoutParams = (new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
         layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
 
-        JsonMetadata metadata = new JsonMetadata(jsonObject);
-        setViewTags(v, metadata);
+        final String keyStr = jsonObject.getString("key");
+
+        // JsonMetadata metadata = new JsonMetadata(jsonObject);
+        // setViewTags(v, metadata);
 
         View child = createView(jsonApi, factory, v, stepName, jsonObject, listener, editable, metaDataWatcher);
         child.setLayoutParams(layoutParams);
@@ -70,7 +72,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
             boolean visible = Boolean.parseBoolean(jsonObject.getString("visible"));
             if (!visible) {
                 v.setVisibility(View.GONE);
-                listener.onVisibilityChange(metadata.key, null, false);
+                listener.onVisibilityChange(keyStr, null, false);
             }
         }
         return views;
@@ -100,6 +102,8 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @SuppressLint("ResourceType")
     protected View createEditText(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, final CommonListener listener) throws JSONException {
+        final String keyStr = jsonObject.getString("key");
+
         View v = factory.inflate(
                 resId, parent, false);
         EditText editText = (EditText) v.findViewById(R.id.user_input);
@@ -119,13 +123,13 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
             else
                 editText.setId(ViewUtil.generateViewId());
         }
-        JsonMetadata metadata = new JsonMetadata(jsonObject);
-        setViewTags(editText, metadata);
+        // JsonMetadata metadata = new JsonMetadata(jsonObject);
+        // setViewTags(editText, metadata);
 
         String value = jsonObject.optString("value");
         if (!TextUtils.isEmpty(value)) {
             editText.setText(value);
-            listener.onInitialValueSet(metadata.key, null, value);
+            listener.onInitialValueSet(keyStr, null, value);
         }
         else
             editText.setText("");

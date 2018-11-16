@@ -28,6 +28,7 @@ import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
+import au.com.tyo.json.android.utils.JsonMetadata;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 21/9/17.
@@ -62,12 +63,15 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         ViewGroup container = (ViewGroup) v.findViewById(R.id.frame2);
         View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, listener, editable, vertical ? Gravity.LEFT : Gravity.RIGHT, metaDataWatcher);
 
+        JsonMetadata metadata = new JsonMetadata(jsonObject);
+        setViewTags(child, metadata);
+
         View userInputView = child.findViewById(R.id.user_input);
-        final String keyStr = jsonObject.getString("key");
+        // final String keyStr = jsonObject.getString("key");
         if (null != userInputView)
-            metaDataWatcher.setUserInputView(keyStr, userInputView);
+            metaDataWatcher.setUserInputView(metadata.key, userInputView, metadata.required);
         else
-            metaDataWatcher.setUserInputView(keyStr, child);
+            metaDataWatcher.setUserInputView(metadata.key, child, metadata.required);
 
         container.addView(child);
 

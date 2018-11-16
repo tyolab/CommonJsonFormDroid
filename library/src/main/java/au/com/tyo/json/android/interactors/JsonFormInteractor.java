@@ -117,15 +117,17 @@ public class JsonFormInteractor {
     }
 
     private View createStaticView(String name, LayoutInflater factory, JSONObject parentJson) {
-        JSONObject jsonObject = null;
+        int value = -1;
         View view = null;
         try {
-            jsonObject = parentJson.getJSONObject(name);
+            value = parentJson.getInt(name);
 
-            if (jsonObject.has("value"))
-                view = factory.inflate(jsonObject.getInt("value"), null);
+            //if (jsonObject.has("value"))
+            if (value > 0)
+                view = factory.inflate(value, null); //.getInt("value"), null);
 
         } catch (JSONException e) {
+            Log.e(TAG, "failed to get json object header / footer", e);
         }
         return view;
     }

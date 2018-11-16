@@ -17,8 +17,10 @@ import android.widget.LinearLayout;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.TextView;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -203,25 +205,32 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         }
     }
 
+    /**
+     *
+     * We only keep the metadata info for the user input / or updatable
+     * @param key
+     * @param v
+     * @param required
+     */
     @Override
-    public void setUserInputView(String key, View v) {
+    public void setUserInputView(String key, View v, int required) {
         // String key = (String) view.getTag(R.id.key);
-        int i;
+        // int i;
 
         FieldMetadata metadata = null;
         if (metadataMap.containsKey(key)) {
             metadata = getFieldMetaData(key);
-            i = metadata.index;
+             // i = metadata.index;
         }
         else {
-             i = metadataMap.size();
-            metadata.index = i;
+            // i = metadataMap.size();
+            // metadata.index = i;
         }
 
-        if (null != v.getTag(R.id.required)) {
-            int required = (int) v.getTag(R.id.required);
+        //if (null != v.getTag(R.id.required)) {
+        //    int required = (int) v.getTag(R.id.required);
             metadata.required = required;
-        }
+        // }
 
         if (!isEditable())
             setFormRowEditable(metadata.view, false);
@@ -526,5 +535,19 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         bundle.putString("stepName", stepName);
         jsonFormFragment.setArguments(bundle);
         return jsonFormFragment;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (!isEditable()) {
+            Collection<FieldMetadata> values = metadataMap.values();
+            Iterator<FieldMetadata> it = values.iterator();
+            while (it.hasNext()) {
+                FieldMetadata metadata = it.next();
+                setFormRowEditable(metadata.view, false);
+            }
+        }
     }
 }
