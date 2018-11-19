@@ -150,19 +150,21 @@ public class JsonFormInteractor {
                         viewsFromJson.add(gapView);
                     }
 
-                    ViewGroup viewGroup = (ViewGroup) factory.inflate(R.layout.form_group, null);
                     JSONObject childJson = groups.getJSONObject(i);
                     try {
                         List<View> views = createFieldViews(jsonApi, factory, stepName, context, childJson, listener, editable, metaDataWatcher);
-                        for (View view : views)
-                            viewGroup.addView(view);
+                        if (views.size() > 0) {
+                            ViewGroup viewGroup = (ViewGroup) factory.inflate(R.layout.form_group, null);
+                            for (View view : views)
+                                viewGroup.addView(view);
+                            viewsFromJson.add(viewGroup);
+                        }
 
                     } catch (Exception e) {
                         Log.e(TAG,
                                 "Exception occurred in making group view at index : " + i + " : Exception is : "
                                         + e.getMessage());
                     }
-                    viewsFromJson.add(viewGroup);
                 }
             }
         } catch (JSONException e) {

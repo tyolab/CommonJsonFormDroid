@@ -35,7 +35,7 @@
     <dimen name="form_row_padding_bottom">12dp</dimen>
 
     <!-- GROUP -->
-    <dimen name="form_default_group_gap_height">40dp</dimen>
+    <dimen name="form_default_group_gap_height">24dp</dimen>
 
     <!-- SEPARATOR -->
     <dimen name="form_default_separator_height">1dp</dimen>

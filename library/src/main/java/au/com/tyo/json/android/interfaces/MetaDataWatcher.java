@@ -4,6 +4,6 @@ import android.view.View;
 
 public interface MetaDataWatcher {
 
-    void setUserInputView(String key, View v, int required);
+    void setUserInputView(String key, View v, boolean editable, int required);
 
 }

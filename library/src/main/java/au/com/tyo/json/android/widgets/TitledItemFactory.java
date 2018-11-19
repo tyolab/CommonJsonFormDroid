@@ -67,11 +67,10 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         setViewTags(child, metadata);
 
         View userInputView = child.findViewById(R.id.user_input);
-        // final String keyStr = jsonObject.getString("key");
         if (null != userInputView)
-            metaDataWatcher.setUserInputView(metadata.key, userInputView, metadata.required);
+            metaDataWatcher.setUserInputView(metadata.key, userInputView, editable, metadata.required);
         else
-            metaDataWatcher.setUserInputView(metadata.key, child, metadata.required);
+            metaDataWatcher.setUserInputView(metadata.key, child, editable, metadata.required);
 
         container.addView(child);
 
