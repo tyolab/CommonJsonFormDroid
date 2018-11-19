@@ -89,27 +89,6 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
         return views;
     }
 
-        protected void bindUserInput(View parent, JSONObject jsonObject, int gravity) throws JSONException {
-        View view = parent.findViewById(R.id.user_input);
-        String value = jsonObject.getString("value");
-        if (view instanceof android.widget.TextView) {
-            android.widget.TextView inputTextView = (android.widget.TextView) view;
-
-            if (jsonObject.has("textStyle") && jsonObject.getString("textStyle").equalsIgnoreCase("html"))
-                inputTextView.setText(Html.fromHtml(value));
-            else
-                inputTextView.setText(value);
-
-            inputTextView.setGravity(gravity);
-        }
-        else if (view instanceof EditText) {
-            EditText inputTextView = (EditText) view;
-            inputTextView.setText(value);
-        }
-        else
-            throw new IllegalStateException("Unknown user input view type");
-    }
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @SuppressLint("ResourceType")
     protected View createEditText(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, final CommonListener listener) throws JSONException {

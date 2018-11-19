@@ -31,24 +31,24 @@ import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 /**
  * Created by vijay on 24-05-2015.
  */
-public class TitledLabelFactory extends TitledItemFactory {
+public class TitledClickableLabelFactory extends TitledItemFactory {
 
-    public static final String KEY = TitledLabelFactory.class.getSimpleName();
+    public static final String KEY = TitledClickableLabelFactory.class.getSimpleName();
 
-    private static final String TAG = TitledLabelFactory.class.getSimpleName();
+    private static final String TAG = TitledClickableLabelFactory.class.getSimpleName();
 
-    public TitledLabelFactory(String widgetKey) {
+    public TitledClickableLabelFactory(String widgetKey) {
         super(widgetKey);
     }
 
-    public TitledLabelFactory() {
-        super(TitledLabelFactory.class.getSimpleName());
+    public TitledClickableLabelFactory() {
+        super(TitledClickableLabelFactory.class.getSimpleName());
     }
 
     @Override
     protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
 
-        View v = factory.inflate(R.layout.item_label, null);
+        View v = factory.inflate(R.layout.item_clickable_label, null);
 
         bindUserInput(v, jsonObject, gravity, listener, editable, metaDataWatcher);
 

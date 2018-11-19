@@ -1,22 +1,20 @@
 package au.com.tyo.json.android.widgets;
 
-import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
-import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
@@ -61,5 +59,36 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
             titletext.setText(jsonObject.getString("value"));
         else
             titletext.setVisibility(View.GONE);
+    }
+
+    protected void bindUserInput(View parent, JSONObject jsonObject, int gravity, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException {
+        View userInputView = parent.findViewById(R.id.user_input);
+        String value = jsonObject.getString("value");
+
+        if (userInputView instanceof android.widget.TextView) {
+            android.widget.TextView inputTextView = (android.widget.TextView) userInputView;
+
+            if (jsonObject.has("textStyle") && jsonObject.getString("textStyle").equalsIgnoreCase("html"))
+                inputTextView.setText(Html.fromHtml(value));
+            else
+                inputTextView.setText(value);
+
+            inputTextView.setGravity(gravity);
+        }
+        else if (userInputView instanceof EditText) {
+            EditText inputTextView = (EditText) userInputView;
+            inputTextView.setText(value);
+        }
+        else
+            throw new IllegalStateException("Unknown user input view type");
+
+        if (null != userInputView) {
+            metaDataWatcher.setUserInputView(jsonObject.getString("key"), userInputView, editable, -1);
+
+            if (jsonObject.has("clickable") && jsonObject.getBoolean("clickable")) {
+                userInputView.setClickable(true);
+                userInputView.setOnClickListener(listener);
+            }
+        }
     }
 }
