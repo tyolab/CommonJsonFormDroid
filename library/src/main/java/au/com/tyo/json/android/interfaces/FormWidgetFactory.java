@@ -18,6 +18,10 @@ public abstract class FormWidgetFactory {
         this.widgetKey = widgetKey;
     }
 
+    public FormWidgetFactory() {
+
+    }
+
     public String getWidgetKey() {
         return widgetKey;
     }

@@ -83,7 +83,7 @@ public class TitledSwitchButtonFactory extends TitledItemFactory {
 //            }
 //        });
 
-        setViewTags(switchButton, jsonObject);
+        // setViewTags(switchButton, jsonObject);
         return v;
     }
 

@@ -40,6 +40,10 @@ public class CheckBoxFactory extends CompoundItemFactory {
         super(widgetKey);
     }
 
+    public CheckBoxFactory() {
+        super();
+    }
+
     @Override
     protected void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
 

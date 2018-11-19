@@ -40,10 +40,14 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         super(widgetKey);
     }
 
+    public TitledItemFactory() {
+
+    }
+
     protected abstract View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
-    protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException {
+    protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException {
         ViewGroup v;
 
         boolean vertical = false;
@@ -62,9 +66,6 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         // if it is aligned vertically, we adjust form to the "left"
         ViewGroup container = (ViewGroup) v.findViewById(R.id.frame2);
         View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, listener, editable, vertical ? Gravity.LEFT : Gravity.RIGHT, metaDataWatcher);
-
-        JsonMetadata metadata = new JsonMetadata(jsonObject);
-        setViewTags(child, metadata);
 
         View userInputView = child.findViewById(R.id.user_input);
         if (null != userInputView)

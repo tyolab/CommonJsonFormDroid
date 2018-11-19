@@ -135,6 +135,9 @@ public class FormHelper {
         JsonFormInteractor.registerWidget(titledSwitchButtonFactory);
         JsonFormInteractor.registerWidget(userProvidedViewFactory);
 
+        JsonFormFieldButton.setWidgetType(TitledButtonFactory.class.getSimpleName());
+        JsonFormInteractor.registerWidget(TitledButtonFactory.class);
+
         JsonFormInteractor.registerWidget(GroupTitleFactory.class);
     }
 
@@ -143,13 +146,17 @@ public class FormHelper {
     }
 
     public static JsonFormFieldEditText createTitledEditTextField(String key, String title, String text) {
-        JsonFormFieldEditText editText = new JsonFormFieldEditText(key, titledTextFactory.getClass().getSimpleName(), title, "");
+        JsonFormFieldEditText editText = new JsonFormFieldEditText(key, title, "");
+        editText.type = titledTextFactory.getClass().getSimpleName();
         editText.value = text;
         return editText;
     }
 
     public static JsonFormFieldTitledLabel createTitledLabelField(String key, String title, String text) {
-        JsonFormFieldTitledLabel label = new JsonFormFieldTitledLabel(key, TitledLabelFactory.class.getSimpleName(), title, "");
+        JsonFormFieldTitledLabel label = new JsonFormFieldTitledLabel(key, title, "");
+
+        // make sure we use the right widget
+        label.type = TitledLabelFactory.class.getSimpleName();
         label.value = text;
         return label;
     }
@@ -164,23 +171,45 @@ public class FormHelper {
     }
 
     public static JsonFormFieldSwitch createSwitchButton(String key, String title, boolean initValue) {
-        JsonFormFieldSwitch switchButton = new JsonFormFieldSwitch(key, TitledSwitchButtonFactory.class.getSimpleName(), title);
+        JsonFormFieldSwitch switchButton = new JsonFormFieldSwitch(key, title);
+        switchButton.type = TitledSwitchButtonFactory.class.getSimpleName();
         switchButton.value = String.valueOf(initValue);
         return switchButton;
     }
 
-    public static JsonFormFieldButton createButton(String key, String title) {
-        JsonFormFieldButton switchButton = new JsonFormFieldButton(key, TitledButtonFactory.class.getSimpleName());
-        switchButton.title = title;
-        return switchButton;
+    public static JsonFormFieldButton createButton(String key, String title, String text) {
+        JsonFormFieldButton fieldButton = new JsonFormFieldButton(key, title);
+        fieldButton.value = text;
+        fieldButton.type = TitledButtonFactory.class.getSimpleName();
+        return fieldButton;
+    }
+
+    public static JsonFormFieldTitledLabel createLabelButton(String key, String title, String text) {
+        JsonFormFieldTitledLabel fieldButton = new JsonFormFieldTitledLabel(key, title);
+        fieldButton.value = text;
+        fieldButton.type = TitledLabelFactory.class.getSimpleName();
+        fieldButton.clickable = true;
+        return fieldButton;
     }
 
     public static <T extends FormWidgetFactory> JsonFormField createFieldWidget(String key, Class<T> factoryClass, Object value) {
         return createFieldWidget(key, factoryClass.getSimpleName(), value);
     }
 
+    /**
+     * Create a field with the provide widget type, and user doesn't have to provide value
+     *
+     * @param key
+     * @param type
+     * @param value
+     * @return
+     */
     public static JsonFormField createFieldWidget(String key, String type, Object value) {
-        JsonFormField formField = new JsonFormField(key, type);
+        return createFieldWidget(key, type, value, false);
+    }
+
+    public static JsonFormField createFieldWidget(String key, String type, Object value, boolean required) {
+        JsonFormField formField = new JsonFormField(key, type, required);
         formField.value = value;
         return formField;
     }
@@ -444,9 +473,13 @@ public class FormHelper {
 
         if (null != subMetaMap && subMetaMap.containsKey(JsonForm.FORM_META_KEY_WIDGET)) {
             field = new JsonFormFieldWithTitleAndHint(fieldKey,
-                    (String) subMetaMap.get(JsonForm.FORM_META_KEY_WIDGET),
                     newTitle,
                     subMetaMap.containsKey(JsonForm.FORM_META_KEY_HINT) ? (String) subMetaMap.get(JsonForm.FORM_META_KEY_HINT) : "");
+            field.type = (String) subMetaMap.get(JsonForm.FORM_META_KEY_WIDGET);
+
+            if (field.type == null)
+                throw new IllegalStateException("Widget field (" + field.key + ")'s type is not specified");
+
             field.value = value != null ? value.toString() : "";
         }
         else {

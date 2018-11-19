@@ -20,6 +20,10 @@ public class GapFactory extends CommonItemFactory {
         super(widgetKey);
     }
 
+    public GapFactory() {
+        super();
+    }
+
     @Override
     public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
         List<View> views = new ArrayList<>(1);

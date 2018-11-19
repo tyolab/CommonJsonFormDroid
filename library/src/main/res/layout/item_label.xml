@@ -23,5 +23,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/user_input"
         android:gravity="center_vertical|right"
+        style="@style/AppStyle.Form.LabelField"
         />
 </FrameLayout>

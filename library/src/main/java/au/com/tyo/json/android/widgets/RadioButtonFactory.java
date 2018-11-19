@@ -40,6 +40,10 @@ public class RadioButtonFactory extends CompoundItemFactory {
         super(widgetKey);
     }
 
+    public RadioButtonFactory() {
+
+    }
+
     @Override
     protected void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
 

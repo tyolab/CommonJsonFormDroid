@@ -46,13 +46,13 @@ public class JsonFormInteractor {
     }
 
     private void registerWidgets() {
-        registerWidget(new EditTextFactory(JsonFormConstants.EDIT_TEXT));
-        registerWidget(new LabelFactory(JsonFormConstants.LABEL));
-        registerWidget(new CheckBoxFactory(JsonFormConstants.CHECK_BOX));
-        registerWidget(new RadioButtonFactory(JsonFormConstants.RADIO_BUTTON));
-        registerWidget(new ImagePickerFactory(JsonFormConstants.CHOOSE_IMAGE));
-        registerWidget(new SpinnerFactory(JsonFormConstants.SPINNER));
-        registerWidget(new GapFactory(JsonFormConstants.GAP));
+        registerWidget(new EditTextFactory());
+        registerWidget(new LabelFactory());
+        registerWidget(new CheckBoxFactory());
+        registerWidget(new RadioButtonFactory());
+        registerWidget(new ImagePickerFactory());
+        registerWidget(new SpinnerFactory());
+        registerWidget(new GapFactory());
     }
 
     public static void registerWidget(String key, FormWidgetFactory factory) {
@@ -117,7 +117,7 @@ public class JsonFormInteractor {
     }
 
     private View createStaticView(String name, LayoutInflater factory, JSONObject parentJson) {
-        int value = -1;
+        int value;
         View view = null;
         try {
             value = parentJson.getInt(name);
@@ -162,13 +162,12 @@ public class JsonFormInteractor {
 
                     } catch (Exception e) {
                         Log.e(TAG,
-                                "Exception occurred in making group view at index : " + i + " : Exception is : "
-                                        + e.getMessage());
+                                "Exception occurred in making group view at index : " + i + "", e);
                     }
                 }
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Json exception occurred : " + e.getMessage());
+            Log.e(TAG, "Json exception occurred", e);
         }
         return  viewsFromJson;
     }
@@ -190,7 +189,11 @@ public class JsonFormInteractor {
                 for (int i = 0; i < fields.length(); i++) {
                     JSONObject childJson = fields.getJSONObject(i);
                     try {
-                        FormWidgetFactory widgetFactory = map.get(childJson.getString("type"));
+                        String widgetType = childJson.getString("type");
+                        FormWidgetFactory widgetFactory = map.get(widgetType);
+
+                        if (null == widgetFactory)
+                            throw new IllegalStateException("Unknown widget type: " + widgetType);
 
                         if (count > 0) {
                             View separator = factory.inflate(R.layout.form_separator, null);
@@ -207,8 +210,7 @@ public class JsonFormInteractor {
 
                     } catch (Exception e) {
                         Log.e(TAG,
-                                "Exception occurred in making child view at index : " + i + " : Exception is : "
-                                        + e.getMessage());
+                                "Exception occurred in making child view at index : " + i + "", e);
                     }
                 }
             }

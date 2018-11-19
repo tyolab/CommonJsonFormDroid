@@ -25,6 +25,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import au.com.tyo.json.JsonFormFieldButton;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
@@ -40,6 +41,10 @@ public class TitledButtonFactory extends TitledItemFactory {
     public static final String KEY = TitledButtonFactory.class.getSimpleName();
 
     private static final String TAG = TitledButtonFactory.class.getSimpleName();
+
+    static {
+        JsonFormFieldButton.setWidgetType(TitledButtonFactory.class.getSimpleName());
+    }
 
     public TitledButtonFactory(String widgetKey) {
         super(widgetKey);
@@ -79,7 +84,10 @@ public class TitledButtonFactory extends TitledItemFactory {
         final String key = jsonObject.getString("key");
 
         String text = null;
-        if (jsonObject.has("text"))
+
+        if (jsonObject.has("value"))
+            text = jsonObject.getString("value");
+        else if (jsonObject.has("text"))
             text = jsonObject.getString("text");
 
         View v = factory.inflate(

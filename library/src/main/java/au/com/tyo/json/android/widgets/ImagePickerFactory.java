@@ -33,6 +33,10 @@ public class ImagePickerFactory extends CompoundItemFactory {
         super(widgetKey);
     }
 
+    public ImagePickerFactory() {
+
+    }
+
     @Override
     protected void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
         Context context = parent.getContext();

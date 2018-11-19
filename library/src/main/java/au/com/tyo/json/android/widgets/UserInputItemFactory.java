@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.rey.material.util.ViewUtil;
 
@@ -45,7 +44,11 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
         super(widgetKey);
     }
 
-    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException;
+    public UserInputItemFactory() {
+
+    }
+
+    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
     public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
@@ -61,8 +64,11 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
 
         // JsonMetadata metadata = new JsonMetadata(jsonObject);
         // setViewTags(v, metadata);
+        JsonMetadata metadata = new JsonMetadata(jsonObject);
 
-        View child = createView(jsonApi, factory, v, stepName, jsonObject, listener, editable, metaDataWatcher);
+        View child = createView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, metaDataWatcher);
+        setViewTags(child, metadata);
+
         child.setLayoutParams(layoutParams);
         v.addView(child);
 
@@ -74,6 +80,11 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
                 v.setVisibility(View.GONE);
                 listener.onVisibilityChange(keyStr, null, false);
             }
+        }
+
+        if (jsonObject.has("clickable") && jsonObject.getBoolean("clickable")) {
+            v.setClickable(true);
+            v.setOnClickListener(listener);
         }
         return views;
     }

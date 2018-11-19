@@ -91,4 +91,12 @@
         <item name="android:paddingLeft">@dimen/form_default_separator_padding_left</item>
     </style>
 
+    <style name="AppStyle.Form.Button">
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>
+    </style>
+
+    <style name="AppStyle.Form.LabelField">
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

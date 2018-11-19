@@ -31,6 +31,10 @@ public class SpinnerFactory extends CommonItemFactory {
         super(widgetKey);
     }
 
+    public SpinnerFactory() {
+
+    }
+
     @Override
     public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
         List<View> views = new ArrayList<>(1);

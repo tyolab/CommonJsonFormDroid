@@ -23,6 +23,10 @@ public abstract class CompoundItemFactory extends TitledItemFactory {
         super(widgetKey);
     }
 
+    public CompoundItemFactory() {
+        super();
+    }
+
     @Override
     protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
         ViewGroup v = (ViewGroup) factory.inflate(R.layout.item_compound, null);

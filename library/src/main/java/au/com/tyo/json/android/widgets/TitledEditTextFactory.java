@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import au.com.tyo.json.JsonFormFieldEditText;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
@@ -41,6 +42,10 @@ public class TitledEditTextFactory extends TitledItemFactory {
 
     public static final int MIN_LENGTH = 0;
     public static final int MAX_LENGTH = 0;
+
+    static {
+        JsonFormFieldEditText.setWidgetType(TitledEditTextFactory.class.getSimpleName());
+    }
 
     public TitledEditTextFactory(String widgetKey) {
         super(widgetKey);

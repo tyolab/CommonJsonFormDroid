@@ -58,6 +58,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     private Object form;
 
     private JsonFormExtensionPresenter  formPresenter;
+    private boolean                     darkThemeInUse;
 
     static class FieldMetadata {
         public int index;
@@ -218,14 +219,14 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         // int i;
 
         FieldMetadata metadata = null;
-        if (metadataMap.containsKey(key)) {
+        //if (metadataMap.containsKey(key)) {
             metadata = getFieldMetaData(key);
              // i = metadata.index;
-        }
-        else {
+        //}
+        // else {
             // i = metadataMap.size();
             // metadata.index = i;
-        }
+        // }
 
         //if (null != v.getTag(R.id.required)) {
         //    int required = (int) v.getTag(R.id.required);
@@ -233,9 +234,8 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         // }
 
         //if (!editable)
+        metadata.view = v;
         setFormRowEditable(metadata.view, editable);
-
-        getFieldMetaData(key).view = v;
     }
 
     private FieldMetadata getFieldMetaData(String key) {
@@ -273,7 +273,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     }
 
     private void setFormRowEditable(View view, boolean editable) {
-        if (null == view)
+        if (null == view || isDarkThemeInUse())
             return;
 
         View inputView = view.findViewById(R.id.user_input);
@@ -540,11 +540,22 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     }
 
     private void onFormEditableStateChanged(boolean editable) {
+        if (isDarkThemeInUse())
+            return;
+
         Collection<FieldMetadata> values = metadataMap.values();
         Iterator<FieldMetadata> it = values.iterator();
         while (it.hasNext()) {
             FieldMetadata metadata = it.next();
             setFormRowEditable(metadata.view, editable);
         }
+    }
+
+    private boolean isDarkThemeInUse() {
+        return darkThemeInUse;
+    }
+
+    public void setDarkThemeInUse(boolean darkThemeInUse) {
+        this.darkThemeInUse = darkThemeInUse;
     }
 }

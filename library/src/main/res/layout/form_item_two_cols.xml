@@ -21,8 +21,6 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:layout_gravity="center_vertical"
-    android:clickable="true"
-    android:focusable="true"
     >
 
     <include layout="@layout/form_title"

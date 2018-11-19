@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
@@ -29,7 +30,13 @@ public class UserProvidedViewFactory extends CommonItemFactory {
 
         int resId = jsonObject.getInt("value");
         LayoutInflater factory = LayoutInflater.from(context);
-        views.add(factory.inflate(resId, null));
+
+        View v = factory.inflate(resId, null);
+
+        View userInputView = v.findViewById(R.id.user_input);
+        if (null != userInputView)
+            metaDataWatcher.setUserInputView(jsonObject.getString("key"), userInputView, editable, -1);
+        views.add(v);
 
         return views;
     }

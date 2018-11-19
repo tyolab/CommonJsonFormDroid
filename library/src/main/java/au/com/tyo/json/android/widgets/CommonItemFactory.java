@@ -28,6 +28,10 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         super(widgetKey);
     }
 
+    public CommonItemFactory() {
+        super();
+    }
+
     protected void setViewTags(View v, JSONObject jsonObject) throws JSONException {
         setViewTags(v, new JsonMetadata(jsonObject));
     }
