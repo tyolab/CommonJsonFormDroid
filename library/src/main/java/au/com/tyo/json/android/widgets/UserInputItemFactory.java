@@ -67,7 +67,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
         JsonMetadata metadata = new JsonMetadata(jsonObject);
 
         View child = createView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, metaDataWatcher);
-        setViewTags(child, metadata);
+        setFieldTags(child, metadata);
 
         child.setLayoutParams(layoutParams);
         v.addView(child);

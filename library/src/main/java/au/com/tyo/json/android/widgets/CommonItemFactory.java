@@ -35,7 +35,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
     }
 
     protected void setFieldTags(View v, JsonMetadata metadata) {
-        v.setTag(R.id.key, metadata.key);
+        v.setTag(R.id.key, "field-" + metadata.key);
     }
 
     protected void setUserInputViewTags(View v, JsonMetadata metadata) {
