@@ -142,6 +142,11 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * If all
+     *
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         mJsonApi.onFieldClick(v);

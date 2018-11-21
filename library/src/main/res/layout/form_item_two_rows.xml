@@ -29,6 +29,7 @@
         android:id="@+id/form_row_title"
         android:paddingLeft="0dp"
         android:layout_alignParentTop="true"
+        style="@style/AppStyle.Form.TitleStyle"
         />
 
     <FrameLayout
@@ -42,6 +43,7 @@
         android:layout_gravity="center_vertical"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/form_row_title"
+        style="@style/AppStyle.Form.FieldStyle.AlignLeft"
         >
 
     </FrameLayout>

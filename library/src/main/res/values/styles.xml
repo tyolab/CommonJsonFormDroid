@@ -105,4 +105,18 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="AppStyle.Form.FieldStyle">
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+    <style name="AppStyle.Form.TitleStyle"></style>
+
+    <style name="AppStyle.Form.FieldStyle.AlignLeft">
+        <item name="android:layout_gravity">center_vertical|left</item>
+    </style>
+
+    <style name="AppStyle.Form.FieldStyle.AlignRight">
+        <item name="android:layout_gravity">center_vertical|right</item>
+    </style>
+
 </resources>

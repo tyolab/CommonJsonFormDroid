@@ -31,6 +31,7 @@ import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.widgets.CommonItemFactory;
 import au.com.tyo.json.android.widgets.GroupTitleFactory;
 import au.com.tyo.json.android.widgets.TitledButtonFactory;
+import au.com.tyo.json.android.widgets.TitledClickableLabelFactory;
 import au.com.tyo.json.android.widgets.UserProvidedViewFactory;
 import au.com.tyo.json.util.DataFormEx;
 import au.com.tyo.json.util.DataJson;
@@ -137,6 +138,7 @@ public class FormHelper {
 
         JsonFormFieldButton.setWidgetType(TitledButtonFactory.class.getSimpleName());
         JsonFormInteractor.registerWidget(TitledButtonFactory.class);
+        JsonFormInteractor.registerWidget(TitledClickableLabelFactory.class);
 
         JsonFormInteractor.registerWidget(GroupTitleFactory.class);
     }
@@ -180,7 +182,7 @@ public class FormHelper {
     public static JsonFormFieldButton createButton(String key, String title, String text) {
         JsonFormFieldButton fieldButton = new JsonFormFieldButton(key, title);
         fieldButton.value = text;
-        fieldButton.type = TitledButtonFactory.class.getSimpleName();
+        fieldButton.type = TitledClickableLabelFactory.class.getSimpleName(); // TitledButtonFactory.class.getSimpleName();
         return fieldButton;
     }
 

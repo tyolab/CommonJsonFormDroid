@@ -30,11 +30,15 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         super();
     }
 
-    protected void setViewTags(View v, JSONObject jsonObject) throws JSONException {
-        setViewTags(v, new JsonMetadata(jsonObject));
+    protected void setUserInputViewTags(View v, JSONObject jsonObject) throws JSONException {
+        setUserInputViewTags(v, new JsonMetadata(jsonObject));
     }
 
-    protected void setViewTags(View v, JsonMetadata metadata) {
+    protected void setFieldTags(View v, JsonMetadata metadata) {
+        v.setTag(R.id.key, metadata.key);
+    }
+
+    protected void setUserInputViewTags(View v, JsonMetadata metadata) {
         v.setTag(R.id.key, metadata.key);
         v.setTag(R.id.type, metadata.type);
         v.setTag(R.id.required, metadata.required);
