@@ -1,7 +1,5 @@
 package au.com.tyo.json.android.interfaces;
 
-import android.view.View;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,7 +34,7 @@ public interface JsonApi {
 
     String getPredefinedValueMin(String stepName, String key);
 
-    void onFieldClick(View v);
+    void onFieldClick(String key, String type);
 
     void onFieldValueClear(String key);
 

@@ -63,6 +63,11 @@ public class FormHelper {
 
     private static final String TAG = "FormHelper";
 
+    public static final String WIDGET_TYPE_TITLED_CLICKABLE_LABEL = TitledClickableLabelFactory.class.getSimpleName();
+    public static final String WIDGET_TYPE_TITLED_LABEL = TitledLabelFactory.class.getSimpleName();
+    public static final String WIDGET_TYPE_TITLED_BUTTON = TitledClickableLabelFactory.class.getSimpleName();
+    public static final String WIDGET_TYPE_TITLED_SWITCH_BUTTON = TitledSwitchButtonFactory.class.getSimpleName();
+
     private static final TitledEditTextFactory titledTextFactory = new TitledEditTextFactory();
     private static final TitledLabelFactory titledLabelFactory = new TitledLabelFactory();
     private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
@@ -131,12 +136,15 @@ public class FormHelper {
     }
 
     public static void registerWidgetFactories() {
+        //
+        JsonFormFieldButton.setWidgetType(WIDGET_TYPE_TITLED_BUTTON);
+
+        //
         JsonFormInteractor.registerWidget(titledLabelFactory);
         JsonFormInteractor.registerWidget(titledTextFactory);
         JsonFormInteractor.registerWidget(titledSwitchButtonFactory);
         JsonFormInteractor.registerWidget(userProvidedViewFactory);
 
-        JsonFormFieldButton.setWidgetType(TitledButtonFactory.class.getSimpleName());
         JsonFormInteractor.registerWidget(TitledButtonFactory.class);
         JsonFormInteractor.registerWidget(TitledClickableLabelFactory.class);
 
@@ -174,7 +182,7 @@ public class FormHelper {
 
     public static JsonFormFieldSwitch createSwitchButton(String key, String title, boolean initValue) {
         JsonFormFieldSwitch switchButton = new JsonFormFieldSwitch(key, title);
-        switchButton.type = TitledSwitchButtonFactory.class.getSimpleName();
+        switchButton.type = WIDGET_TYPE_TITLED_SWITCH_BUTTON;
         switchButton.value = String.valueOf(initValue);
         return switchButton;
     }
@@ -182,14 +190,14 @@ public class FormHelper {
     public static JsonFormFieldButton createButton(String key, String title, String text) {
         JsonFormFieldButton fieldButton = new JsonFormFieldButton(key, title);
         fieldButton.value = text;
-        fieldButton.type = TitledClickableLabelFactory.class.getSimpleName(); // TitledButtonFactory.class.getSimpleName();
+        fieldButton.type = WIDGET_TYPE_TITLED_CLICKABLE_LABEL; // TitledButtonFactory.class.getSimpleName();
         return fieldButton;
     }
 
     public static JsonFormFieldTitledLabel createLabelButton(String key, String title, String text) {
         JsonFormFieldTitledLabel fieldButton = new JsonFormFieldTitledLabel(key, title);
         fieldButton.value = text;
-        fieldButton.type = TitledLabelFactory.class.getSimpleName();
+        fieldButton.type = WIDGET_TYPE_TITLED_LABEL;
         fieldButton.clickable = true;
         return fieldButton;
     }

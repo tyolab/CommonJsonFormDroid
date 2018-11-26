@@ -34,7 +34,6 @@ import au.com.tyo.json.android.utils.ImageUtils;
 import au.com.tyo.json.android.utils.ValidationStatus;
 import au.com.tyo.json.android.views.JsonFormFragmentView;
 import au.com.tyo.json.android.viewstates.JsonFormFragmentViewState;
-import au.com.tyo.json.android.widgets.EditTextFactory;
 import au.com.tyo.json.android.widgets.ImagePickerFactory;
 import au.com.tyo.json.android.widgets.SpinnerFactory;
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -172,16 +171,18 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
         }
     }
 
-    public void onClick(View v) {
-        String key = (String) v.getTag(R.id.key);
-        String type = (String) v.getTag(R.id.type);
+    public boolean onFieldClick(String key, String type) {
+        setCurrentKey(key);
+
         if (JsonFormConstants.CHOOSE_IMAGE.equals(type)) {
             getView().hideKeyBoard();
             Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             mCurrentKey = key;
             getView().startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+            return true;
         }
+        return false;
     }
 
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {

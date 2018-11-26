@@ -55,7 +55,7 @@ public class TitledButtonFactory extends TitledItemFactory {
         // if (listenerMethodStr != null)
         //     button.setOnClickListener(new View.OnClickListener() {
         //         @Override
-        //         public void onClick(View v) {
+        //         public void onFieldClick(View v) {
         //             if (null != listenerMethodStr)
         //                 try {
         //                     Method listenerMethod = CommonApp.getInstance().getClass().getDeclaredMethod(listenerMethodStr, String.class, String.class);

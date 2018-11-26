@@ -34,14 +34,16 @@ import au.com.tyo.json.android.utils.ValidationStatus;
 
 public class JsonFormExtensionPresenter extends JsonFormFragmentPresenter {
 
+    // not really necessary, should be a better way to do this
+    // and also common listener also implements this method
+    /*
     @Override
-    public void onClick(View v) {
-        String key = (String) v.getTag(R.id.key);
-        String type = (String) v.getTag(R.id.pick);
-        setCurrentKey(key);
+    public boolean onFieldClick(String key, String type) {
+        super.onFieldClick(key, type);
 
         ((FormFragment) getView()).onUserInputFieldClick(v.getContext(), key, type);
     }
+    */
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && null != data) {
