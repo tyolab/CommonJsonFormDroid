@@ -119,15 +119,17 @@ public class TitledButtonFactory extends TitledItemFactory {
 
         setupOnClickListener(aListener, v);
 
-        TextView buttonText = (TextView) v.findViewById(R.id.button_text);
-        if (null != text && text.length() > 0) {
-            buttonText.setText(text);
-            listener.onInitialValueSet(key, null, text);
-        }
-        else if (jsonObject.has("hint")) {
-            buttonText.setHint(jsonObject.getString("hint"));
-            buttonText.setHintTextColor(Color.GRAY);
-            buttonText.setTextColor(Color.GRAY);
+        View userInputView = v.findViewById(R.id.user_input);
+        if (null != userInputView && userInputView instanceof TextView) {
+            TextView buttonText = (TextView) userInputView;
+            if (null != text && text.length() > 0) {
+                buttonText.setText(text);
+                listener.onInitialValueSet(key, null, text);
+            } else if (jsonObject.has("hint")) {
+                buttonText.setHint(jsonObject.getString("hint"));
+                buttonText.setHintTextColor(Color.GRAY);
+                buttonText.setTextColor(Color.GRAY);
+            }
         }
         return v;
     }

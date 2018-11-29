@@ -85,7 +85,7 @@ public class TitledDatePickerFactory extends TitledButtonFactory {
             date = Calendar.getInstance(TimeZone.getDefault()).getTime();
         }
 
-        final TextView buttonText = (TextView) view.findViewById(R.id.button_text);
+        final TextView buttonText = (TextView) view.findViewById(R.id.user_input);
 
         final int y, m, day;
         Calendar cal = null;

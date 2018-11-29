@@ -51,7 +51,7 @@ public class TitledLabelFactory extends TitledItemFactory {
 
         View v = factory.inflate(R.layout.item_label, null);
 
-        bindUserInput(v, jsonObject, gravity, listener, editable, metaDataWatcher);
+        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, metaDataWatcher);
 
         return v;
     }

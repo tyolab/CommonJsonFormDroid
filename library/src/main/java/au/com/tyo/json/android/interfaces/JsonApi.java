@@ -41,4 +41,6 @@ public interface JsonApi {
     CommonListener getFormOnClickListenerByName(String listenerMethodStr);
 
     CommonListener getFormOnClickListenerByKey(String key, String text);
+
+    Object getNullValueReplacement(String keyStr);
 }

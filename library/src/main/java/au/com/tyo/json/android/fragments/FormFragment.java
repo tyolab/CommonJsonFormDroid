@@ -1,5 +1,6 @@
 package au.com.tyo.json.android.fragments;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,12 +27,14 @@ import java.util.Set;
 
 import au.com.tyo.json.FieldValue;
 import au.com.tyo.json.android.R;
+import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
 import au.com.tyo.json.android.views.OptionalButton;
+import au.com.tyo.json.android.widgets.CommonItemFactory;
 import au.com.tyo.json.android.widgets.TitledItemFactory;
 
 import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
@@ -192,15 +195,17 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         TitledItemFactory.showHideOptionalClearButton(view, text, required);
 
         // update the text
-        if (null != view) {
-            View v = view.findViewById(R.id.button_text);
+        if (null != userInputView) {
+            // View v = view.findViewById(R.id.button_text);
+            //
+            // if (null == v)
+            //     v = userInputView;
 
-            if (null == v)
-                v = userInputView;
+            CommonItemFactory.bindUserInput(getJsonApi(), userInputView, targetKey, text, false);
 
-            if (v instanceof TextView) {
-                TextView button = (TextView) v;
-                button.setText(text);
+            if (userInputView instanceof TextView) {
+                TextView button = (TextView) userInputView;
+                // button.setText(text);
                 button.setTextColor(fieldTextColors);
             }
         }
@@ -297,7 +302,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
             if (inputView instanceof ButtonContainer) {
                 inputView.setClickable(editable);
 
-                View v = view.findViewById(R.id.button_text);
+                View v = view.findViewById(android.R.id.text1);
 
                 if (v instanceof android.widget.TextView) {
                     setInputViewTextColor((android.widget.TextView) v, editable);
@@ -557,5 +562,21 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
     public void setDarkThemeInUse(boolean darkThemeInUse) {
         this.darkThemeInUse = darkThemeInUse;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (null != data && requestCode == JsonFormConstants.REQUEST_FORM_FILLING) {
+            /**
+             * @TODO
+             * to be finished
+             */
+            Object result = data.getParcelableExtra(JsonFormConstants.RESULT_FORM_FILLING);
+            String keyStr = getCurrentKey();
+            updateForm(keyStr, result);
+        }
+        else
+            super.onActivityResult(requestCode, resultCode, data);
     }
 }

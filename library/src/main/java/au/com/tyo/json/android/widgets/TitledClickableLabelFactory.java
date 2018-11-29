@@ -29,6 +29,8 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
+import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
+
 /**
  * Created by vijay on 24-05-2015.
  */
@@ -51,9 +53,12 @@ public class TitledClickableLabelFactory extends TitledItemFactory {
 
         View v = factory.inflate(R.layout.item_clickable_label, null);
 
-        setupOptionalButton(metadata, v, jsonObject.getString("value"), listener);
+        String value = getJsonStringValue(jsonObject);
 
-        bindUserInput(v, jsonObject, gravity, listener, editable, metaDataWatcher);
+        if (metadata.required != VALUE_REQUIRED)
+            setupOptionalButton(metadata, v, value, listener);
+
+        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, metaDataWatcher);
 
         return v;
     }
