@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -20,9 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import au.com.tyo.android.AndroidUtils;
@@ -51,9 +48,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
     protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
-    public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
-
-        List<View> views = new ArrayList<>(1);
+    public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
         LayoutInflater factory = LayoutInflater.from(context);
 
         ViewGroup v = createViewContainer(factory);
@@ -62,17 +57,10 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
 
         final String keyStr = jsonObject.getString("key");
 
-        // JsonMetadata metadata = new JsonMetadata(jsonObject);
-        // setViewTags(v, metadata);
-        JsonMetadata metadata = new JsonMetadata(jsonObject);
-
         View child = createView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, metaDataWatcher);
-        setFieldTags(child, metadata);
 
         child.setLayoutParams(layoutParams);
         v.addView(child);
-
-        views.add(v);
 
         if (jsonObject.has("visible")) {
             boolean visible = Boolean.parseBoolean(jsonObject.getString("visible"));
@@ -86,7 +74,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
             v.setClickable(true);
             v.setOnClickListener(listener);
         }
-        return views;
+        return v;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)

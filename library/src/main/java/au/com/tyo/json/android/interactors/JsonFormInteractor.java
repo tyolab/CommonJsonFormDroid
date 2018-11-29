@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Map;
 
 import au.com.tyo.json.android.R;
-import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
+import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.json.android.widgets.CheckBoxFactory;
 import au.com.tyo.json.android.widgets.EditTextFactory;
 import au.com.tyo.json.android.widgets.GapFactory;
@@ -200,13 +200,15 @@ public class JsonFormInteractor {
                             viewsFromJson.add(separator);
                         }
 
-                        List<View> views = widgetFactory.getViewsFromJson(jsonApi, stepName, context, childJson, listener, editable, metaDataWatcher);
+                        // a ViewGroups with lots of children
+                        JsonMetadata metadata = new JsonMetadata(childJson);
+                        View views = widgetFactory.getViewFromJson(jsonApi, stepName, context, childJson, metadata, listener, editable, metaDataWatcher);
+                        FormWidgetFactory.setFieldTags(views, metadata);
+                        metaDataWatcher.addFieldView(metadata.key, views);
                         if (!widgetFactory.getWidgetKey().equals(GroupTitleFactory.class.getSimpleName()))
                             ++count;
 
-                        if (views.size() > 0) {
-                            viewsFromJson.addAll(views);
-                        }
+                        viewsFromJson.add(views);
 
                     } catch (Exception e) {
                         Log.e(TAG,

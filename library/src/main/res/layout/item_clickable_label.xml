@@ -28,10 +28,27 @@
         />
 </FrameLayout>
 -->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/user_input"
-    style="@style/AppStyle.Form.LabelField"
-    android:clickable="true"
-    />
+    >
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_input"
+        style="@style/AppStyle.Form.LabelField"
+        android:clickable="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        />
+
+    <include layout="@layout/optional_button"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@id/user_input"
+        android:layout_toEndOf="@id/user_input"
+        android:layout_centerVertical="true"
+        />
+
+</RelativeLayout>

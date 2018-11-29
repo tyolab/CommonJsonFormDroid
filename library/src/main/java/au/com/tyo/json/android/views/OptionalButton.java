@@ -20,8 +20,6 @@ public class OptionalButton extends RelativeLayout {
 
     private View imageClear;
 
-    private View imageGo;
-
     public OptionalButton(@NonNull Context context) {
         super(context);
     }
@@ -44,16 +42,13 @@ public class OptionalButton extends RelativeLayout {
         super.onFinishInflate();
 
         imageClear = findViewById(R.id.btn_clear);
-        imageGo = findViewById(R.id.btn_go);
     }
 
     public void showClearButton() {
         imageClear.setVisibility(VISIBLE);
-        imageGo.setVisibility(GONE);
     }
 
     public void hideClearButton() {
-        imageGo.setVisibility(VISIBLE);
         imageClear.setVisibility(GONE);
     }
 

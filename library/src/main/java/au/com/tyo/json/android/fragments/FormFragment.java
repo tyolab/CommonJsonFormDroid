@@ -4,7 +4,6 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,15 +24,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import au.com.tyo.json.FieldValue;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
-import au.com.tyo.utils.StringUtils;
 
-import static au.com.tyo.json.JsonFormField.VALUE_OPTIONAL;
 import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
 
 /**
@@ -59,6 +57,9 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
     private JsonFormExtensionPresenter  formPresenter;
     private boolean                     darkThemeInUse;
+
+    public Map<String, FieldMetadata>   metadataMap;
+    public Map<String, View>            fieldViews;
 
     static class FieldMetadata {
         public int index;
@@ -87,8 +88,6 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         this.form = form;
     }
 
-    public Map<String, FieldMetadata> metadataMap;
-
     public boolean isEditable() {
         return editable;
     }
@@ -114,6 +113,8 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
         if (null == metadataMap)
             metadataMap = new HashMap<>();
+
+        fieldViews = new HashMap<>();
 
         grayColor = getActivity().getResources().getColor(R.color.grey);
         fieldTextColors = getActivity().getResources().getColorStateList(R.color.field_text_colors);
@@ -148,13 +149,16 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         if (null != result) {
             if (result instanceof String)
                 text = (String) result;
-            else if (result instanceof java.lang.Object)
+            else if (result instanceof FieldValue)
+                text = ((FieldValue) result).getStringValue();
+            else
                 text = result.toString();
         }
 
-        // it can be null
-        // if (null == text)
-        //    return;
+        /** it can be null
+         if (null == text)
+            return;
+         */
 
         updateFormField(targetKey, text);
     }
@@ -162,16 +166,17 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     protected void updateFormField(String targetKey, String text) {
         onValueChange(targetKey, null, text);
 
-        View view = getViewByKey(targetKey);
+        View view = getFieldViewByKey(targetKey);
         int required = (int) view.getTag(R.id.required);
 
         View userInputView = view.findViewById(R.id.user_input);
 
-        // show the optional button if it is
-        if (required == VALUE_OPTIONAL) {
+        // show the optional button if there is one
+        if (required != VALUE_REQUIRED) {
             ButtonContainer optionalButton = null;
-            if (userInputView instanceof ButtonContainer)
-                optionalButton = (ButtonContainer) userInputView;;
+            optionalButton = view.findViewById(R.id.btn_clearable);
+            // if (userInputView instanceof ButtonContainer)
+            //     optionalButton = (ButtonContainer) userInputView;
 
             if (null != optionalButton) {
                 if (TextUtils.isEmpty(text)) {
@@ -236,6 +241,11 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         //if (!editable)
         metadata.view = v;
         setFormRowEditable(metadata.view, editable);
+    }
+
+    @Override
+    public void addFieldView(String key, View v) {
+        fieldViews.put(key, v);
     }
 
     private FieldMetadata getFieldMetaData(String key) {
@@ -361,26 +371,13 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         View view = null;
         FieldMetadata metaData = getFieldMetaData(key);
         int index = metaData.index;
-        try {
-            view = mainView.getChildAt(index);
-        }
-        catch (Exception e) {
-            Log.e(TAG, StringUtils.exceptionStackTraceToString(e));
-        }
-
-        if (view == null)
-            for (int i = 0; i < mainView.getChildCount(); i++) {
-                View childView = mainView.getChildAt(i);
-
-                String aKey = (String) view.getTag(R.id.key);
-                if (aKey.equals(key)) {
-                    view= childView;
-                    metaData.index = i;
-                    break;
-                }
-            }
+        view = metaData.view; //
 
         return view;
+    }
+
+    public View getFieldViewByKey(String key) {
+        return fieldViews.get(key);
     }
 
     public void requestFocusForField(String key) {

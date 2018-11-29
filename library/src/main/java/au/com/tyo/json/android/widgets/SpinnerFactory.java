@@ -9,16 +9,13 @@ import android.widget.ArrayAdapter;
 import com.rey.material.util.ViewUtil;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
-import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
+import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.json.android.utils.ValidationStatus;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 
@@ -36,8 +33,8 @@ public class SpinnerFactory extends CommonItemFactory {
     }
 
     @Override
-    public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
-        List<View> views = new ArrayList<>(1);
+    public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
+
         MaterialSpinner spinner = (MaterialSpinner) LayoutInflater.from(context).inflate(R.layout.item_spinner, null);
 
         String hint = jsonObject.optString("hint");
@@ -83,8 +80,7 @@ public class SpinnerFactory extends CommonItemFactory {
             spinner.setSelection(indexToSelect + 1, true);
             spinner.setOnItemSelectedListener(listener);
         }
-        views.add(spinner);
-        return views;
+        return (spinner);
     }
 
     public static ValidationStatus validate(MaterialSpinner spinner) {
