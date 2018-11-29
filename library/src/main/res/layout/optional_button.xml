@@ -8,12 +8,13 @@
     android:layout_gravity="center_vertical|right"
     android:layout_centerVertical="true"
     android:id="@+id/btn_clearable"
+    android:clickable="true"
     >
 
     <include layout="@layout/button_clear"
         android:id="@+id/btn_clear"
-        android:layout_width="@dimen/button_height"
-        android:layout_height="@dimen/button_width"
+        android:layout_width="@dimen/form_clear_button_height"
+        android:layout_height="@dimen/form_clear_button_width"
         android:layout_gravity="center_vertical"
         android:visibility="gone"
         android:layout_marginLeft="3dp"

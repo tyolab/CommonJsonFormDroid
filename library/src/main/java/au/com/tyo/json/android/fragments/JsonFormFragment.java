@@ -153,7 +153,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         String key = (String) v.getTag(R.id.key);
         String type = (String) v.getTag(R.id.type);
 
-        if (!presenter.onFieldClick(key, type))
+        if (!presenter.onFieldClick(v, key, type))
             mJsonApi.onFieldClick(key, type);
 
         hideKeyBoard();
@@ -388,7 +388,8 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     }
 
     @Override
-    public void onUserInputFieldClick(Context context, String key, String text) {
+    public boolean onUserInputFieldClick(View view, String key, String text) {
         // no ops
+        return false;
     }
 }

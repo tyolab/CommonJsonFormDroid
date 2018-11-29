@@ -27,6 +27,7 @@ import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
+import au.com.tyo.json.android.utils.JsonMetadata;
 
 /**
  * Created by vijay on 24-05-2015.
@@ -46,9 +47,11 @@ public class TitledClickableLabelFactory extends TitledItemFactory {
     }
 
     @Override
-    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
+    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
 
         View v = factory.inflate(R.layout.item_clickable_label, null);
+
+        setupOptionalButton(metadata, v, jsonObject.getString("value"), listener);
 
         bindUserInput(v, jsonObject, gravity, listener, editable, metaDataWatcher);
 

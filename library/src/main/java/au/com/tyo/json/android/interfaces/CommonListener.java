@@ -1,6 +1,5 @@
 package au.com.tyo.json.android.interfaces;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
@@ -16,5 +15,5 @@ public interface CommonListener extends View.OnClickListener,
         Spinner.OnItemSelectedListener,
         Switch.OnCheckedChangeListener, OnFieldStateChangeListener, View.OnFocusChangeListener {
 
-    void onUserInputFieldClick(Context context, String key, String text);
+    boolean onUserInputFieldClick(View context, String key, String text);
 }

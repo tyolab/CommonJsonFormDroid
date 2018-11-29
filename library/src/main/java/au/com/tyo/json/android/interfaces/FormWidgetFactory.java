@@ -23,8 +23,13 @@ public abstract class FormWidgetFactory {
         setUserInputViewTags(v, new JsonMetadata(jsonObject));
     }
 
+    public static void setViewTagKey(View v, String key) {
+        v.setTag(R.id.key, key);
+    }
+
     public static void setFieldTags(View v, JsonMetadata metadata) {
         v.setTag(R.id.key, metadata.key);
+        v.setTag(R.id.required, metadata.required);
     }
 
     public static void setUserInputViewTags(View v, JsonMetadata metadata) {

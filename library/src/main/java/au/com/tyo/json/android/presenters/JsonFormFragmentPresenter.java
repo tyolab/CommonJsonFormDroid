@@ -171,7 +171,7 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
         }
     }
 
-    public boolean onFieldClick(String key, String type) {
+    public boolean onFieldClick(View v, String key, String type) {
         setCurrentKey(key);
 
         if (JsonFormConstants.CHOOSE_IMAGE.equals(type)) {

@@ -31,6 +31,8 @@ import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
+import au.com.tyo.json.android.views.OptionalButton;
+import au.com.tyo.json.android.widgets.TitledItemFactory;
 
 import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
 
@@ -144,6 +146,21 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         return false; // let the parent page to deal with ith
     }
 
+    @Override
+    public boolean onUserInputFieldClick(View view, String key, String text) {
+        super.onUserInputFieldClick(view, key, text);
+
+        if (view instanceof OptionalButton) {
+            OptionalButton optionalButton = (OptionalButton) view;
+            if (optionalButton.isOpClear()) {
+                updateFormField(key, null);
+                getJsonApi().onFieldValueClear(key);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void updateForm(String targetKey, java.lang.Object result) {
         String text = null;
         if (null != result) {
@@ -172,21 +189,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         View userInputView = view.findViewById(R.id.user_input);
 
         // show the optional button if there is one
-        if (required != VALUE_REQUIRED) {
-            ButtonContainer optionalButton = null;
-            optionalButton = view.findViewById(R.id.btn_clearable);
-            // if (userInputView instanceof ButtonContainer)
-            //     optionalButton = (ButtonContainer) userInputView;
-
-            if (null != optionalButton) {
-                if (TextUtils.isEmpty(text)) {
-                    optionalButton.getClearableButton().hideClearButton();
-                }
-                else {
-                    optionalButton.getClearableButton().showClearButton();
-                }
-            }
-        }
+        TitledItemFactory.showHideOptionalClearButton(view, text, required);
 
         // update the text
         if (null != view) {

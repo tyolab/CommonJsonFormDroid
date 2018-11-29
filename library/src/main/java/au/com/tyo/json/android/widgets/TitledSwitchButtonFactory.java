@@ -28,6 +28,7 @@ import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
+import au.com.tyo.json.android.utils.JsonMetadata;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
@@ -46,7 +47,7 @@ public class TitledSwitchButtonFactory extends TitledItemFactory {
     }
 
     @Override
-    protected View createUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, JSONObject jsonObject, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
+    protected View createUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
         String value = jsonObject.getString("value");
         final String key = jsonObject.getString("key");
         boolean checked = Boolean.parseBoolean(value);
