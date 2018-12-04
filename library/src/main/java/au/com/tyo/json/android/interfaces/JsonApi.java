@@ -43,4 +43,6 @@ public interface JsonApi {
     CommonListener getFormOnClickListenerByKey(String key, String text);
 
     Object getNullValueReplacement(String keyStr);
+
+    void onValidateRequiredFormFieldFailed(String key);
 }

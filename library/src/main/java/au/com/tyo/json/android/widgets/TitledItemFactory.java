@@ -75,8 +75,9 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.gravity = Gravity.RIGHT;
             child.setLayoutParams(layoutParams);
-            container.addView(child);
         }
+
+        container.addView(child);
 
         View userInputView = child.findViewById(R.id.user_input);
         if (null != userInputView) {

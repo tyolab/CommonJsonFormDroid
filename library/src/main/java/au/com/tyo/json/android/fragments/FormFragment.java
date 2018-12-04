@@ -158,6 +158,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
             if (optionalButton.isOpClear()) {
                 updateFormField(key, null);
                 getJsonApi().onFieldValueClear(key);
+                optionalButton.hideClearButton();
                 return true;
             }
         }
@@ -186,21 +187,23 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     protected void updateFormField(String targetKey, String text) {
         onValueChange(targetKey, null, text);
 
-        View view = getFieldViewByKey(targetKey);
-        int required = (int) view.getTag(R.id.required);
+        View userInputView;
+        View view = getViewByKey(targetKey);
+        int required;
+        if (null == view) {
+            view = getFieldViewByKey(targetKey);
+            userInputView = view.findViewById(R.id.user_input);
+        }
+        else
+            userInputView = view;
 
-        View userInputView = view.findViewById(R.id.user_input);
+        required = (int) userInputView.getTag(R.id.required);
 
         // show the optional button if there is one
         TitledItemFactory.showHideOptionalClearButton(view, text, required);
 
         // update the text
         if (null != userInputView) {
-            // View v = view.findViewById(R.id.button_text);
-            //
-            // if (null == v)
-            //     v = userInputView;
-
             CommonItemFactory.bindUserInput(getJsonApi(), userInputView, targetKey, text, false);
 
             if (userInputView instanceof TextView) {
@@ -209,6 +212,8 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
                 button.setTextColor(fieldTextColors);
             }
         }
+        else
+            throw new IllegalStateException("User input view is not found, and a value is set to attach to the view");
     }
 
     @Override
@@ -367,18 +372,18 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
             onValidateRequiredFormFieldFailed(key);
 
             result = false;
+            break;
         }
         return result;
     }
 
     protected void onValidateRequiredFormFieldFailed(String key) {
-        // no ops
+        getJsonApi().onValidateRequiredFormFieldFailed(key);
     }
 
     public View getViewByKey(String key) {
-        View view = null;
+        View view;
         FieldMetadata metaData = getFieldMetaData(key);
-        int index = metaData.index;
         view = metaData.view; //
 
         return view;

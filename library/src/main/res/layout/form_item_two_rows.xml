@@ -39,9 +39,6 @@
         android:layout_height="wrap_content"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
-        android:background="@android:color/transparent"
-        android:layout_gravity="center_vertical"
-        android:layout_alignParentBottom="true"
         android:layout_below="@id/form_row_title"
         style="@style/AppStyle.Form.FieldStyle.AlignLeft"
         >
