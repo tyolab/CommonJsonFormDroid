@@ -3,13 +3,12 @@ package au.com.tyo.json.android.customviews;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.rey.material.widget.ImageButton;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 12/1/18.
  */
 
-public class ImageOption extends ImageButton {
+public class ImageOption extends android.support.v7.widget.AppCompatImageButton {
 
     public ImageOption(Context context) {
         super(context);
@@ -21,10 +20,6 @@ public class ImageOption extends ImageButton {
 
     public ImageOption(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public ImageOption(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override

@@ -6,11 +6,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.rey.material.util.ViewUtil;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import au.com.tyo.android.AndroidUtils;
 import au.com.tyo.json.android.R;
 
 /**
@@ -34,7 +33,7 @@ public class FormUtils {
         textView.setText(text);
         textView.setTag(R.id.key, key);
         textView.setTag(R.id.type, type);
-        textView.setId(ViewUtil.generateViewId());
+        textView.setId(AndroidUtils.generateViewId());
         textView.setTextSize(textSizeInSp);
         textView.setLayoutParams(layoutParams);
         textView.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));

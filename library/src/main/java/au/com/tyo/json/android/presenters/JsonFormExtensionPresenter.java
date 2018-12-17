@@ -21,8 +21,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.rengwuxian.materialedittext.MaterialEditText;
-
 import au.com.tyo.android.utils.ActivityUtils;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.fragments.FormFragment;
@@ -82,13 +80,13 @@ public class JsonFormExtensionPresenter extends JsonFormFragmentPresenter {
                 view = childAt;
 
             String key = (String) view.getTag(R.id.key);
-            if (view instanceof MaterialEditText) {
-                MaterialEditText editText = (MaterialEditText) view;
+//             if (view instanceof EditText) {
+//                 EditText editText = (EditText) view;
 //                ValidationStatus validationStatus = EditTextFactory.validate(editText);
-//                if (!validationStatus.isValid()) {
-//                    return validationStatus;
-//                }
-            }
+// //                if (!validationStatus.isValid()) {
+// //                    return validationStatus;
+// //                }
+//             }
         }
         return new ValidationStatus(true, null);
     }

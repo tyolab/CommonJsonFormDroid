@@ -10,12 +10,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
-import com.rey.material.widget.Button;
-import com.rey.material.widget.TextView;
+import android.widget.TextView;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -288,13 +287,6 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
             inputView.setTextColor(grayColor);
     }
 
-    private void setInputViewTextColor(android.widget.TextView inputView, boolean editable) {
-        if (editable)
-            inputView.setTextColor(fieldTextColors);
-        else
-            inputView.setTextColor(grayColor);
-    }
-
     private void setFormRowEditable(View view, boolean editable) {
         if (null == view || isDarkThemeInUse())
             return;
@@ -336,8 +328,8 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
                     }
                 }
             }
-            else if (inputView instanceof com.rey.material.widget.Switch)
-                setViewAlpha(inputView, editable);
+            // else if (inputView instanceof com.rey.material.widget.Switch)
+            //     setViewAlpha(inputView, editable);
         }
         else if (view instanceof EditText)
             view.setEnabled(false);

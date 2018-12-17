@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-import com.rey.material.util.ViewUtil;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -95,12 +93,8 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
         //editText.setFloatingLabelText(jsonObject.getString("hint"));
 
         // no no, we don't need it, the id should be "id/user_input"
-        if (editText.getId() < 0) {
-            if (AndroidUtils.getAndroidVersion() >= 17 )
-                editText.setId(View.generateViewId());
-            else
-                editText.setId(ViewUtil.generateViewId());
-        }
+        if (editText.getId() < 0)
+            editText.setId(AndroidUtils.generateViewId());
         // JsonMetadata metadata = new JsonMetadata(jsonObject);
         // setViewTags(editText, metadata);
 

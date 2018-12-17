@@ -30,13 +30,15 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api 'com.github.rey5137:material:1.1.0'
+    implementation "com.android.support:appcompat-v7:${SUPPORT_LIBERY_VERSION}"
 
-    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
-    implementation('com.github.ganfra:material-spinner:1.1.0') {
-        exclude group: 'com.nineoldandroids', module: 'library'
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-    }
+    // try not to rely on too many third-party libraries for this core json form library
+    // api 'com.github.rey5137:material:1.1.0'
+    // implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+    //    implementation('com.github.ganfra:material-spinner:1.1.0') {
+    //        exclude group: 'com.nineoldandroids', module: 'library'
+    //        exclude group: 'com.android.support', module: 'appcompat-v7'
+    //    }
     api project(':CommonJsonForm')
     implementation project(':CommonUtils')
     implementation project(':CommonAndroid')

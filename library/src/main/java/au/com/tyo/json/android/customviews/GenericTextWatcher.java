@@ -1,6 +1,5 @@
 package au.com.tyo.json.android.customviews;
 
-import android.support.v7.internal.widget.TintContextWrapper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -43,10 +42,12 @@ public class GenericTextWatcher implements TextWatcher {
 
                     if (mView.getContext() instanceof JsonApi) {
                         api = (JsonApi) mView.getContext();
-                    } else if (mView.getContext() instanceof TintContextWrapper) {
-                        TintContextWrapper tintContextWrapper = (TintContextWrapper) mView.getContext();
-                        api = (JsonApi) tintContextWrapper.getBaseContext();
-                    } else {
+                    }
+                    // else if (mView.getContext() instanceof TintContextWrapper) {
+                    //     TintContextWrapper tintContextWrapper = (TintContextWrapper) mView.getContext();
+                    //     api = (JsonApi) tintContextWrapper.getBaseContext();
+                    // }
+                    else {
                         throw new RuntimeException("Could not get json api interface");
                     }
                 }

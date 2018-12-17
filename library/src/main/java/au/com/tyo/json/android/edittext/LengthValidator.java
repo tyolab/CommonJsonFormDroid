@@ -1,22 +1,20 @@
 package au.com.tyo.json.android.edittext;
 
-import com.rengwuxian.materialedittext.validation.METValidator;
+import android.widget.AutoCompleteTextView;
 
 /**
  * Created by vijay.rawat01 on 7/21/15.
  */
-public class LengthValidator extends METValidator {
+public class LengthValidator implements AutoCompleteTextView.Validator {
 
     int minLength = 0;
     int maxLength = Integer.MAX_VALUE;
 
     public LengthValidator(String errorMessage, int minLength, int maxLength) {
-        super(errorMessage);
         this.minLength = minLength;
         this.maxLength = maxLength;
     }
 
-    @Override
     public boolean isValid(CharSequence charSequence, boolean isEmpty) {
         if(!isEmpty) {
             if(charSequence.length() >= minLength && charSequence.length() <= maxLength) {
@@ -24,5 +22,15 @@ public class LengthValidator extends METValidator {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isValid(CharSequence text) {
+        return isValid(text, false);
+    }
+
+    @Override
+    public CharSequence fixText(CharSequence invalidText) {
+        return null;
     }
 }

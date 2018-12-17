@@ -5,19 +5,18 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
-import com.rey.material.util.ViewUtil;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import au.com.tyo.android.AndroidUtils;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.json.android.utils.ValidationStatus;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import fr.ganfra.materialspinner.MaterialSpinner;
 
 /**
  * Created by nipun on 30/05/15.
@@ -35,15 +34,15 @@ public class SpinnerFactory extends CommonItemFactory {
     @Override
     public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
 
-        MaterialSpinner spinner = (MaterialSpinner) LayoutInflater.from(context).inflate(R.layout.item_spinner, null);
+        Spinner spinner = (Spinner) LayoutInflater.from(context).inflate(R.layout.item_spinner, null);
 
-        String hint = jsonObject.optString("hint");
-        if (!TextUtils.isEmpty(hint)) {
-            spinner.setHint(jsonObject.getString("hint"));
-            spinner.setFloatingLabelText(jsonObject.getString("hint"));
-        }
+        // String hint = jsonObject.optString("hint");
+        // if (!TextUtils.isEmpty(hint)) {
+        //     spinner.setHint(jsonObject.getString("hint"));
+        //     spinner.setFloatingLabelText(jsonObject.getString("hint"));
+        // }
 
-        spinner.setId(ViewUtil.generateViewId());
+        spinner.setId(AndroidUtils.generateViewId());
 
         spinner.setTag(R.id.key, jsonObject.getString("key"));
         spinner.setTag(R.id.type, jsonObject.getString("type"));
@@ -83,7 +82,7 @@ public class SpinnerFactory extends CommonItemFactory {
         return (spinner);
     }
 
-    public static ValidationStatus validate(MaterialSpinner spinner) {
+    public static ValidationStatus validate(Spinner spinner) {
         if (!(spinner.getTag(R.id.v_required) instanceof String) || !(spinner.getTag(R.id.error) instanceof String)) {
             return new ValidationStatus(true, null);
         }

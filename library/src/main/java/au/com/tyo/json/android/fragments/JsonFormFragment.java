@@ -16,12 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
-
-import com.rey.material.widget.EditText;
-import com.rey.material.widget.Switch;
 
 import org.json.JSONException;
 import org.json.JSONObject;
