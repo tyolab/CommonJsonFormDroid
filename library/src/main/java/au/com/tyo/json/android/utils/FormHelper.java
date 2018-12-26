@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import au.com.tyo.json.JsonFormFieldButton;
-import au.com.tyo.json.JsonFormFieldLabel;
 import au.com.tyo.json.JsonFormGroup;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.widgets.CommonItemFactory;
@@ -342,7 +341,7 @@ public class FormHelper {
                     }
 
                     for (int j = 0; j < formGroup.size(); ++j) {
-                        FormField value = (FormField) formGroup.get(j); // all value are stored as String during form creation
+                        FormField value = (FormField) formGroup.getValue(j); // all value are stored as String during form creation
 
                         addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter, formMetaMap);
                     }
