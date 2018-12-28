@@ -25,7 +25,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import au.com.tyo.json.JsonFormFieldButton;
+import au.com.tyo.json.jsonform.JsonFormFieldButton;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;

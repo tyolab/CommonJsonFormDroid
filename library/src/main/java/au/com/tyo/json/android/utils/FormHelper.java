@@ -24,35 +24,35 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import au.com.tyo.json.JsonFormFieldButton;
-import au.com.tyo.json.JsonFormGroup;
+import au.com.tyo.json.jsonform.JsonFormFieldButton;
+import au.com.tyo.json.jsonform.JsonFormGroup;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.widgets.CommonItemFactory;
 import au.com.tyo.json.android.widgets.GroupTitleFactory;
 import au.com.tyo.json.android.widgets.TitledButtonFactory;
 import au.com.tyo.json.android.widgets.TitledClickableLabelFactory;
 import au.com.tyo.json.android.widgets.UserProvidedViewFactory;
-import au.com.tyo.json.util.DataFormEx;
-import au.com.tyo.json.util.DataJson;
-import au.com.tyo.json.FormBasicItem;
-import au.com.tyo.json.FormObject;
-import au.com.tyo.json.JsonForm;
-import au.com.tyo.json.JsonFormField;
-import au.com.tyo.json.JsonFormFieldDatePicker;
-import au.com.tyo.json.JsonFormFieldEditText;
-import au.com.tyo.json.JsonFormFieldSwitch;
-import au.com.tyo.json.JsonFormFieldTitledLabel;
-import au.com.tyo.json.JsonFormFieldWithTitleAndHint;
-import au.com.tyo.json.JsonFormStep;
+import au.com.tyo.json.form.DataFormEx;
+import au.com.tyo.json.form.DataJson;
+import au.com.tyo.json.form.FormBasicItem;
+import au.com.tyo.json.form.FormObject;
+import au.com.tyo.json.jsonform.JsonForm;
+import au.com.tyo.json.jsonform.JsonFormField;
+import au.com.tyo.json.jsonform.JsonFormFieldDatePicker;
+import au.com.tyo.json.jsonform.JsonFormFieldEditText;
+import au.com.tyo.json.jsonform.JsonFormFieldSwitch;
+import au.com.tyo.json.jsonform.JsonFormFieldTitledLabel;
+import au.com.tyo.json.jsonform.JsonFormFieldWithTitleAndHint;
+import au.com.tyo.json.jsonform.JsonFormStep;
 import au.com.tyo.json.android.interactors.JsonFormInteractor;
 import au.com.tyo.json.android.widgets.TitledEditTextFactory;
 import au.com.tyo.json.android.widgets.TitledLabelFactory;
 import au.com.tyo.json.android.widgets.TitledSwitchButtonFactory;
-import au.com.tyo.json.util.FormField;
-import au.com.tyo.json.util.FormGroup;
+import au.com.tyo.json.form.FormField;
+import au.com.tyo.json.form.FormGroup;
 import au.com.tyo.json.util.TitleKeyConverter;
 
-import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
+import static au.com.tyo.json.jsonform.JsonFormFieldButton.PICK_DATE;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 21/12/17.

@@ -44,8 +44,8 @@ import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.utils.StringUtils;
 
-import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
-import static au.com.tyo.json.JsonFormFieldButton.PICK_TIME;
+import static au.com.tyo.json.jsonform.JsonFormFieldButton.PICK_DATE;
+import static au.com.tyo.json.jsonform.JsonFormFieldButton.PICK_TIME;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 14/8/17.

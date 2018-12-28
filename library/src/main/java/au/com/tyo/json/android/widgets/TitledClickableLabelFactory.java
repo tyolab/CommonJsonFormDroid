@@ -29,7 +29,7 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
-import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
+import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
 
 /**
  * Created by vijay on 24-05-2015.

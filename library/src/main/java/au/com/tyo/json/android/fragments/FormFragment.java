@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import au.com.tyo.json.FieldValue;
+import au.com.tyo.json.form.FieldValue;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.customviews.RadioButton;
@@ -36,7 +36,7 @@ import au.com.tyo.json.android.views.OptionalButton;
 import au.com.tyo.json.android.widgets.CommonItemFactory;
 import au.com.tyo.json.android.widgets.TitledItemFactory;
 
-import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
+import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 19/7/17.

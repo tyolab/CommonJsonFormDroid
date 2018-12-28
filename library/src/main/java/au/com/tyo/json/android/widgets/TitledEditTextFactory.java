@@ -23,7 +23,7 @@ import android.view.ViewGroup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import au.com.tyo.json.JsonFormFieldEditText;
+import au.com.tyo.json.jsonform.JsonFormFieldEditText;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;

@@ -33,7 +33,7 @@ import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.json.android.views.OptionalButton;
 
-import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
+import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 21/9/17.

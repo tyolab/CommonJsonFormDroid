@@ -16,9 +16,9 @@
 
 package au.com.tyo.json.android.utils;
 
-import au.com.tyo.json.FormItem;
-import au.com.tyo.json.FormObject;
-import au.com.tyo.json.JsonForm;
+import au.com.tyo.json.form.FormItem;
+import au.com.tyo.json.form.FormObject;
+import au.com.tyo.json.jsonform.JsonForm;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 22/12/17.

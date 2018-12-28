@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import au.com.tyo.android.AndroidUtils;
-import au.com.tyo.json.JsonFormFieldFilter;
+import au.com.tyo.json.jsonform.JsonFormFieldFilter;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.GenericTextWatcher;
 import au.com.tyo.json.android.interfaces.CommonListener;
