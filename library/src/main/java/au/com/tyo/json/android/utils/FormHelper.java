@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import au.com.tyo.json.android.widgets.TitledImageFactory;
 import au.com.tyo.json.jsonform.JsonFormFieldButton;
 import au.com.tyo.json.jsonform.JsonFormGroup;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
@@ -148,6 +149,7 @@ public class FormHelper {
         JsonFormInteractor.registerWidget(TitledClickableLabelFactory.class);
 
         JsonFormInteractor.registerWidget(GroupTitleFactory.class);
+        JsonFormInteractor.registerWidget(TitledImageFactory.class);
     }
 
     public static String getWidgetName(CommonItemFactory factory) {
@@ -342,8 +344,11 @@ public class FormHelper {
 
                     for (int j = 0; j < formGroup.size(); ++j) {
                         FormField value = (FormField) formGroup.getValue(j); // all value are stored as String during form creation
+                        JsonFormField field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter,
+                                formMetaMap);
 
-                        addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter, formMetaMap);
+                        if (null != value.getType())
+                            field.type = value.getType();
                     }
                 }
                 else
@@ -432,11 +437,12 @@ public class FormHelper {
      * @param keyConverter
      * @param metaMap
      */
-    private static void addField(JsonFormGroup step, String key, String title, Object value, boolean editable, TitleKeyConverter keyConverter, Map metaMap) {
+    private static JsonFormField addField(JsonFormGroup step, String key, String title, Object value, boolean editable, TitleKeyConverter keyConverter, Map metaMap) {
         JsonFormField field = createField(key, title, value, editable, keyConverter, metaMap);
 
         if (null != field)
             step.addField(field);
+        return field;
     }
 
     /**

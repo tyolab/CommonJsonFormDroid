@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import au.com.tyo.json.android.R;
@@ -31,7 +32,6 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
     }
 
     public static String getJsonStringValue(JSONObject jsonObject) {
-
         String text = null;
         try {
             if (jsonObject.has("value"))
@@ -79,6 +79,10 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         else if (userInputView instanceof EditText) {
             EditText inputTextView = (EditText) userInputView;
             inputTextView.setText(value);
+        }
+        else if (userInputView instanceof ImageView) {
+            ImageView imageView = (ImageView) userInputView;
+            jsonApi.loadImage(keyStr, imageView);
         }
         else
             throw new IllegalStateException("Unknown user input view type");

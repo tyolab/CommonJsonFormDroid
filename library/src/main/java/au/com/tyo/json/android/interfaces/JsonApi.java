@@ -1,5 +1,7 @@
 package au.com.tyo.json.android.interfaces;
 
+import android.widget.ImageView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,4 +47,6 @@ public interface JsonApi {
     Object getNullValueReplacement(String keyStr);
 
     void onValidateRequiredFormFieldFailed(String key);
+
+    void loadImage(String keyStr, ImageView imageView);
 }

@@ -4,6 +4,6 @@ import android.graphics.drawable.Drawable;
 
 public interface FieldItem {
 
-    Drawable getImage();
+    Drawable getImageDrawable();
 
 }
