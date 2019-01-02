@@ -1,5 +1,4 @@
 <au.com.tyo.json.android.customviews.RadioButton
-    style="@style/Material.Drawable.RadioButton"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"

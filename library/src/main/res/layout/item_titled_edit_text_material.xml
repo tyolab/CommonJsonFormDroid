@@ -2,14 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
      android:layout_height="match_parent"
      android:layout_width="match_parent">
-    <com.rengwuxian.materialedittext.MaterialEditText
+
+    <!-- replace with your material widget
+        android:layout_gravity="center_vertical|right"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelText=""
+    -->
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/user_input"
         android:gravity="center_vertical|right"
-        android:layout_gravity="center_vertical|right"
-        app:met_floatingLabel="highlight"
-        app:met_floatingLabelText=""
         android:minWidth="@dimen/edit_text_min_length"
         />
 </FrameLayout>

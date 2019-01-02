@@ -5,39 +5,44 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-
-import com.rey.material.util.ViewUtil;
-import au.com.tyo.json.android.R;
-import au.com.tyo.json.android.interfaces.CommonListener;
-import au.com.tyo.json.android.interfaces.FormWidgetFactory;
-import au.com.tyo.json.android.interfaces.JsonApi;
-import au.com.tyo.json.android.utils.ValidationStatus;
+import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import fr.ganfra.materialspinner.MaterialSpinner;
+import au.com.tyo.android.AndroidUtils;
+import au.com.tyo.json.android.R;
+import au.com.tyo.json.android.interfaces.CommonListener;
+import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
+import au.com.tyo.json.android.utils.JsonMetadata;
+import au.com.tyo.json.android.utils.ValidationStatus;
 
 /**
  * Created by nipun on 30/05/15.
  */
-public class SpinnerFactory implements FormWidgetFactory {
+public class SpinnerFactory extends CommonItemFactory {
+
+    public SpinnerFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
+    public SpinnerFactory() {
+
+    }
 
     @Override
-    public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception {
-        List<View> views = new ArrayList<>(1);
-        MaterialSpinner spinner = (MaterialSpinner) LayoutInflater.from(context).inflate(R.layout.item_spinner, null);
+    public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
 
-        String hint = jsonObject.optString("hint");
-        if (!TextUtils.isEmpty(hint)) {
-            spinner.setHint(jsonObject.getString("hint"));
-            spinner.setFloatingLabelText(jsonObject.getString("hint"));
-        }
+        Spinner spinner = (Spinner) LayoutInflater.from(context).inflate(R.layout.item_spinner, null);
 
-        spinner.setId(ViewUtil.generateViewId());
+        // String hint = jsonObject.optString("hint");
+        // if (!TextUtils.isEmpty(hint)) {
+        //     spinner.setHint(jsonObject.getString("hint"));
+        //     spinner.setFloatingLabelText(jsonObject.getString("hint"));
+        // }
+
+        spinner.setId(AndroidUtils.generateViewId());
 
         spinner.setTag(R.id.key, jsonObject.getString("key"));
         spinner.setTag(R.id.type, jsonObject.getString("type"));
@@ -74,11 +79,10 @@ public class SpinnerFactory implements FormWidgetFactory {
             spinner.setSelection(indexToSelect + 1, true);
             spinner.setOnItemSelectedListener(listener);
         }
-        views.add(spinner);
-        return views;
+        return (spinner);
     }
 
-    public static ValidationStatus validate(MaterialSpinner spinner) {
+    public static ValidationStatus validate(Spinner spinner) {
         if (!(spinner.getTag(R.id.v_required) instanceof String) || !(spinner.getTag(R.id.error) instanceof String)) {
             return new ValidationStatus(true, null);
         }

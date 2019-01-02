@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -12,126 +11,97 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import com.rey.material.util.ViewUtil;
+import android.widget.RelativeLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import au.com.tyo.android.AndroidUtils;
-import au.com.tyo.json.JsonFormFieldFilter;
+import au.com.tyo.json.jsonform.JsonFormFieldFilter;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.GenericTextWatcher;
 import au.com.tyo.json.android.interfaces.CommonListener;
-import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
  */
 
-public abstract class UserInputItemFactory extends CommonItemFactory implements FormWidgetFactory {
+public abstract class UserInputItemFactory extends CommonItemFactory {
+
+    public UserInputItemFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
+    public UserInputItemFactory() {
+
+    }
+
+    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
-    public List<View> getViewsFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, CommonListener listener, boolean editable) throws Exception {
-
-        List<View> views = new ArrayList<>(1);
+    public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
         LayoutInflater factory = LayoutInflater.from(context);
+
         ViewGroup v = createViewContainer(factory);
+        RelativeLayout.LayoutParams layoutParams = (new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
 
-        JsonMetadata metadata = new JsonMetadata(jsonObject);
-        setViewTags(v, metadata);
+        final String keyStr = jsonObject.getString("key");
 
-        View child = createView(jsonApi, factory, v, stepName, jsonObject, listener, editable);
+        View child = createView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, metaDataWatcher);
+
+        child.setLayoutParams(layoutParams);
         v.addView(child);
-
-        views.add(v);
 
         if (jsonObject.has("visible")) {
             boolean visible = Boolean.parseBoolean(jsonObject.getString("visible"));
             if (!visible) {
                 v.setVisibility(View.GONE);
-                listener.onVisibilityChange(metadata.key, null, false);
+                listener.onVisibilityChange(keyStr, null, false);
             }
         }
-        return views;
-    }
 
-    protected ViewGroup createViewContainer(LayoutInflater factory) {
-        return (ViewGroup) factory.inflate(R.layout.form_row, null);
-    }
-
-    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException;
-
-    protected View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey) throws JSONException {
-        View v = factory.inflate(R.layout.form_title, null);
-        bindTitle(v, jsonObject, titleKey);
+        if (jsonObject.has("clickable") && jsonObject.getBoolean("clickable")) {
+            v.setClickable(true);
+            v.setOnClickListener(listener);
+        }
         return v;
-    }
-
-    protected void bindTitle(View parent, JSONObject jsonObject, String titleKey) throws JSONException {
-        TextView titletext = (TextView) parent.findViewById(android.R.id.text1);
-        // 1st Column
-        if (jsonObject.has(titleKey))
-            titletext.setText(jsonObject.getString(titleKey));
-        else
-            titletext.setVisibility(View.GONE);
-    }
-
-    protected void bindUserInput(View parent, JSONObject jsonObject, int gravity) throws JSONException {
-        View view = parent.findViewById(R.id.user_input);
-        String value = jsonObject.getString("value");
-        if (view instanceof android.widget.TextView) {
-            android.widget.TextView inputTextView = (android.widget.TextView) view;
-
-            if (jsonObject.has("textStyle") && jsonObject.getString("textStyle").equalsIgnoreCase("html"))
-                inputTextView.setText(Html.fromHtml(value));
-            else
-                inputTextView.setText(value);
-
-            inputTextView.setGravity(gravity);
-        }
-        else if (view instanceof EditText) {
-            EditText inputTextView = (EditText) view;
-            inputTextView.setText(value);
-        }
-        else
-            throw new IllegalStateException("Unknown user input view type");
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @SuppressLint("ResourceType")
-    protected View createEditText(LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, final CommonListener listener) throws JSONException {
+    protected View createEditText(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, final CommonListener listener) throws JSONException {
+        final String keyStr = jsonObject.getString("key");
+
         View v = factory.inflate(
                 resId, parent, false);
         EditText editText = (EditText) v.findViewById(R.id.user_input);
+
+        if (jsonObject.has("editable")) {
+            editText.setEnabled(jsonObject.getBoolean("editable"));
+        }
 
         if (jsonObject.has("hint"))
             editText.setHint(jsonObject.getString("hint"));
         //editText.setFloatingLabelText(jsonObject.getString("hint"));
 
         // no no, we don't need it, the id should be "id/user_input"
-        if (editText.getId() < 0) {
-            if (AndroidUtils.getAndroidVersion() >= 17 )
-                editText.setId(View.generateViewId());
-            else
-                editText.setId(ViewUtil.generateViewId());
-        }
-        JsonMetadata metadata = new JsonMetadata(jsonObject);
-        setViewTags(editText, metadata);
+        if (editText.getId() < 0)
+            editText.setId(AndroidUtils.generateViewId());
+        // JsonMetadata metadata = new JsonMetadata(jsonObject);
+        // setViewTags(editText, metadata);
 
         String value = jsonObject.optString("value");
         if (!TextUtils.isEmpty(value)) {
             editText.setText(value);
-            listener.onInitialValueSet(metadata.key, null, value);
+            listener.onInitialValueSet(keyStr, null, value);
         }
         else
             editText.setText("");
@@ -293,7 +263,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory implements 
             // be careful, setRawInputType doesn't work on the CAP_SETENNCES and CAP_WORDS
             editText.setInputType(types);
         }
-        editText.addTextChangedListener(new GenericTextWatcher(stepName, editText));
+        editText.addTextChangedListener(new GenericTextWatcher(jsonApi, stepName, editText));
 
         editText.setOnFocusChangeListener(listener);
         return v;

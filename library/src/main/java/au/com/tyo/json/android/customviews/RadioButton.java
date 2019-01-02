@@ -1,14 +1,13 @@
 package au.com.tyo.json.android.customviews;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
-
-import com.rey.material.drawable.RadioButtonDrawable;
 
 /**
  * Created by vijay on 5/18/15.
  */
-public class RadioButton extends CompoundButton {
+public class RadioButton extends AppCompatRadioButton {
     public RadioButton(Context context) {
         super(context);
 
@@ -42,13 +41,13 @@ public class RadioButton extends CompoundButton {
     }
 
     private void applyStyle(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        RadioButtonDrawable drawable = new RadioButtonDrawable.Builder(context, attrs, defStyleAttr, defStyleRes)
-                .build();
-        drawable.setInEditMode(isInEditMode());
-        drawable.setAnimEnable(false);
-        setButtonDrawable(null);
-        setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
-        drawable.setAnimEnable(true);
+        // RadioButtonDrawable drawable = new RadioButtonDrawable.Builder(context, attrs, defStyleAttr, defStyleRes)
+        //         .build();
+        // drawable.setInEditMode(isInEditMode());
+        // drawable.setAnimEnable(false);
+        // setButtonDrawable(null);
+        // setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
+        // drawable.setAnimEnable(true);
     }
 
     @Override
@@ -67,13 +66,13 @@ public class RadioButton extends CompoundButton {
      * @param checked
      *            The checked state.
      */
-    public void setCheckedImmediately(boolean checked) {
-        if (mButtonDrawable instanceof RadioButtonDrawable) {
-            RadioButtonDrawable drawable = (RadioButtonDrawable) mButtonDrawable;
-            drawable.setAnimEnable(false);
-            setChecked(checked);
-            drawable.setAnimEnable(true);
-        } else
-            setChecked(checked);
-    }
+    // public void setCheckedImmediately(boolean checked) {
+    //     if (mButtonDrawable instanceof RadioButtonDrawable) {
+    //         RadioButtonDrawable drawable = (RadioButtonDrawable) mButtonDrawable;
+    //         drawable.setAnimEnable(false);
+    //         setChecked(checked);
+    //         drawable.setAnimEnable(true);
+    //     } else
+    //         setChecked(checked);
+    // }
 }

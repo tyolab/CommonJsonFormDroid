@@ -19,28 +19,41 @@ package au.com.tyo.json.android.utils;
 import android.text.TextUtils;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import au.com.tyo.json.DataJson;
-import au.com.tyo.json.FormBasicItem;
-import au.com.tyo.json.FormObject;
-import au.com.tyo.json.JsonForm;
-import au.com.tyo.json.JsonFormField;
-import au.com.tyo.json.JsonFormFieldDatePicker;
-import au.com.tyo.json.JsonFormFieldEditText;
-import au.com.tyo.json.JsonFormFieldSwitch;
-import au.com.tyo.json.JsonFormFieldTitledLabel;
-import au.com.tyo.json.JsonFormFieldWithTitleAndHint;
-import au.com.tyo.json.JsonFormStep;
+import au.com.tyo.json.android.widgets.TitledImageFactory;
+import au.com.tyo.json.jsonform.JsonFormFieldButton;
+import au.com.tyo.json.jsonform.JsonFormGroup;
+import au.com.tyo.json.android.interfaces.FormWidgetFactory;
+import au.com.tyo.json.android.widgets.CommonItemFactory;
+import au.com.tyo.json.android.widgets.GroupTitleFactory;
+import au.com.tyo.json.android.widgets.TitledButtonFactory;
+import au.com.tyo.json.android.widgets.TitledClickableLabelFactory;
+import au.com.tyo.json.android.widgets.UserProvidedViewFactory;
+import au.com.tyo.json.form.DataFormEx;
+import au.com.tyo.json.form.DataJson;
+import au.com.tyo.json.form.FormBasicItem;
+import au.com.tyo.json.form.FormObject;
+import au.com.tyo.json.jsonform.JsonForm;
+import au.com.tyo.json.jsonform.JsonFormField;
+import au.com.tyo.json.jsonform.JsonFormFieldDatePicker;
+import au.com.tyo.json.jsonform.JsonFormFieldEditText;
+import au.com.tyo.json.jsonform.JsonFormFieldSwitch;
+import au.com.tyo.json.jsonform.JsonFormFieldTitledLabel;
+import au.com.tyo.json.jsonform.JsonFormFieldWithTitleAndHint;
+import au.com.tyo.json.jsonform.JsonFormStep;
 import au.com.tyo.json.android.interactors.JsonFormInteractor;
-import au.com.tyo.json.android.widgets.ImageBoxFactory;
 import au.com.tyo.json.android.widgets.TitledEditTextFactory;
 import au.com.tyo.json.android.widgets.TitledLabelFactory;
 import au.com.tyo.json.android.widgets.TitledSwitchButtonFactory;
+import au.com.tyo.json.form.FormField;
+import au.com.tyo.json.form.FormGroup;
+import au.com.tyo.json.util.TitleKeyConverter;
 
-import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
+import static au.com.tyo.json.jsonform.JsonFormFieldButton.PICK_DATE;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 21/12/17.
@@ -48,49 +61,28 @@ import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
 
 public class FormHelper {
 
+    private static final String TAG = "FormHelper";
+
+    public static final String WIDGET_TYPE_TITLED_CLICKABLE_LABEL = TitledClickableLabelFactory.class.getSimpleName();
+    public static final String WIDGET_TYPE_TITLED_LABEL = TitledLabelFactory.class.getSimpleName();
+    public static final String WIDGET_TYPE_TITLED_BUTTON = TitledClickableLabelFactory.class.getSimpleName();
+    public static final String WIDGET_TYPE_TITLED_SWITCH_BUTTON = TitledSwitchButtonFactory.class.getSimpleName();
+
     private static final TitledEditTextFactory titledTextFactory = new TitledEditTextFactory();
     private static final TitledLabelFactory titledLabelFactory = new TitledLabelFactory();
     private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
-    private static final ImageBoxFactory imageBoxFactory = new ImageBoxFactory();
-
-    public interface TitleKeyConverter {
-        String toKey(String title);
-        String toTitle(String key);
-    }
+    private static final UserProvidedViewFactory userProvidedViewFactory = new UserProvidedViewFactory();
 
     public static class GeneralTitleKeyConverter implements TitleKeyConverter {
 
         @Override
         public String toKey(String title) {
-            String[] tokens = title.split(" -_");
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < tokens.length; ++i) {
-                if (TextUtils.isEmpty(tokens[i]))
-                    continue;
-
-                if (i > 0)
-                    sb.append('-');
-
-                sb.append(tokens[i].toLowerCase());
-            }
-            return sb.toString();
+            return FormField.toKey(title);
         }
 
         @Override
         public String toTitle(String key) {
-            String[] tokens = key.split("-_");
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < tokens.length; ++i) {
-                if (TextUtils.isEmpty(tokens[i]))
-                    continue;
-
-                if (i > 0)
-                    sb.append(' ');
-
-                sb.append(tokens[i].substring(0, 1).toUpperCase());
-                sb.append(tokens[i].substring(1));
-            }
-            return sb.toString();
+            return FormField.toTitle(key);
         }
     }
 
@@ -98,6 +90,10 @@ public class FormHelper {
      * The default title/key converter
      */
     private static TitleKeyConverter generalTitleConverter = new GeneralTitleKeyConverter();
+
+    public static TitleKeyConverter getGeneralTitleKeyConverter() {
+        return generalTitleConverter;
+    }
 
     public static class DefaultTitleKeyConverter implements TitleKeyConverter {
 
@@ -140,20 +136,38 @@ public class FormHelper {
     }
 
     public static void registerWidgetFactories() {
+        //
+        JsonFormFieldButton.setWidgetType(WIDGET_TYPE_TITLED_BUTTON);
+
+        //
         JsonFormInteractor.registerWidget(titledLabelFactory);
         JsonFormInteractor.registerWidget(titledTextFactory);
         JsonFormInteractor.registerWidget(titledSwitchButtonFactory);
-        JsonFormInteractor.registerWidget(imageBoxFactory);
+        JsonFormInteractor.registerWidget(userProvidedViewFactory);
+
+        JsonFormInteractor.registerWidget(TitledButtonFactory.class);
+        JsonFormInteractor.registerWidget(TitledClickableLabelFactory.class);
+
+        JsonFormInteractor.registerWidget(GroupTitleFactory.class);
+        JsonFormInteractor.registerWidget(TitledImageFactory.class);
+    }
+
+    public static String getWidgetName(CommonItemFactory factory) {
+        return factory.getClass().getCanonicalName();
     }
 
     public static JsonFormFieldEditText createTitledEditTextField(String key, String title, String text) {
-        JsonFormFieldEditText editText = new JsonFormFieldEditText(key, titledTextFactory.getClass().getSimpleName(), title, "");
+        JsonFormFieldEditText editText = new JsonFormFieldEditText(key, title, "");
+        editText.type = titledTextFactory.getClass().getSimpleName();
         editText.value = text;
         return editText;
     }
 
     public static JsonFormFieldTitledLabel createTitledLabelField(String key, String title, String text) {
-        JsonFormFieldTitledLabel label = new JsonFormFieldTitledLabel(key, titledLabelFactory.getClass().getSimpleName(), title, "");
+        JsonFormFieldTitledLabel label = new JsonFormFieldTitledLabel(key, title, "");
+
+        // make sure we use the right widget
+        label.type = TitledLabelFactory.class.getSimpleName();
         label.value = text;
         return label;
     }
@@ -168,15 +182,60 @@ public class FormHelper {
     }
 
     public static JsonFormFieldSwitch createSwitchButton(String key, String title, boolean initValue) {
-        JsonFormFieldSwitch switchButton = new JsonFormFieldSwitch(key, titledSwitchButtonFactory.getClass().getSimpleName(), title);
+        JsonFormFieldSwitch switchButton = new JsonFormFieldSwitch(key, title);
+        switchButton.type = WIDGET_TYPE_TITLED_SWITCH_BUTTON;
         switchButton.value = String.valueOf(initValue);
         return switchButton;
+    }
+
+    public static JsonFormFieldButton createButton(String key, String title, String text) {
+        JsonFormFieldButton fieldButton = new JsonFormFieldButton(key, title);
+        fieldButton.value = text;
+        fieldButton.type = WIDGET_TYPE_TITLED_CLICKABLE_LABEL; // TitledButtonFactory.class.getSimpleName();
+        return fieldButton;
+    }
+
+    public static JsonFormFieldTitledLabel createLabelButton(String key, String title, String text) {
+        JsonFormFieldTitledLabel fieldButton = new JsonFormFieldTitledLabel(key, title);
+        fieldButton.value = text;
+        fieldButton.type = WIDGET_TYPE_TITLED_LABEL;
+        fieldButton.clickable = true;
+        return fieldButton;
+    }
+
+    public static <T extends FormWidgetFactory> JsonFormField createFieldWidget(String key, Class<T> factoryClass, Object value) {
+        return createFieldWidget(key, factoryClass.getSimpleName(), value);
+    }
+
+    /**
+     * Create a field with the provide widget type, and user doesn't have to provide value
+     *
+     * @param key
+     * @param type
+     * @param value
+     * @return
+     */
+    public static JsonFormField createFieldWidget(String key, String type, Object value) {
+        return createFieldWidget(key, type, value, false);
+    }
+
+    public static JsonFormField createFieldWidget(String key, String type, Object value, boolean required) {
+        JsonFormField formField = new JsonFormField(key, type, required);
+        formField.value = value;
+        return formField;
     }
 
     public static JsonForm createForm(FormBasicItem data, boolean sortFormNeeded) {
         return createForm(data, null, sortFormNeeded);
     }
 
+    /**
+     *
+     * @param data
+     * @param keyConverter
+     * @param sortFormNeeded
+     * @return
+     */
     public static JsonForm createForm(FormBasicItem data, TitleKeyConverter keyConverter, boolean sortFormNeeded) {
         JsonForm form;
 
@@ -199,11 +258,11 @@ public class FormHelper {
 
                 /**
                  * Not necessary to check null value
+                 *
+                 * the field value can be null
                  */
-//                if (null == value)
-//                    continue;
 
-                addField(step, key, value, keyConverter, metaMap);
+                addField(step, key, null, value, data.isEditable(), keyConverter, metaMap);
             }
         }
         else {
@@ -241,7 +300,7 @@ public class FormHelper {
      * @return
      */
     public static JsonForm createForm(Map map, TitleKeyConverter keyConverter, boolean sortForm) {
-        return createForm(map, keyConverter, null, sortForm);
+        return createForm(map, true, keyConverter, null, sortForm);
     }
 
     /**
@@ -252,36 +311,92 @@ public class FormHelper {
      * @param sortForm
      * @return
      */
-    public static JsonForm createForm(Map map, TitleKeyConverter keyConverter, Map metaMap, boolean sortForm) {
+    public static JsonForm createForm(Map map, boolean editable, TitleKeyConverter keyConverter, Map metaMap, boolean sortForm) {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
+        if (keyConverter == null)
+            keyConverter = generalTitleConverter;
 
-        Set<Map.Entry<String, Object>> list = map.entrySet();
+        if (map instanceof DataFormEx) {
+            DataFormEx formMap = (DataFormEx) map;
+            form.title = formMap.getTitle();
 
-        for (Map.Entry<String, Object> entry : list) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
+            step.header = formMap.getHeader();
+            step.footer = formMap.getFooter();
 
-            /**
-             * Form Category
-             */
-            if (value instanceof Map) {
-                Set<Map.Entry> set = ((Map) value).entrySet();
-                for (Map.Entry entry1 : set) {
-                    String subkey = (String) entry1.getKey();
-                    Object subvalue = entry1.getValue();
+            List groups = formMap.getGroups();
 
-                    addField(step, subkey, subvalue, keyConverter, metaMap);
+            Map formMetaMap = formMap.getMetaMap();
+            if (null == formMetaMap)
+                formMetaMap = metaMap;
+
+            for (int i = 0; i < groups.size(); ++i) {
+                Map groupMap = (Map) groups.get(i);
+
+                JsonFormGroup jsonFormGroup = createGroup();
+                if (groupMap instanceof FormGroup) {
+                    FormGroup formGroup = (FormGroup) groupMap;
+
+                    if (formGroup.isShowingTitle() && null != formGroup.getTitle()) {
+                        JsonFormField titleField = createFieldWidget(keyConverter.toKey(formGroup.getTitle()), GroupTitleFactory.class, formGroup.getTitle());
+                        jsonFormGroup.addField(titleField);
+                    }
+
+                    for (int j = 0; j < formGroup.size(); ++j) {
+                        FormField value = (FormField) formGroup.getValue(j); // all value are stored as String during form creation
+                        JsonFormField field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter,
+                                formMetaMap);
+
+                        if (null != value.getType())
+                            field.type = value.getType();
+                    }
                 }
+                else
+                    mapToField(jsonFormGroup, groupMap, editable, keyConverter, formMetaMap);
+
+                step.addGroup(jsonFormGroup);
             }
-            else
-                addField(step, key, value, keyConverter, metaMap);
+        }
+        else {
+            Set<Map.Entry<String, Object>> list = map.entrySet();
+
+            for (Map.Entry<String, Object> entry : list) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                /**
+                 * Form Category
+                 */
+                if (value instanceof Map) {
+                    mapToField(step, (Map) value, editable, keyConverter, metaMap);
+                }
+                else
+                    addField(step, key, null, value, editable, keyConverter, metaMap);
+            }
+
+            if (sortForm)
+                form.sort();
         }
 
-        if (sortForm)
-            form.sort();
-
         return form;
+    }
+
+    /**
+     *
+     * @param jsonFormGroup
+     * @param map
+     * @param editable
+     * @param keyConverter
+     * @param metaMap
+     */
+    private static void mapToField(JsonFormGroup jsonFormGroup, Map map, boolean editable, TitleKeyConverter keyConverter, Map metaMap) {
+        Set<Map.Entry> set = ((Map) map).entrySet();
+        for (Map.Entry entry1 : set) {
+            String subkey = (String) entry1.getKey();
+            Object subvalue = entry1.getValue();
+
+            addField(jsonFormGroup, subkey, null, subvalue, editable, keyConverter, metaMap);
+        }
     }
 
     /**
@@ -298,17 +413,36 @@ public class FormHelper {
 
     /**
      *
+     */
+    private static void addGroup(JsonFormStep step) {
+        JsonFormGroup group = createGroup();
+
+        if (null != group)
+            step.addGroup(group);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private static JsonFormGroup createGroup() {
+        return new JsonFormGroup();
+    }
+
+    /**
+     *
      * @param step
      * @param key
      * @param value
      * @param keyConverter
      * @param metaMap
      */
-    private static void addField(JsonFormStep step, String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
-        JsonFormField field = createField(key, value, keyConverter, metaMap);
+    private static JsonFormField addField(JsonFormGroup step, String key, String title, Object value, boolean editable, TitleKeyConverter keyConverter, Map metaMap) {
+        JsonFormField field = createField(key, title, value, editable, keyConverter, metaMap);
 
         if (null != field)
             step.addField(field);
+        return field;
     }
 
     /**
@@ -319,15 +453,18 @@ public class FormHelper {
      * @param metaMap
      * @return
      */
-    public static JsonFormField createField(String key, Object value, TitleKeyConverter keyConverter, Map metaMap) {
+    public static JsonFormField createField(String key, String title, Object value, boolean editable, TitleKeyConverter keyConverter, Map metaMap) {
+
+        /**
+         * Other data
+         */
         JsonFormField field = null;
         String fieldKey = null != keyConverter ? keyConverter.toKey(key) : key;
         if (null == fieldKey)
             fieldKey = key;
 
-        String newTitle;
-
         Map subMetaMap = null;
+        String newTitle = title;
 
         if (null != metaMap)
             subMetaMap = (Map) metaMap.get(key);
@@ -345,28 +482,34 @@ public class FormHelper {
                     newTitle = localTitle;
             }
         }
-        else {
+        else if (null == newTitle){
             newTitle = null != keyConverter ? keyConverter.toTitle(key) : key;
-            if (null == newTitle)
-                newTitle = key;
         }
 
         if (null != subMetaMap && subMetaMap.containsKey(JsonForm.FORM_META_KEY_WIDGET)) {
             field = new JsonFormFieldWithTitleAndHint(fieldKey,
-                    (String) subMetaMap.get(JsonForm.FORM_META_KEY_WIDGET),
                     newTitle,
                     subMetaMap.containsKey(JsonForm.FORM_META_KEY_HINT) ? (String) subMetaMap.get(JsonForm.FORM_META_KEY_HINT) : "");
+            field.type = (String) subMetaMap.get(JsonForm.FORM_META_KEY_WIDGET);
+
+            if (field.type == null)
+                throw new IllegalStateException("Widget field (" + field.key + ")'s type is not specified");
+
             field.value = value != null ? value.toString() : "";
         }
         else {
-            if (value instanceof Boolean)
+            if (value instanceof JsonFormField)
+                field = (JsonFormField) value;
+            else if (value instanceof Boolean)
                 field = createSwitchButton(fieldKey, newTitle, Boolean.parseBoolean(String.valueOf(value)));
-            else { // for anything else it is just edit text
-                JsonFormFieldEditText labelField = createTitledEditTextField(fieldKey, newTitle, value != null ? value.toString() : "");
+            else {
 
-                // JsonFormFieldLabel labelField = (JsonFormFieldLabel) (field = createTitledLabelField(key, newTitle, value != null ? value.toString() : ""));
-//                if (metaMap.containsKey(JsonForm.FORM_META_KEY_TEXT_STYLE))
-//                    labelField.textStyle = (String) metaMap.get(JsonForm.FORM_META_KEY_TEXT_STYLE);
+                JsonFormField labelField;
+                if (editable)
+                    // for anything else it is just edit text, and it is not editable by default
+                    labelField = createTitledEditTextField(fieldKey, newTitle, value != null ? value.toString() : "");
+                else
+                    labelField = (createTitledLabelField(key, newTitle, value != null ? value.toString() : ""));
                 field = labelField;
             }
         }

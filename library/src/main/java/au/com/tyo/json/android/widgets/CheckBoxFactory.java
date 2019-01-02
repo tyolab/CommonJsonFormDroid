@@ -36,6 +36,14 @@ import au.com.tyo.json.android.interfaces.CommonListener;
  */
 public class CheckBoxFactory extends CompoundItemFactory {
 
+    public CheckBoxFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
+    public CheckBoxFactory() {
+        super();
+    }
+
     @Override
     protected void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
 

@@ -16,12 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
-
-import com.rey.material.widget.EditText;
-import com.rey.material.widget.Switch;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +32,7 @@ import au.com.tyo.json.android.activities.JsonFormActivity;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.mvp.MvpFragment;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.JsonFormFragmentView;
@@ -48,6 +48,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     private Menu                mMenu;
     private JsonApi             mJsonApi;
     private boolean             keyboardHidden = true;
+    private MetaDataWatcher     metaDataWatcher;
 
     public void setJsonApi(JsonApi jsonApi) {
         this.mJsonApi = jsonApi;
@@ -89,8 +90,16 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (null !=mJsonApi)
-            presenter.addFormElements(mJsonApi, mJsonApi.isEditable());
+        if (null != mJsonApi)
+            presenter.addFormElements(mJsonApi, mJsonApi.isEditable(), getMetaDataWatcher());
+    }
+
+    public MetaDataWatcher getMetaDataWatcher() {
+        return metaDataWatcher;
+    }
+
+    public void setMetaDataWatcher(MetaDataWatcher metaDataWatcher) {
+        this.metaDataWatcher = metaDataWatcher;
     }
 
     @Override
@@ -132,11 +141,19 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * If all
+     *
+     * @param v
+     */
     @Override
     public void onClick(View v) {
-        mJsonApi.onFieldClick(v);
 
-        presenter.onClick(v);
+        String key = (String) v.getTag(R.id.key);
+        String type = (String) v.getTag(R.id.type);
+
+        if (!presenter.onFieldClick(v, key, type))
+            mJsonApi.onFieldClick(key, type);
 
         hideKeyBoard();
     }
@@ -370,7 +387,8 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     }
 
     @Override
-    public void onUserInputFieldClick(Context context, String key, String text) {
+    public boolean onUserInputFieldClick(View view, String key, String text) {
         // no ops
+        return false;
     }
 }

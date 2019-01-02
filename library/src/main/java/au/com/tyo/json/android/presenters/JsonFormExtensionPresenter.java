@@ -21,13 +21,10 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.rengwuxian.materialedittext.MaterialEditText;
-
-import au.com.tyo.app.ui.page.Page;
+import au.com.tyo.android.utils.ActivityUtils;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.fragments.FormFragment;
 import au.com.tyo.json.android.utils.ValidationStatus;
-import au.com.tyo.json.android.widgets.EditTextFactory;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 31/7/17.
@@ -35,19 +32,30 @@ import au.com.tyo.json.android.widgets.EditTextFactory;
 
 public class JsonFormExtensionPresenter extends JsonFormFragmentPresenter {
 
+    /**
+     *     not really necessary, should be a better way to do this
+     *     // and also common listener also implements this method
+     *
+     *     =======
+     *
+     *     For form updating
+     *
+     * @param v
+     * @param key
+     * @param type
+     * @return
+     */
     @Override
-    public void onClick(View v) {
-        String key = (String) v.getTag(R.id.key);
-        String type = (String) v.getTag(R.id.pick);
-        setCurrentKey(key);
+    public boolean onFieldClick(View v, String key, String type) {
+        super.onFieldClick(v, key, type);
 
-        ((FormFragment) getView()).onUserInputFieldClick(v.getContext(), key, type);
+        return ((FormFragment) getView()).onUserInputFieldClick(v, key, type);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && null != data) {
             FormFragment fragmentJsonForm = (FormFragment) getView();
-            Object result = Page.getActivityResult(data);
+            Object result = ActivityUtils.getActivityResult(data);
             fragmentJsonForm.updateForm(getCurrentKey(), result);
         }
     }
@@ -72,13 +80,13 @@ public class JsonFormExtensionPresenter extends JsonFormFragmentPresenter {
                 view = childAt;
 
             String key = (String) view.getTag(R.id.key);
-            if (view instanceof MaterialEditText) {
-                MaterialEditText editText = (MaterialEditText) view;
+//             if (view instanceof EditText) {
+//                 EditText editText = (EditText) view;
 //                ValidationStatus validationStatus = EditTextFactory.validate(editText);
-//                if (!validationStatus.isValid()) {
-//                    return validationStatus;
-//                }
-            }
+// //                if (!validationStatus.isValid()) {
+// //                    return validationStatus;
+// //                }
+//             }
         }
         return new ValidationStatus(true, null);
     }

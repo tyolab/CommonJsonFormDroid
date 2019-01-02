@@ -11,10 +11,8 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
-
-import com.rengwuxian.materialedittext.MaterialEditText;
-import com.rey.material.widget.Switch;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,15 +26,13 @@ import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.fragments.JsonFormFragment;
 import au.com.tyo.json.android.interactors.JsonFormInteractor;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.mvp.MvpBasePresenter;
 import au.com.tyo.json.android.utils.ImageUtils;
 import au.com.tyo.json.android.utils.ValidationStatus;
 import au.com.tyo.json.android.views.JsonFormFragmentView;
 import au.com.tyo.json.android.viewstates.JsonFormFragmentViewState;
-import au.com.tyo.json.android.widgets.EditTextFactory;
 import au.com.tyo.json.android.widgets.ImagePickerFactory;
-import au.com.tyo.json.android.widgets.SpinnerFactory;
-import fr.ganfra.materialspinner.MaterialSpinner;
 
 import static au.com.tyo.json.android.utils.FormUtils.dpToPixels;
 
@@ -51,7 +47,7 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
     private String mCurrentKey;
     private JsonFormInteractor mJsonFormInteractor = JsonFormInteractor.getInstance();
 
-    public void addFormElements(JsonApi jsonApi, boolean editable) {
+    public void addFormElements(JsonApi jsonApi, boolean editable, MetaDataWatcher metaDataWatcher) {
         mStepName = getView().getArguments().getString("stepName");
         JSONObject step = getView().getStep(mStepName);
         try {
@@ -60,7 +56,7 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
             e.printStackTrace();
         }
         List<View> views = mJsonFormInteractor.fetchFormElements(jsonApi, mStepName, getView().getContext(),
-                mStepDetails, getView().getCommonListener(), editable);
+                mStepDetails, getView().getCommonListener(), editable, metaDataWatcher);
         getView().addFormElements(views);
     }
 
@@ -103,14 +99,16 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
         for (int i = 0; i < childCount; i++) {
             View childAt = mainView.getChildAt(i);
             String key = (String) childAt.getTag(R.id.key);
-            if (childAt instanceof MaterialEditText) {
-                MaterialEditText editText = (MaterialEditText) childAt;
-                // ValidationStatus validationStatus = EditTextFactory.validate(editText);
-//                if (!validationStatus.isValid()) {
-//                    return validationStatus;
-//                }
-                getView().writeValue(mStepName, key, editText.getText().toString());
-            } else if (childAt instanceof ImageView) {
+//             if (childAt instanceof MaterialEditText) {
+//                 MaterialEditText editText = (MaterialEditText) childAt;
+//                 // ValidationStatus validationStatus = EditTextFactory.validate(editText);
+// //                if (!validationStatus.isValid()) {
+// //                    return validationStatus;
+// //                }
+//                 getView().writeValue(mStepName, key, editText.getText().toString());
+//             }
+//             else
+            if (childAt instanceof ImageView) {
                 ValidationStatus validationStatus = ImagePickerFactory.validate((ImageView) childAt);
                 if (!validationStatus.isValid()) {
                     return validationStatus;
@@ -130,16 +128,17 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
                 if (((RadioButton) childAt).isChecked()) {
                     getView().writeValue(mStepName, parentKey, childKey);
                 }
-            } else if (childAt instanceof MaterialSpinner) {
-                MaterialSpinner spinner = (MaterialSpinner) childAt;
-                ValidationStatus validationStatus = SpinnerFactory.validate(spinner);
-                if (!validationStatus.isValid()) {
-                    spinner.setError(validationStatus.getErrorMessage());
-                    return validationStatus;
-                } else {
-                    spinner.setError(null);
-                }
             }
+            // else if (childAt instanceof MaterialSpinner) {
+            //     MaterialSpinner spinner = (MaterialSpinner) childAt;
+            //     ValidationStatus validationStatus = SpinnerFactory.validate(spinner);
+            //     if (!validationStatus.isValid()) {
+            //         spinner.setError(validationStatus.getErrorMessage());
+            //         return validationStatus;
+            //     } else {
+            //         spinner.setError(null);
+            //     }
+            // }
         }
         return new ValidationStatus(true, null);
     }
@@ -171,16 +170,18 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
         }
     }
 
-    public void onClick(View v) {
-        String key = (String) v.getTag(R.id.key);
-        String type = (String) v.getTag(R.id.type);
+    public boolean onFieldClick(View v, String key, String type) {
+        setCurrentKey(key);
+
         if (JsonFormConstants.CHOOSE_IMAGE.equals(type)) {
             getView().hideKeyBoard();
             Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             mCurrentKey = key;
             getView().startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+            return true;
         }
+        return false;
     }
 
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {

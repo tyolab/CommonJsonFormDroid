@@ -9,12 +9,9 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.rey.material.drawable.RippleDrawable;
-import com.rey.material.widget.RippleManager;
-
 public class CompoundButton extends android.widget.CompoundButton {
 
-    private RippleManager mRippleManager = new RippleManager();
+    // private RippleManager mRippleManager = new RippleManager();
     protected Drawable    mButtonDrawable;
 
     public CompoundButton(Context context) {
@@ -63,33 +60,33 @@ public class CompoundButton extends android.widget.CompoundButton {
     }
 
     private void applyStyle(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        mRippleManager.onCreate(this, context, attrs, defStyleAttr, defStyleRes);
+        // mRippleManager.onCreate(this, context, attrs, defStyleAttr, defStyleRes);
     }
 
-    @Override
-    public void setBackgroundDrawable(Drawable drawable) {
-        Drawable background = getBackground();
-        if (background instanceof RippleDrawable && !(drawable instanceof RippleDrawable))
-            ((RippleDrawable) background).setBackgroundDrawable(drawable);
-        else
-            super.setBackgroundDrawable(drawable);
-    }
+    // @Override
+    // public void setBackgroundDrawable(Drawable drawable) {
+    //     Drawable background = getBackground();
+    //     if (background instanceof RippleDrawable && !(drawable instanceof RippleDrawable))
+    //         ((RippleDrawable) background).setBackgroundDrawable(drawable);
+    //     else
+    //         super.setBackgroundDrawable(drawable);
+    // }
 
-    @Override
-    public void setOnClickListener(OnClickListener l) {
-        if (l == mRippleManager)
-            super.setOnClickListener(l);
-        else {
-            mRippleManager.setOnClickListener(l);
-            setOnClickListener(mRippleManager);
-        }
-    }
+    // @Override
+    // public void setOnClickListener(OnClickListener l) {
+    //     if (l == mRippleManager)
+    //         super.setOnClickListener(l);
+    //     else {
+    //         mRippleManager.setOnClickListener(l);
+    //         setOnClickListener(mRippleManager);
+    //     }
+    // }
 
-    @Override
-    public boolean onTouchEvent(@NonNull MotionEvent event) {
-        boolean result = super.onTouchEvent(event);
-        return mRippleManager.onTouchEvent(event) || result;
-    }
+    // @Override
+    // public boolean onTouchEvent(@NonNull MotionEvent event) {
+    //     boolean result = super.onTouchEvent(event);
+    //     return mRippleManager.onTouchEvent(event) || result;
+    // }
 
     @Override
     public void setButtonDrawable(Drawable d) {

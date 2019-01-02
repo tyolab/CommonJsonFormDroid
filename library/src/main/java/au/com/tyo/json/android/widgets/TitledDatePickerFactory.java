@@ -40,10 +40,12 @@ import au.com.tyo.json.android.R;
 import au.com.tyo.android.utils.SimpleDateUtils;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
+import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.utils.StringUtils;
 
-import static au.com.tyo.json.JsonFormFieldButton.PICK_DATE;
-import static au.com.tyo.json.JsonFormFieldButton.PICK_TIME;
+import static au.com.tyo.json.jsonform.JsonFormFieldButton.PICK_DATE;
+import static au.com.tyo.json.jsonform.JsonFormFieldButton.PICK_TIME;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 14/8/17.
@@ -55,6 +57,10 @@ public class TitledDatePickerFactory extends TitledButtonFactory {
 
     private static final String TAG = "TitledDatePickerFactory";
 
+    public TitledDatePickerFactory(String widgetKey) {
+        super(widgetKey);
+    }
+
     private void setDatePickerMinMax(DatePicker datePicker, long finalMax, long finalMin) {
 
         if (finalMax > -1)
@@ -65,8 +71,8 @@ public class TitledDatePickerFactory extends TitledButtonFactory {
     }
 
     @Override
-    protected View createUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, final JSONObject jsonObject, final CommonListener listener, boolean editable, int gravity) throws JSONException {
-        View view = super.createUserInputView(jsonApi, factory, parent, stepName, jsonObject, listener, editable, gravity);
+    protected View createUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, final JSONObject jsonObject, JsonMetadata metadata, final CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
+        View view = super.createUserInputView(jsonApi, factory, parent, stepName, jsonObject, metadata, listener, editable, gravity, metaDataWatcher);
         String dateString = jsonObject.getString("text");
         final String key = jsonObject.getString("key");
         final String title = jsonObject.getString("title");
@@ -79,7 +85,7 @@ public class TitledDatePickerFactory extends TitledButtonFactory {
             date = Calendar.getInstance(TimeZone.getDefault()).getTime();
         }
 
-        final TextView buttonText = (TextView) view.findViewById(R.id.button_text);
+        final TextView buttonText = (TextView) view.findViewById(R.id.user_input);
 
         final int y, m, day;
         Calendar cal = null;

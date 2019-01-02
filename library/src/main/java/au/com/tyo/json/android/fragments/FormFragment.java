@@ -1,43 +1,48 @@
 package au.com.tyo.json.android.fragments;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.rey.material.widget.Button;
-import com.rey.material.widget.TextView;
-
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import au.com.tyo.json.form.FieldValue;
 import au.com.tyo.json.android.R;
+import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.customviews.RadioButton;
+import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
-import au.com.tyo.utils.StringUtils;
+import au.com.tyo.json.android.views.OptionalButton;
+import au.com.tyo.json.android.widgets.CommonItemFactory;
+import au.com.tyo.json.android.widgets.TitledItemFactory;
 
-import static au.com.tyo.json.JsonFormField.VALUE_OPTIONAL;
-import static au.com.tyo.json.JsonFormField.VALUE_REQUIRED;
+import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 19/7/17.
  */
 
-public class FormFragment extends JsonFormFragment {
+public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
     public static final String          FRAGMENT_JSON_FORM_TAG = "FormFragment";
 
@@ -55,12 +60,17 @@ public class FormFragment extends JsonFormFragment {
     private Object form;
 
     private JsonFormExtensionPresenter  formPresenter;
+    private boolean                     darkThemeInUse;
 
-    public static class FieldMetadata {
+    public Map<String, FieldMetadata>   metadataMap;
+    public Map<String, View>            fieldViews;
+
+    static class FieldMetadata {
         public int index;
         public int required; // -1 nullable, 0 optional, 1 required
         public java.lang.Object value;
         public boolean visible;
+        public View view;
 
         public FieldMetadata(int i, int required) {
             this();
@@ -81,8 +91,6 @@ public class FormFragment extends JsonFormFragment {
     public void setForm(Object form) {
         this.form = form;
     }
-
-    public Map<String, FieldMetadata> metadataMap;
 
     public boolean isEditable() {
         return editable;
@@ -110,8 +118,12 @@ public class FormFragment extends JsonFormFragment {
         if (null == metadataMap)
             metadataMap = new HashMap<>();
 
+        fieldViews = new HashMap<>();
+
         grayColor = getActivity().getResources().getColor(R.color.grey);
         fieldTextColors = getActivity().getResources().getColorStateList(R.color.field_text_colors);
+
+        setMetaDataWatcher(this);
     }
 
     @Override
@@ -136,18 +148,37 @@ public class FormFragment extends JsonFormFragment {
         return false; // let the parent page to deal with ith
     }
 
+    @Override
+    public boolean onUserInputFieldClick(View view, String key, String text) {
+        super.onUserInputFieldClick(view, key, text);
+
+        if (view instanceof OptionalButton) {
+            OptionalButton optionalButton = (OptionalButton) view;
+            if (optionalButton.isOpClear()) {
+                updateFormField(key, null);
+                getJsonApi().onFieldValueClear(key);
+                optionalButton.hideClearButton();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void updateForm(String targetKey, java.lang.Object result) {
         String text = null;
         if (null != result) {
             if (result instanceof String)
                 text = (String) result;
-            else if (result instanceof java.lang.Object)
+            else if (result instanceof FieldValue)
+                text = ((FieldValue) result).getStringValue();
+            else
                 text = result.toString();
         }
 
-        // it can be null
-        // if (null == text)
-        //    return;
+        /** it can be null
+         if (null == text)
+            return;
+         */
 
         updateFormField(targetKey, text);
     }
@@ -155,40 +186,33 @@ public class FormFragment extends JsonFormFragment {
     protected void updateFormField(String targetKey, String text) {
         onValueChange(targetKey, null, text);
 
+        View userInputView;
         View view = getViewByKey(targetKey);
-        int required = (int) view.getTag(R.id.required);
-
-        View userInputView = view.findViewById(R.id.user_input);
-
-        // show the optional button if it is
-        if (required == VALUE_OPTIONAL) {
-            ButtonContainer optionalButton = null;
-            if (userInputView instanceof ButtonContainer)
-                optionalButton = (ButtonContainer) userInputView;;
-
-            if (null != optionalButton) {
-                if (TextUtils.isEmpty(text)) {
-                    optionalButton.getClearableButton().hideClearButton();
-                }
-                else {
-                    optionalButton.getClearableButton().showClearButton();
-                }
-            }
+        int required;
+        if (null == view) {
+            view = getFieldViewByKey(targetKey);
+            userInputView = view.findViewById(R.id.user_input);
         }
+        else
+            userInputView = view;
+
+        required = (int) userInputView.getTag(R.id.required);
+
+        // show the optional button if there is one
+        TitledItemFactory.showHideOptionalClearButton(view, text, required);
 
         // update the text
-        if (null != view) {
-            View v = view.findViewById(R.id.button_text);
+        if (null != userInputView) {
+            CommonItemFactory.bindUserInput(getJsonApi(), userInputView, targetKey, text, false);
 
-            if (null == v)
-                v = userInputView;
-
-            if (v instanceof TextView) {
-                TextView button = (TextView) v;
-                button.setText(text);
+            if (userInputView instanceof TextView) {
+                TextView button = (TextView) userInputView;
+                // button.setText(text);
                 button.setTextColor(fieldTextColors);
             }
         }
+        else
+            throw new IllegalStateException("User input view is not found, and a value is set to attach to the view");
     }
 
     @Override
@@ -196,17 +220,44 @@ public class FormFragment extends JsonFormFragment {
         for (int i = 0; i < views.size(); ++i) {
             View view = views.get(i);
             mainView.addView(view);
-
-            String key = (String) view.getTag(R.id.key);
-
-            FieldMetadata metadata = getFieldMetaData(key);
-            int required = (int) view.getTag(R.id.required);
-            metadata.required = required;
-            metadata.index = i;
-
-            if (!isEditable())
-                setFormRowEditable(view, false);
         }
+    }
+
+    /**
+     *
+     * We only keep the metadata info for the user input / or updatable
+     * @param key
+     * @param v
+     * @param required
+     */
+    @Override
+    public void setUserInputView(String key, View v, boolean editable, int required) {
+        // String key = (String) view.getTag(R.id.key);
+        // int i;
+
+        FieldMetadata metadata = null;
+        //if (metadataMap.containsKey(key)) {
+            metadata = getFieldMetaData(key);
+             // i = metadata.index;
+        //}
+        // else {
+            // i = metadataMap.size();
+            // metadata.index = i;
+        // }
+
+        //if (null != v.getTag(R.id.required)) {
+        //    int required = (int) v.getTag(R.id.required);
+            metadata.required = required;
+        // }
+
+        //if (!editable)
+        metadata.view = v;
+        setFormRowEditable(metadata.view, editable);
+    }
+
+    @Override
+    public void addFieldView(String key, View v) {
+        fieldViews.put(key, v);
     }
 
     private FieldMetadata getFieldMetaData(String key) {
@@ -218,13 +269,8 @@ public class FormFragment extends JsonFormFragment {
         return fieldMetadata;
     }
 
-    public void setFormEditable(boolean editable) {
-        setEditable(editable);
-
-        for (int i = 0; i < mainView.getChildCount(); ++i) {
-            View view = mainView.getChildAt(i);
-            setFormRowEditable(view, editable);
-        }
+    public void changeFormEditableState(boolean editable) {
+        onFormEditableStateChanged(editable);
     }
 
     protected void setViewAlpha(View childView, boolean editable) {
@@ -241,14 +287,10 @@ public class FormFragment extends JsonFormFragment {
             inputView.setTextColor(grayColor);
     }
 
-    private void setInputViewTextColor(android.widget.TextView inputView, boolean editable) {
-        if (editable)
-            inputView.setTextColor(fieldTextColors);
-        else
-            inputView.setTextColor(grayColor);
-    }
-
     private void setFormRowEditable(View view, boolean editable) {
+        if (null == view || isDarkThemeInUse())
+            return;
+
         View inputView = view.findViewById(R.id.user_input);
 
         if (null != inputView) {
@@ -257,7 +299,7 @@ public class FormFragment extends JsonFormFragment {
             if (inputView instanceof ButtonContainer) {
                 inputView.setClickable(editable);
 
-                View v = view.findViewById(R.id.button_text);
+                View v = view.findViewById(android.R.id.text1);
 
                 if (v instanceof android.widget.TextView) {
                     setInputViewTextColor((android.widget.TextView) v, editable);
@@ -286,8 +328,8 @@ public class FormFragment extends JsonFormFragment {
                     }
                 }
             }
-            else if (inputView instanceof com.rey.material.widget.Switch)
-                setViewAlpha(inputView, editable);
+            // else if (inputView instanceof com.rey.material.widget.Switch)
+            //     setViewAlpha(inputView, editable);
         }
         else if (view instanceof EditText)
             view.setEnabled(false);
@@ -322,38 +364,25 @@ public class FormFragment extends JsonFormFragment {
             onValidateRequiredFormFieldFailed(key);
 
             result = false;
+            break;
         }
         return result;
     }
 
     protected void onValidateRequiredFormFieldFailed(String key) {
-        // no ops
+        getJsonApi().onValidateRequiredFormFieldFailed(key);
     }
 
     public View getViewByKey(String key) {
-        View view = null;
+        View view;
         FieldMetadata metaData = getFieldMetaData(key);
-        int index = metaData.index;
-        try {
-            view = mainView.getChildAt(index);
-        }
-        catch (Exception e) {
-            Log.e(TAG, StringUtils.exceptionStackTraceToString(e));
-        }
-
-        if (view == null)
-            for (int i = 0; i < mainView.getChildCount(); i++) {
-                View childView = mainView.getChildAt(i);
-
-                String aKey = (String) view.getTag(R.id.key);
-                if (aKey.equals(key)) {
-                    view= childView;
-                    metaData.index = i;
-                    break;
-                }
-            }
+        view = metaData.view; //
 
         return view;
+    }
+
+    public View getFieldViewByKey(String key) {
+        return fieldViews.get(key);
     }
 
     public void requestFocusForField(String key) {
@@ -503,5 +532,48 @@ public class FormFragment extends JsonFormFragment {
         bundle.putString("stepName", stepName);
         jsonFormFragment.setArguments(bundle);
         return jsonFormFragment;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // onFormEditableStateChanged(editable);
+    }
+
+    private void onFormEditableStateChanged(boolean editable) {
+        if (isDarkThemeInUse())
+            return;
+
+        Collection<FieldMetadata> values = metadataMap.values();
+        Iterator<FieldMetadata> it = values.iterator();
+        while (it.hasNext()) {
+            FieldMetadata metadata = it.next();
+            setFormRowEditable(metadata.view, editable);
+        }
+    }
+
+    private boolean isDarkThemeInUse() {
+        return darkThemeInUse;
+    }
+
+    public void setDarkThemeInUse(boolean darkThemeInUse) {
+        this.darkThemeInUse = darkThemeInUse;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (null != data && requestCode == JsonFormConstants.REQUEST_FORM_FILLING) {
+            /**
+             * @TODO
+             * to be finished
+             */
+            Object result = data.getParcelableExtra(JsonFormConstants.RESULT_FORM_FILLING);
+            String keyStr = getCurrentKey();
+            updateForm(keyStr, result);
+        }
+        else
+            super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -1,6 +1,6 @@
 package au.com.tyo.json.android.interfaces;
 
-import android.view.View;
+import android.widget.ImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +36,17 @@ public interface JsonApi {
 
     String getPredefinedValueMin(String stepName, String key);
 
-    void onFieldClick(View v);
+    void onFieldClick(String key, String type);
 
     void onFieldValueClear(String key);
+
+    CommonListener getFormOnClickListenerByName(String listenerMethodStr);
+
+    CommonListener getFormOnClickListenerByKey(String key, String text);
+
+    Object getNullValueReplacement(String keyStr);
+
+    void onValidateRequiredFormFieldFailed(String key);
+
+    void loadImage(String keyStr, ImageView imageView);
 }

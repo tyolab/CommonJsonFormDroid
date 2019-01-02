@@ -1,22 +1,47 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="default_left_margin">16dp</dimen>
-    <dimen name="default_right_margin">16dp</dimen>
     <integer name="navigationAnimTime">300</integer>
 
-    <dimen name="default_text_size">16sp</dimen>
-    <dimen name="default_text_top_bottom_padding">8sp</dimen>
-    <dimen name="default_bottom_margin">8dp</dimen>
+    <!-- Form Activity -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Form Default -->
+
+    <dimen name="form_default_left_margin">16dp</dimen>
+    <dimen name="form_default_right_margin">16dp</dimen>
+
+    <dimen name="form_default_text_size">16sp</dimen>
+    <dimen name="form_default_text_top_bottom_padding">8sp</dimen>
+    <dimen name="form_default_bottom_margin">0dp</dimen>
     <dimen name="extra_bottom_margin">16dp</dimen>
-    <dimen name="form_row_padding_left">8dp</dimen>
-    <dimen name="form_row_padding_right">2dp</dimen>
-    <dimen name="form_row_image_box_height">168dp</dimen>
-    <dimen name="form_row_min_height">48dp</dimen>
+
     <dimen name="edit_text_min_length">12dp</dimen>
-    <dimen name="button_height">36dp</dimen>
-    <dimen name="button_width">36dp</dimen>
+    <dimen name="form_clear_button_height">24dp</dimen>
+    <dimen name="form_clear_button_width">24dp</dimen>
 
     <dimen name="form_button_margin_right">-5dp</dimen>
+
+    <dimen name="form_group_padding_left">0dp</dimen>
+    <dimen name="form_group_padding_right">0dp</dimen>
+
+    <!-- ROW -->
+    <dimen name="form_default_row_height">48dp</dimen>
+    <dimen name="form_row_padding_left">0dp</dimen>
+    <dimen name="form_row_padding_right">0dp</dimen>
+    <dimen name="form_row_image_box_height">168dp</dimen>
+    <dimen name="form_row_min_height">48dp</dimen>
+    <dimen name="form_row_padding_top">12dp</dimen>
+    <dimen name="form_row_padding_bottom">12dp</dimen>
+
+    <!-- GROUP -->
+    <dimen name="form_default_group_gap_height">24dp</dimen>
+
+    <!-- SEPARATOR -->
+    <dimen name="form_default_separator_height">1dp</dimen>
+    <dimen name="form_default_separator_padding_right">3dp</dimen>
+    <dimen name="form_default_separator_padding_left">3dp</dimen>
+    <dimen name="form_default_separator_container_height">3dp</dimen>
+    <dimen name="form_default_field_icon_width">48dp</dimen>
+    <dimen name="form_default_field_icon_height">48dp</dimen>
 </resources>
