@@ -30,19 +30,23 @@
         android:layout_height="wrap_content"
         android:text="@string/empty_string"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:textColor="@color/lb_tv_white"
         android:id="@+id/preview_box_alt"
         android:focusable="false"
         android:clickable="false"
         />
 
+    <!--
+        Can customize the look of the card box by adding the following:
+
+        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="2dp"
+        card_view:cardCornerRadius="1dp"
+
+    -->
     <au.com.tyo.common.ui.BoxCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/preview_box_bg_img"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="2dp"
-        card_view:cardCornerRadius="1dp"
         android:padding="1dp"
         >
 
