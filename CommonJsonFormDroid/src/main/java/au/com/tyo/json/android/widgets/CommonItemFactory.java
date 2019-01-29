@@ -8,14 +8,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_FIELD;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
@@ -89,7 +91,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
     }
 
-    public static void bindUserInput(JsonApi jsonApi, View parent, JSONObject jsonObject, int gravity, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException {
+    public static void bindUserInput(JsonApi jsonApi, View parent, JSONObject jsonObject, int gravity, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException {
         View userInputView = parent.findViewById(R.id.user_input);
         final String value = getJsonStringValue(jsonObject);
         final String keyStr = jsonObject.getString("key");
@@ -100,7 +102,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         if (null != userInputView) {
             metaDataWatcher.setUserInputView(keyStr, userInputView, editable, -1);
 
-            if (jsonObject.has("clickable") && jsonObject.getBoolean("clickable")) {
+            if (clickable == CLICKABLE_FIELD) {
                 userInputView.setClickable(true);
                 userInputView.setOnClickListener(listener);
             }

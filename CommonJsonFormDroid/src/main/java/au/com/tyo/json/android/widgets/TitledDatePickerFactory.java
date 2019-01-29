@@ -71,8 +71,8 @@ public class TitledDatePickerFactory extends TitledButtonFactory {
     }
 
     @Override
-    protected View createUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, final JSONObject jsonObject, JsonMetadata metadata, final CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
-        View view = super.createUserInputView(jsonApi, factory, parent, stepName, jsonObject, metadata, listener, editable, gravity, metaDataWatcher);
+    protected View createUserInputView(final JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, final String stepName, final JSONObject jsonObject, JsonMetadata metadata, final CommonListener listener, boolean editable, int clickable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
+        View view = super.createUserInputView(jsonApi, factory, parent, stepName, jsonObject, metadata, listener, editable, clickable, gravity, metaDataWatcher);
         String dateString = jsonObject.getString("text");
         final String key = jsonObject.getString("key");
         final String title = jsonObject.getString("title");

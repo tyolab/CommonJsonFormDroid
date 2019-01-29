@@ -26,9 +26,11 @@ public class UserProvidedViewFactory extends CommonItemFactory {
         int resId = jsonObject.getInt("value");
         LayoutInflater factory = LayoutInflater.from(context);
 
+        int clickable = jsonObject.optInt("clickable", 0);
+
         View v = factory.inflate(resId, null);
 
-        bindUserInput(jsonApi, v, jsonObject, -1, listener, editable, metaDataWatcher);
+        bindUserInput(jsonApi, v, jsonObject, -1, listener, editable, clickable, metaDataWatcher);
 
         return (v);
     }

@@ -29,6 +29,8 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
+import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_ROW;
+
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
  */
@@ -43,10 +45,13 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
 
     }
 
-    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException;
+    protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
     public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
+
+        int clickable = jsonObject.optInt("clickable", 0);
+
         LayoutInflater factory = LayoutInflater.from(context);
 
         ViewGroup v = createViewContainer(factory);
@@ -55,7 +60,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
 
         final String keyStr = jsonObject.getString("key");
 
-        View child = createView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, metaDataWatcher);
+        View child = createView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, clickable, metaDataWatcher);
 
         child.setLayoutParams(layoutParams);
         v.addView(child);
@@ -68,7 +73,8 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
             }
         }
 
-        if (jsonObject.has("clickable") && jsonObject.getBoolean("clickable")) {
+        // Clickable on the row level
+        if (clickable == CLICKABLE_ROW) {
             v.setClickable(true);
             v.setOnClickListener(listener);
         }

@@ -199,7 +199,7 @@ public class FormHelper {
         JsonFormFieldTitledLabel fieldButton = new JsonFormFieldTitledLabel(key, title);
         fieldButton.value = text;
         fieldButton.type = WIDGET_TYPE_TITLED_LABEL;
-        fieldButton.clickable = true;
+        fieldButton.clickable = 1;
         return fieldButton;
     }
 
@@ -344,8 +344,13 @@ public class FormHelper {
 
                     for (int j = 0; j < formGroup.size(); ++j) {
                         FormField value = (FormField) formGroup.getValue(j); // all value are stored as String during form creation
-                        JsonFormField field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter,
+                        JsonFormField field;
+                        if (value.getValue() instanceof JsonFormField)
+                            field = (JsonFormField) value.getValue();
+                        else
+                            field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter,
                                 formMetaMap);
+                        field.clickable = value.isClickable();
 
                         if (null != value.getType())
                             field.type = value.getType();

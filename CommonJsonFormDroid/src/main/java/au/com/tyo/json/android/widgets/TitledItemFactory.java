@@ -49,10 +49,10 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
 
     }
 
-    protected abstract View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException;
+    protected abstract View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException;
 
     @Override
-    protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException {
+    protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException {
         ViewGroup v;
 
         boolean vertical = this instanceof CompoundItemFactory ||
@@ -69,7 +69,7 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         // 2nd Column / Row
         // if it is aligned vertically, we adjust form to the "left"
         FrameLayout container = (FrameLayout) v.findViewById(R.id.frame2);
-        View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, vertical ? Gravity.LEFT : Gravity.RIGHT, metaDataWatcher);
+        View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, clickable, vertical ? Gravity.LEFT : Gravity.RIGHT, metaDataWatcher);
 
         if (!vertical) {
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

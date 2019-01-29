@@ -49,7 +49,7 @@ public class TitledClickableLabelFactory extends TitledItemFactory {
     }
 
     @Override
-    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
+    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
 
         View v = factory.inflate(R.layout.item_clickable_label, null);
 
@@ -58,7 +58,7 @@ public class TitledClickableLabelFactory extends TitledItemFactory {
         if (metadata.required != VALUE_REQUIRED)
             setupOptionalButton(metadata, v, value, listener);
 
-        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, metaDataWatcher);
+        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, clickable, metaDataWatcher);
 
         return v;
     }

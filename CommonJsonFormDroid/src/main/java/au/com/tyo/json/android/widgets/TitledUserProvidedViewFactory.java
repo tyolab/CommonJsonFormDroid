@@ -23,13 +23,13 @@ public class TitledUserProvidedViewFactory extends TitledItemFactory {
     }
 
     @Override
-    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
+    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
 
         int resId = jsonObject.getInt("value");
 
         View v = factory.inflate(resId, null);
 
-        bindUserInput(jsonApi, v, jsonObject, -1, listener, editable, metaDataWatcher);
+        bindUserInput(jsonApi, v, jsonObject, -1, listener, editable, clickable, metaDataWatcher);
 
         return v;
     }
