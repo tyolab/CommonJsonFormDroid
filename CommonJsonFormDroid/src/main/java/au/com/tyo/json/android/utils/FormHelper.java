@@ -345,8 +345,10 @@ public class FormHelper {
                     for (int j = 0; j < formGroup.size(); ++j) {
                         FormField value = (FormField) formGroup.getValue(j); // all value are stored as String during form creation
                         JsonFormField field;
-                        if (value.getValue() instanceof JsonFormField)
+                        if (value.getValue() instanceof JsonFormField) {
                             field = (JsonFormField) value.getValue();
+                            jsonFormGroup.addField(field);
+                        }
                         else
                             field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter,
                                 formMetaMap);
@@ -436,17 +438,17 @@ public class FormHelper {
 
     /**
      *
-     * @param step
+     * @param jsonFormGroup
      * @param key
      * @param value
      * @param keyConverter
      * @param metaMap
      */
-    private static JsonFormField addField(JsonFormGroup step, String key, String title, Object value, boolean editable, TitleKeyConverter keyConverter, Map metaMap) {
+    private static JsonFormField addField(JsonFormGroup jsonFormGroup, String key, String title, Object value, boolean editable, TitleKeyConverter keyConverter, Map metaMap) {
         JsonFormField field = createField(key, title, value, editable, keyConverter, metaMap);
 
         if (null != field)
-            step.addField(field);
+            jsonFormGroup.addField(field);
         return field;
     }
 
