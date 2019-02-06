@@ -123,4 +123,8 @@
 
     <style name="AppStyle.Form.ImageField"></style>
 
+    <style name="AppStyle.Form.Footer"></style>
+
+    <style name="AppStyle.Form.Header"></style>
+
 </resources>

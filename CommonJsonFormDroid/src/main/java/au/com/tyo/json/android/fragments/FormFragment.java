@@ -2,6 +2,7 @@ package au.com.tyo.json.android.fragments;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -120,8 +121,17 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
         fieldViews = new HashMap<>();
 
-        grayColor = getActivity().getResources().getColor(R.color.grey);
-        fieldTextColors = getActivity().getResources().getColorStateList(R.color.field_text_colors);
+        /**
+         * The context is themed
+         */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            grayColor = getActivity().getColor(R.color.grey);
+            fieldTextColors = getActivity().getColorStateList(R.color.field_text_colors);
+        }
+        else {
+            grayColor = getActivity().getResources().getColor(R.color.grey);
+            fieldTextColors = getActivity().getResources().getColorStateList(R.color.field_text_colors);
+        }
 
         setMetaDataWatcher(this);
     }
