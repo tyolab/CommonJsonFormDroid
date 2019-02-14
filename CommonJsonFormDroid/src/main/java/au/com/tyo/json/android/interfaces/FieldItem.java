@@ -6,4 +6,5 @@ public interface FieldItem {
 
     Drawable getImageDrawable();
 
+    void checkForUpdates();
 }
