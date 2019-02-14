@@ -45,5 +45,5 @@
     <dimen name="form_default_field_icon_width">48dp</dimen>
     <dimen name="form_default_field_icon_height">48dp</dimen>
     <dimen name="form_default_footer_height">36dp</dimen>
-    <dimen name="form_default_header_height">10dp</dimen>
+    <dimen name="form_default_header_height">24dp</dimen>
 </resources>
