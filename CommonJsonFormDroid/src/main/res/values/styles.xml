@@ -123,8 +123,12 @@
 
     <style name="AppStyle.Form.ImageField"></style>
 
-    <style name="AppStyle.Form.Footer"></style>
+    <style name="AppStyle.Form.Footer">
+        <item name="android:minHeight">@dimen/form_default_footer_height</item>
+    </style>
 
-    <style name="AppStyle.Form.Header"></style>
+    <style name="AppStyle.Form.Header">
+        <item name="android:minHeight">@dimen/form_default_header_height</item>
+    </style>
 
 </resources>
