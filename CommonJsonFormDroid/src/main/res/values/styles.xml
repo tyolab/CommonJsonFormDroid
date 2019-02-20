@@ -110,7 +110,9 @@
         <item name="android:layout_alignParentRight">true</item>
     </style>
 
-    <style name="AppStyle.Form.TitleStyle"></style>
+    <style name="AppStyle.Form.TitleStyle">
+        <item name="android:layout_gravity">left|center_vertical</item>
+    </style>
 
     <style name="AppStyle.Form.FieldStyle.AlignLeft">
         <item name="android:layout_gravity">center_vertical|left</item>
