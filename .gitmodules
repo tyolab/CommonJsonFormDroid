@@ -1,0 +1,9 @@
+[submodule "CommonJsonForm"]
+	path = CommonJsonForm
+	url = https://github.com/tyolab/CommonJsonForm.git
+[submodule "CommonUtils"]
+	path = CommonUtils
+	url = https://github.com/tyolab/CommonUtils.git
+[submodule "CommonAndroid"]
+	path = CommonAndroid
+	url = https://github.com/tyolab/CommonAndroid.git
