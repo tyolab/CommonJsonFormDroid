@@ -391,4 +391,5 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         // no ops
         return false;
     }
+
 }

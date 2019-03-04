@@ -133,4 +133,11 @@
         <item name="android:minHeight">@dimen/form_default_header_height</item>
     </style>
 
+    <style name="AppStyle.Form.Switch">
+        <!--
+            setup switch text style if want to have it
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+        -->
+    </style>
+
 </resources>

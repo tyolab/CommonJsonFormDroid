@@ -353,6 +353,7 @@ public class FormHelper {
                         field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter,
                                 formMetaMap);
                         field.clickable = value.isClickable();
+                        field.enabled = value.isEnabled();
 
                         if (null != value.getType())
                             field.type = value.getType();

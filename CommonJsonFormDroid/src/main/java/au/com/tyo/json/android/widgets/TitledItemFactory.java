@@ -80,12 +80,22 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         container.addView(child);
 
         View userInputView = child.findViewById(R.id.user_input);
+
+        boolean enabled;
+        if (editable) {
+            enabled = jsonObject.optBoolean("enabled", editable);
+        }
+        else
+            enabled = editable;
+
         if (null != userInputView) {
             metaDataWatcher.setUserInputView(metadata.key, userInputView, editable, metadata.required);
             setUserInputViewTags(userInputView, metadata);
+
+            userInputView.setEnabled(enabled);
         }
         else
-            metaDataWatcher.setUserInputView(metadata.key, child, editable, metadata.required);
+            metaDataWatcher.setUserInputView(metadata.key, child, enabled, metadata.required);
 
         return v;
     }

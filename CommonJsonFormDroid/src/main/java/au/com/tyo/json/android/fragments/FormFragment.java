@@ -486,7 +486,6 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     @Override
     public void onValueChange(String parentKey, String childKey, java.lang.Object value) {
         FieldMetadata metadata = addUserInputValueToMetadata(parentKey, childKey, value);
-
     }
 
     @Override
@@ -500,14 +499,25 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         updateFormFieldVisibilityInMetadata(targetKey, visible);
     }
 
+    /**
+     *
+     * @param key
+     * @param childKey
+     * @param visible
+     */
     @Override
-    public void onVisibilityChange(String key, String childKey, boolean b) {
-        updateFormFieldVisibilityInMetadata(key, b);
+    public void onVisibilityChange(String key, String childKey, boolean visible) {
+        // ? TODO should it be updateFormFieldVisibility
+        updateFormFieldVisibilityInMetadata(key, visible);
     }
 
     private void updateFormFieldVisibilityInMetadata(String key, boolean visible) {
         FieldMetadata metaData = getFieldMetaData(key);
         metaData.visible = visible;
+    }
+
+    public void enableField(String key, boolean enabled) {
+        getViewByKey(key).setEnabled(enabled);
     }
 
     @Override

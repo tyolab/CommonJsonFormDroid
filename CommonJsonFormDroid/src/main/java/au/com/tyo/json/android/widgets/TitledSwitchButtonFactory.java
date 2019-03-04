@@ -16,6 +16,7 @@
 
 package au.com.tyo.json.android.widgets;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,22 +70,10 @@ public class TitledSwitchButtonFactory extends TitledItemFactory {
                     boolean checked = ((Switch) v).isChecked();
                     jsonApi.writeValue(stepName, key, String.valueOf(checked));
                 } catch (JSONException e) {
-
+                    Log.e(KEY, "failed to save value with json api", e);
                 }
             }
         });
-//        switchButton.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(Switch view, boolean checked) {
-//                try {
-//                    jsonApi.writeValue(stepName, key, String.valueOf(checked));
-//                } catch (JSONException e) {
-//
-//                }
-//            }
-//        });
-
-        // setViewTags(switchButton, jsonObject);
         return v;
     }
 
