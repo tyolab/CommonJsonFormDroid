@@ -120,13 +120,13 @@ public class JsonFormInteractor {
         int value;
         View view = null;
         try {
-            value = parentJson.getInt(name);
+            value = parentJson.optInt(name, -1);
 
             //if (jsonObject.has("value"))
             if (value > 0)
                 view = factory.inflate(value, null); //.getInt("value"), null);
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             Log.e(TAG, "failed to get json object header / footer", e);
         }
         return view;
