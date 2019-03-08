@@ -86,8 +86,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
     protected View createEditText(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, int resId, String stepName, JSONObject jsonObject, int minLength, int maxLength, final CommonListener listener) throws JSONException {
         final String keyStr = jsonObject.getString("key");
 
-        View v = factory.inflate(
-                resId, parent, false);
+        View v = inflateViewForField(jsonObject, factory, resId); //factory.inflate(resId, parent, false);
         EditText editText = (EditText) v.findViewById(R.id.user_input);
 
         if (jsonObject.has("editable")) {

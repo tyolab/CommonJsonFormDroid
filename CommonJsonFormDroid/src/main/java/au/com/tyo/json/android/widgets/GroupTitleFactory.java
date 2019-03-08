@@ -23,7 +23,9 @@ public class GroupTitleFactory extends CommonItemFactory {
 
         LayoutInflater factory = LayoutInflater.from(context);
 
-        View v = factory.inflate(R.layout.item_group_title, null);
+        int layout = jsonObject.optInt("layout", R.layout.item_group_title);
+
+        View v = factory.inflate(layout, null);
 
         bindTitle(v, jsonObject, "value");
 

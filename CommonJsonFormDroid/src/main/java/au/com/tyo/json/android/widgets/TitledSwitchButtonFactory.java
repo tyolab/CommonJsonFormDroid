@@ -53,7 +53,7 @@ public class TitledSwitchButtonFactory extends TitledItemFactory {
         final String key = jsonObject.getString("key");
         boolean checked = Boolean.parseBoolean(value);
 
-        View v = factory.inflate(R.layout.item_switch_button, null);
+        View v = inflateViewForField(jsonObject, factory, R.layout.item_switch_button, true);
 
         Switch switchButton = (Switch) v.findViewById(R.id.user_input);
 

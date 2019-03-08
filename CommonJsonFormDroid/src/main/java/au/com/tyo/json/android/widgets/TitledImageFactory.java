@@ -49,11 +49,12 @@ public class TitledImageFactory extends TitledItemFactory {
     @Override
     protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
 
-        View v = factory.inflate(R.layout.item_imageview, null);
+        View v = inflateViewForField(jsonObject, factory, R.layout.item_imageview);
 
         bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, clickable, metaDataWatcher);
 
         return v;
     }
+
 
 }

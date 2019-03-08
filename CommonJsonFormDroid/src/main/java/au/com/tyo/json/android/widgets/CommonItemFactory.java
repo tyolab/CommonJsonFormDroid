@@ -33,6 +33,22 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         super();
     }
 
+    protected static View inflateViewForField(JSONObject jsonObject, LayoutInflater factory, int layoutFallback) {
+        return inflateViewForField(jsonObject, factory, layoutFallback, false);
+    }
+
+    protected static View inflateViewForField(JSONObject jsonObject, LayoutInflater factory, int layoutFallback, boolean mustHaveUserInputId) {
+        int layout = jsonObject.optInt("layout", layoutFallback);
+        View v = factory.inflate(layout, null);
+
+        if (mustHaveUserInputId) {
+            if (null == v.findViewById(R.id.user_input))
+                throw new IllegalArgumentException("The layout must contain a view with id: user_input");
+        }
+
+        return v;
+    }
+
     public static String getJsonStringValue(JSONObject jsonObject) {
         String text = null;
         try {
