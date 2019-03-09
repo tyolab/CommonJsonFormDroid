@@ -1,5 +1,6 @@
 package au.com.tyo.json.android.widgets;
 
+import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
+import au.com.tyo.json.android.utils.JsonMetadata;
 
 import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_FIELD;
 
@@ -24,6 +26,8 @@ import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_FIELD;
  */
 
 public abstract class CommonItemFactory extends FormWidgetFactory {
+    
+    private int layoutResourceId = -1;
 
     public CommonItemFactory(String widgetKey) {
         super(widgetKey);
@@ -31,6 +35,15 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
     public CommonItemFactory() {
         super();
+
+    }
+
+    public int getLayoutResourceId() {
+        return layoutResourceId;
+    }
+
+    public void setLayoutResourceId(int layoutResourceId) {
+        this.layoutResourceId = layoutResourceId;
     }
 
     protected static View inflateViewForField(JSONObject jsonObject, LayoutInflater factory, int layoutFallback) {
@@ -39,6 +52,10 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
     protected static View inflateViewForField(JSONObject jsonObject, LayoutInflater factory, int layoutFallback, boolean mustHaveUserInputId) {
         int layout = jsonObject.optInt("layout", layoutFallback);
+
+        if (layout <= 0)
+            layout = layoutFallback;
+
         View v = factory.inflate(layout, null);
 
         if (mustHaveUserInputId) {
@@ -59,25 +76,22 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return text;
     }
 
-    protected static ViewGroup createViewContainer(LayoutInflater factory) {
-        return (ViewGroup) factory.inflate(R.layout.form_row, null);
-    }
+    public static void bindUserInput(JsonApi jsonApi, View parent, JSONObject jsonObject, int gravity, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException {
+        View userInputView = parent.findViewById(R.id.user_input);
+        final String value = getJsonStringValue(jsonObject);
+        final String keyStr = jsonObject.getString("key");
 
-    protected static View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey) throws JSONException {
-        View v = factory.inflate(R.layout.form_title, null);
-        bindTitle(v, jsonObject, titleKey);
-        return v;
-    }
+        bindUserInput(jsonApi, userInputView, keyStr, value, jsonObject.has("textStyle") && jsonObject.getString("textStyle").equalsIgnoreCase("html"));
 
-    protected static void bindTitle(View parent, JSONObject jsonObject, String titleKey) throws JSONException {
-        TextView titletext = (TextView) parent.findViewById(android.R.id.text1);
-        // 1st Column
-        if (jsonObject.has(titleKey))
-            titletext.setText(jsonObject.getString(titleKey));
-        else if (jsonObject.has("value"))
-            titletext.setText(jsonObject.getString("value"));
-        else
-            titletext.setVisibility(View.GONE);
+        // inputTextView.setGravity(gravity);
+        if (null != userInputView) {
+            metaDataWatcher.setUserInputView(keyStr, userInputView, editable, -1);
+
+            if (clickable == CLICKABLE_FIELD) {
+                userInputView.setClickable(true);
+                userInputView.setOnClickListener(listener);
+            }
+        }
     }
 
     public static void bindUserInput(JsonApi jsonApi, View userInputView, String keyStr, String value, boolean styled) {
@@ -107,21 +121,44 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
     }
 
-    public static void bindUserInput(JsonApi jsonApi, View parent, JSONObject jsonObject, int gravity, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException {
-        View userInputView = parent.findViewById(R.id.user_input);
-        final String value = getJsonStringValue(jsonObject);
-        final String keyStr = jsonObject.getString("key");
+    protected static ViewGroup createViewContainer(LayoutInflater factory) {
+        return (ViewGroup) factory.inflate(R.layout.form_row, null);
+    }
 
-        bindUserInput(jsonApi, userInputView, keyStr, value, jsonObject.has("textStyle") && jsonObject.getString("textStyle").equalsIgnoreCase("html"));
+    protected static View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey) throws JSONException {
+        View v = factory.inflate(R.layout.form_title, null);
+        bindTitle(v, jsonObject, titleKey);
+        return v;
+    }
 
-        // inputTextView.setGravity(gravity);
-        if (null != userInputView) {
-            metaDataWatcher.setUserInputView(keyStr, userInputView, editable, -1);
+    protected static void bindTitle(View parent, JSONObject jsonObject, String titleKey) throws JSONException {
+        TextView titletext = (TextView) parent.findViewById(android.R.id.text1);
+        // 1st Column
+        if (jsonObject.has(titleKey))
+            titletext.setText(jsonObject.getString(titleKey));
+        else if (jsonObject.has("value"))
+            titletext.setText(jsonObject.getString("value"));
+        else
+            titletext.setVisibility(View.GONE);
+    }
 
-            if (clickable == CLICKABLE_FIELD) {
-                userInputView.setClickable(true);
-                userInputView.setOnClickListener(listener);
-            }
-        }
+    @Override
+    public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
+
+        LayoutInflater factory = LayoutInflater.from(context);
+
+        View v = inflateViewForField(jsonObject, factory, layoutResourceId);
+
+        bindDataAndAction(v, jsonObject);
+
+        if (v.isClickable())
+            v.setOnClickListener(listener);
+
+        return v;
+    }
+
+    protected void bindDataAndAction(View v, JSONObject jsonObject) {
+        // do nothing for now, not all widgets need binding data
+        
     }
 }

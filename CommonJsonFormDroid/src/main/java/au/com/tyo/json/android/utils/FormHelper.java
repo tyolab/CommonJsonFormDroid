@@ -340,6 +340,8 @@ public class FormHelper {
                     if (formGroup.isShowingTitle() && null != formGroup.getTitle()) {
                         JsonFormField titleField = createFieldWidget(keyConverter.toKey(formGroup.getTitle()), GroupTitleFactory.class, formGroup.getTitle());
                         jsonFormGroup.addField(titleField);
+                        if (formGroup.hasTitleLayout())
+                            titleField.layout = formGroup.getTitleLayout();
                     }
 
                     for (int j = 0; j < formGroup.size(); ++j) {
@@ -352,8 +354,15 @@ public class FormHelper {
                         // else
                         field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter,
                                 formMetaMap);
+
                         field.clickable = value.isClickable();
                         field.enabled = value.isEnabled();
+
+                        /**
+                         * make it optional
+                         */
+                        if (value.getLayout() > -1)
+                            field.layout = value.getLayout();
 
                         if (null != value.getType())
                             field.type = value.getType();

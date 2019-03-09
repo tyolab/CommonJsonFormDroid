@@ -23,10 +23,12 @@ import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
+import au.com.tyo.json.android.widgets.ButtonFactory;
 import au.com.tyo.json.android.widgets.CheckBoxFactory;
 import au.com.tyo.json.android.widgets.EditTextFactory;
 import au.com.tyo.json.android.widgets.GapFactory;
 import au.com.tyo.json.android.widgets.GroupTitleFactory;
+import au.com.tyo.json.android.widgets.ImageFactory;
 import au.com.tyo.json.android.widgets.ImagePickerFactory;
 import au.com.tyo.json.android.widgets.LabelFactory;
 import au.com.tyo.json.android.widgets.RadioButtonFactory;
@@ -48,6 +50,8 @@ public class JsonFormInteractor {
     private void registerWidgets() {
         registerWidget(new EditTextFactory());
         registerWidget(new LabelFactory());
+        registerWidget(new ButtonFactory());
+        registerWidget(new ImageFactory());
         registerWidget(new CheckBoxFactory());
         registerWidget(new RadioButtonFactory());
         registerWidget(new ImagePickerFactory());

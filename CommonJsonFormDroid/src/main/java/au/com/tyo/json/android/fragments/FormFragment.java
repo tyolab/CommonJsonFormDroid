@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import au.com.tyo.json.android.widgets.UserInputItemFactory;
 import au.com.tyo.json.form.FieldValue;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
@@ -213,7 +214,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
         // update the text
         if (null != userInputView) {
-            CommonItemFactory.bindUserInput(getJsonApi(), userInputView, targetKey, text, false);
+            UserInputItemFactory.bindUserInput(getJsonApi(), userInputView, targetKey, text, false);
 
             if (userInputView instanceof TextView) {
                 TextView button = (TextView) userInputView;

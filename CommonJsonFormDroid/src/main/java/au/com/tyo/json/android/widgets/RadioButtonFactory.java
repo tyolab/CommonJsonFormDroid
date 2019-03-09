@@ -56,8 +56,7 @@ public class RadioButtonFactory extends CompoundItemFactory {
         JSONArray options = jsonObject.getJSONArray(JsonFormConstants.OPTIONS_FIELD_NAME);
         for (int i = 0; i < options.length(); i++) {
             JSONObject item = options.getJSONObject(i);
-            View view = factory.inflate(R.layout.item_radiobutton,
-                    null);
+            View view = inflateViewForField(jsonObject, factory, R.layout.item_radiobutton); //factory.inflate(R.layout.item_radiobutton,null);
 
             String childKey = item.getString("key");
 

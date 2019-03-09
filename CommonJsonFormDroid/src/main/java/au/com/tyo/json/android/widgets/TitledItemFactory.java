@@ -32,6 +32,7 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.json.android.views.OptionalButton;
+import au.com.tyo.json.jsonform.JsonFormField;
 
 import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
 
@@ -56,7 +57,7 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         ViewGroup v;
 
         boolean vertical = this instanceof CompoundItemFactory ||
-                jsonObject.has("orientation") && jsonObject.getString("orientation").equals("vertical");
+                jsonObject.has(JsonFormField.ATTRIBUTE_NAME_ORIENTATION) && jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_ORIENTATION).equals("vertical");
 
         if (vertical)
             v = (ViewGroup) factory.inflate(R.layout.form_item_two_rows, parent, false);
@@ -64,7 +65,7 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
             v = (ViewGroup) factory.inflate(R.layout.form_item_two_cols, parent, false);
 
         // 1st Column / Row
-        bindTitle(v, jsonObject, "title");
+        bindTitle(v, jsonObject, JsonFormField.ATTRIBUTE_NAME_TITLE);
 
         // 2nd Column / Row
         // if it is aligned vertically, we adjust form to the "left"
@@ -83,7 +84,7 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
 
         boolean enabled;
         if (editable) {
-            enabled = jsonObject.optBoolean("enabled", editable);
+            enabled = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_ENABLED, editable);
         }
         else
             enabled = editable;

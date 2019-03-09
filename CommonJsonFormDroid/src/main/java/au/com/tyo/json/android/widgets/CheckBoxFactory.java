@@ -55,7 +55,7 @@ public class CheckBoxFactory extends CompoundItemFactory {
         JSONArray options = jsonObject.getJSONArray(JsonFormConstants.OPTIONS_FIELD_NAME);
         for (int i = 0; i < options.length(); i++) {
             JSONObject item = options.getJSONObject(i);
-            View view = factory.inflate(R.layout.item_checkbox, null);
+            View view = inflateViewForField(jsonObject, factory, R.layout.item_checkbox); //factory.inflate(R.layout.item_checkbox, null);
             CheckBox checkBox = (CheckBox) view; // (CheckBox) view.findViewById(R.id.user_input);
 
             String childKey = item.getString("key");

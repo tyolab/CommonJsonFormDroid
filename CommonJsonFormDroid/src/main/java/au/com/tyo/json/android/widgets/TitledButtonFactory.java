@@ -91,8 +91,7 @@ public class TitledButtonFactory extends TitledItemFactory {
         else if (jsonObject.has("text"))
             text = jsonObject.getString("text");
 
-        View v = factory.inflate(
-                R.layout.item_button, parent, false);
+        View v = inflateViewForField(jsonObject, factory, R.layout.item_button); //factory.inflate(R.layout.item_button, parent, false);
 
         v.setClickable(editable);
 

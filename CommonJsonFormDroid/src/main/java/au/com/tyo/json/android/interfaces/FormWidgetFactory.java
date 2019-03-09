@@ -45,7 +45,7 @@ public abstract class FormWidgetFactory {
     }
 
     public FormWidgetFactory() {
-
+        this.widgetKey = this.getClass().getSimpleName();
     }
 
     public String getWidgetKey() {
