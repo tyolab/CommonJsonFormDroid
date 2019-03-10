@@ -21,6 +21,8 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.json.jsonform.JsonFormField;
 
 import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_FIELD;
+import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_NONE;
+import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_ROW;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
@@ -86,11 +88,14 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
         // inputTextView.setGravity(gravity);
         if (null != userInputView) {
-            metaDataWatcher.setUserInputView(keyStr, userInputView, editable, -1);
+            if (null != metaDataWatcher)
+                metaDataWatcher.setUserInputView(keyStr, userInputView, editable, editable, -1);
 
             if (clickable == CLICKABLE_FIELD) {
                 userInputView.setClickable(true);
                 userInputView.setOnClickListener(listener);
+
+                setViewTagKey(userInputView, keyStr);
             }
         }
     }
@@ -149,7 +154,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
         View v = inflateViewForField(jsonObject, factory, layoutResourceId);
 
-        bindDataAndAction(v, jsonApi, jsonObject);
+        bindDataAndAction(v, jsonApi, jsonObject, editable, listener, metaDataWatcher);
 
         if (v.isClickable())
             v.setOnClickListener(listener);
@@ -157,21 +162,45 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return v;
     }
 
-    protected void bindDataAndAction(View v, JsonApi jsonApi, JSONObject jsonObject) {
+    protected void bindDataAndAction(View parent, JsonApi jsonApi, JSONObject jsonObject, boolean editable, CommonListener listener, MetaDataWatcher metaDataWatcher) {
+        final String keyStr = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY);
+
+        setViewTagKey(parent, keyStr);
+
         // do nothing for now, not all widgets need binding data
-        TextView tv = v.findViewById(android.R.id.text1);
+        TextView tv = parent.findViewById(android.R.id.text1);
         if (null != tv) {
             String text = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_TITLE);
             tv.setText(text);
         }
         else {
-            View inputView = v.findViewById(R.id.user_input);
+            View userInputView = parent.findViewById(R.id.user_input);
 
-            if (null != inputView) {
+            if (null != userInputView) {
                 final String value = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_VALUE);
-                final String key = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY);
-                bindUserInput(jsonApi, inputView, key, value, false);
+                final int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, CLICKABLE_NONE);
+                final boolean enabled = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_ENABLED, true);
+
+                bindUserInput(jsonApi, userInputView, keyStr, value, false);
+
+                if (null != metaDataWatcher)
+                    metaDataWatcher.setUserInputView(keyStr, userInputView, editable, enabled, -1);
+
+                if (clickable == CLICKABLE_FIELD) {
+                    userInputView.setClickable(true);
+                    userInputView.setOnClickListener(listener);
+
+                    /**
+                     * Set the input view with key too
+                     */
+                    setViewTagKey(userInputView, keyStr);
+                }
+                else if (clickable == CLICKABLE_ROW) {
+                    parent.setClickable(true);
+                    parent.setOnClickListener(listener);
+                }
             }
         }
+
     }
 }

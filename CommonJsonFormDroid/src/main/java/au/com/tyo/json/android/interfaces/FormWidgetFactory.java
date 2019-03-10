@@ -29,6 +29,11 @@ public abstract class FormWidgetFactory {
         v.setTag(R.id.key, key);
     }
 
+    public static void setViewTagKey(View v, String key, String type) {
+        v.setTag(R.id.key, key);
+        v.setTag(R.id.type, type);
+    }
+
     public static void setFieldTags(View v, JsonMetadata metadata) {
         v.setTag(R.id.key, metadata.key);
         v.setTag(R.id.required, metadata.required);

@@ -35,7 +35,6 @@ import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
 import au.com.tyo.json.android.views.OptionalButton;
-import au.com.tyo.json.android.widgets.CommonItemFactory;
 import au.com.tyo.json.android.widgets.TitledItemFactory;
 
 import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
@@ -239,10 +238,11 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
      * We only keep the metadata info for the user input / or updatable
      * @param key
      * @param v
+     * @param enabled
      * @param required
      */
     @Override
-    public void setUserInputView(String key, View v, boolean editable, int required) {
+    public void setUserInputView(String key, View v, boolean editable, boolean enabled, int required) {
         // String key = (String) view.getTag(R.id.key);
         // int i;
 
@@ -263,7 +263,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
         //if (!editable)
         metadata.view = v;
-        setFormRowEditable(metadata.view, editable);
+        setFormRowEditableOrEnabled(metadata.view, editable, enabled);
     }
 
     @Override
@@ -298,52 +298,82 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
             inputView.setTextColor(grayColor);
     }
 
-    private void setFormRowEditable(View view, boolean editable) {
-        if (null == view || isDarkThemeInUse())
+    /**
+     * editable and enabled should be treated separately
+     *
+     * A uneditable form doesn't mean the button / clickable view is not enabled.
+     *
+     * Still a bit mess
+     *
+     * TODO
+     *  seperated editable and enabled
+     *
+     *  @param view
+     * @param editable
+     * @param enabled
+     */
+    private void setFormRowEditableOrEnabled(View view, boolean editable, boolean enabled) {
+        /**
+         * Even the dark theme in use, still
+         *
+         */
+        if (null == view/* || isDarkThemeInUse()*/)
             return;
 
         View inputView = view.findViewById(R.id.user_input);
 
         if (null != inputView) {
-            inputView.setEnabled(editable);
-
             if (inputView instanceof ButtonContainer) {
                 inputView.setClickable(editable);
 
                 View v = view.findViewById(android.R.id.text1);
 
-                if (v instanceof android.widget.TextView) {
-                    setInputViewTextColor((android.widget.TextView) v, editable);
+                if (v instanceof android.widget.TextView || v instanceof TextView) {
+                    // setInputViewTextColor((android.widget.TextView) v, editable);
+                // }
+                // else if (v instanceof TextView) {
+                    // setInputViewTextColor((TextView) v, editable);
+                    inputView = v;
                 }
-                else if (v instanceof TextView) {
-                    setInputViewTextColor((TextView) v, editable);
+            }
+
+            if (inputView instanceof Button) {
+                inputView.setClickable(enabled);
+            }
+            else if (inputView instanceof EditText) {
+                inputView.setEnabled(editable);
+            }
+            else {
+                /**
+                 * Text View include button
+                 */
+                if (inputView instanceof android.widget.TextView) {
+                    setInputViewTextColor((android.widget.TextView) inputView, enabled);
                 }
-            }
-            else if (inputView instanceof android.widget.TextView) {
-                setInputViewTextColor((android.widget.TextView) inputView, editable);
-            }
-            else if (inputView instanceof TextView) {
-                setInputViewTextColor((TextView) inputView, editable);
-            }
-            else if (inputView instanceof Button) {
-                inputView.setClickable(editable);
-            }
-            else if (inputView instanceof ViewGroup) {
-                for (int i = 0; i < ((ViewGroup) inputView).getChildCount(); ++i) {
-                    View childView = ((ViewGroup) inputView).getChildAt(i);
-                    if (childView instanceof CompoundButton) {
-                        // childView.setEnabled(editable);
-                        childView.setClickable(editable);
-                        setViewAlpha(childView, editable);
-                        // the below doesn't look good
+                else if (inputView instanceof TextView) {
+                    setInputViewTextColor((TextView) inputView, enabled);
+                }
+                else if (inputView instanceof ViewGroup) {
+                    for (int i = 0; i < ((ViewGroup) inputView).getChildCount(); ++i) {
+                        View childView = ((ViewGroup) inputView).getChildAt(i);
+                        if (childView instanceof CompoundButton) {
+                            // childView.setEnabled(editable);
+                            childView.setClickable(editable);
+                            setViewAlpha(childView, editable);
+                            // the below doesn't look good
+                        }
                     }
                 }
+                else
+                    inputView.setEnabled(enabled);
             }
             // else if (inputView instanceof com.rey.material.widget.Switch)
             //     setViewAlpha(inputView, editable);
         }
         else if (view instanceof EditText)
-            view.setEnabled(false);
+            view.setEnabled(editable);
+        else
+            view.setEnabled(enabled);
     }
 
 
@@ -570,7 +600,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         Iterator<FieldMetadata> it = values.iterator();
         while (it.hasNext()) {
             FieldMetadata metadata = it.next();
-            setFormRowEditable(metadata.view, editable);
+            setFormRowEditableOrEnabled(metadata.view, editable, editable);
         }
     }
 
