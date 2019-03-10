@@ -10,6 +10,7 @@ import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
+import au.com.tyo.json.jsonform.JsonFormField;
 
 public class UserProvidedViewFactory extends CommonItemFactory {
 
@@ -26,7 +27,7 @@ public class UserProvidedViewFactory extends CommonItemFactory {
         int resId = jsonObject.getInt("value");
         LayoutInflater factory = LayoutInflater.from(context);
 
-        int clickable = jsonObject.optInt("clickable", 0);
+        int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, 0);
 
         View v = factory.inflate(resId, null);
 

@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import au.com.tyo.android.AndroidUtils;
+import au.com.tyo.json.jsonform.JsonFormField;
 import au.com.tyo.json.jsonform.JsonFormFieldFilter;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.customviews.GenericTextWatcher;
@@ -53,7 +54,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
     @Override
     public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
 
-        int clickable = jsonObject.optInt("clickable", 0);
+        int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, 0);
 
         LayoutInflater factory = LayoutInflater.from(context);
 
@@ -68,8 +69,8 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
         child.setLayoutParams(layoutParams);
         v.addView(child);
 
-        if (jsonObject.has("visible")) {
-            boolean visible = Boolean.parseBoolean(jsonObject.getString("visible"));
+        if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VISIBLE)) {
+            boolean visible = Boolean.parseBoolean(jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VISIBLE));
             if (!visible) {
                 v.setVisibility(View.GONE);
                 listener.onVisibilityChange(keyStr, null, false);

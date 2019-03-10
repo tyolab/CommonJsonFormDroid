@@ -18,6 +18,7 @@ import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
+import au.com.tyo.json.jsonform.JsonFormField;
 
 import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_FIELD;
 
@@ -51,7 +52,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
     }
 
     protected static View inflateViewForField(JSONObject jsonObject, LayoutInflater factory, int layoutFallback, boolean mustHaveUserInputId) {
-        int layout = jsonObject.optInt("layout", layoutFallback);
+        int layout = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_LAYOUT, layoutFallback);
 
         if (layout <= 0)
             layout = layoutFallback;
@@ -69,8 +70,8 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
     public static String getJsonStringValue(JSONObject jsonObject) {
         String text = null;
         try {
-            if (jsonObject.has("value"))
-                text = jsonObject.getString("value");
+            if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VALUE))
+                text = jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VALUE);
         }
         catch (Exception ex) {}
         return text;
@@ -79,7 +80,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
     public static void bindUserInput(JsonApi jsonApi, View parent, JSONObject jsonObject, int gravity, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException {
         View userInputView = parent.findViewById(R.id.user_input);
         final String value = getJsonStringValue(jsonObject);
-        final String keyStr = jsonObject.getString("key");
+        final String keyStr = jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_KEY);
 
         bindUserInput(jsonApi, userInputView, keyStr, value, jsonObject.has("textStyle") && jsonObject.getString("textStyle").equalsIgnoreCase("html"));
 
@@ -95,7 +96,6 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
     }
 
     public static void bindUserInput(JsonApi jsonApi, View userInputView, String keyStr, String value, boolean styled) {
-
         if (null == value)
             value = jsonApi.getNullValueReplacement(keyStr).toString();
 
@@ -136,8 +136,8 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         // 1st Column
         if (jsonObject.has(titleKey))
             titletext.setText(jsonObject.getString(titleKey));
-        else if (jsonObject.has("value"))
-            titletext.setText(jsonObject.getString("value"));
+        else if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VALUE))
+            titletext.setText(jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VALUE));
         else
             titletext.setVisibility(View.GONE);
     }
@@ -149,7 +149,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
         View v = inflateViewForField(jsonObject, factory, layoutResourceId);
 
-        bindDataAndAction(v, jsonObject);
+        bindDataAndAction(v, jsonApi, jsonObject);
 
         if (v.isClickable())
             v.setOnClickListener(listener);
@@ -157,8 +157,21 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return v;
     }
 
-    protected void bindDataAndAction(View v, JSONObject jsonObject) {
+    protected void bindDataAndAction(View v, JsonApi jsonApi, JSONObject jsonObject) {
         // do nothing for now, not all widgets need binding data
-        
+        TextView tv = v.findViewById(android.R.id.text1);
+        if (null != tv) {
+            String text = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_TITLE);
+            tv.setText(text);
+        }
+        else {
+            View inputView = v.findViewById(R.id.user_input);
+
+            if (null != inputView) {
+                final String value = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_VALUE);
+                final String key = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY);
+                bindUserInput(jsonApi, inputView, key, value, false);
+            }
+        }
     }
 }
