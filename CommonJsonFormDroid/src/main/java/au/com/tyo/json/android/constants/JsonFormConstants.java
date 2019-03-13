@@ -16,5 +16,7 @@ public interface JsonFormConstants {
     public static final String GAP                = "gap";
 
     int REQUEST_FORM_FILLING = 1132;
+
     String RESULT_FORM_FILLING = "RESULT_FORM_FILLING";
+
 }

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import au.com.tyo.json.Config;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
@@ -33,6 +34,7 @@ import au.com.tyo.json.android.widgets.ImagePickerFactory;
 import au.com.tyo.json.android.widgets.LabelFactory;
 import au.com.tyo.json.android.widgets.RadioButtonFactory;
 import au.com.tyo.json.android.widgets.SpinnerFactory;
+import au.com.tyo.json.jsonform.JsonFormField;
 
 /**
  * Created by vijay on 5/19/15.
@@ -199,20 +201,33 @@ public class JsonFormInteractor {
                         if (null == widgetFactory)
                             throw new IllegalStateException("Unknown widget type: " + widgetType);
 
-                        if (count > 0) {
-                            View separator = factory.inflate(R.layout.form_separator, null);
-                            viewsFromJson.add(separator);
-                        }
 
-                        // a ViewGroups with lots of children
+                        ++count; // count each field including group title and others
+
+                        /**
+                         * ### Add widget
+                         * // a ViewGroups with lots of children
+                         */
                         JsonMetadata metadata = new JsonMetadata(childJson);
                         View views = widgetFactory.getViewFromJson(jsonApi, stepName, context, childJson, metadata, listener, editable, metaDataWatcher);
                         FormWidgetFactory.setFieldTags(views, metadata);
                         metaDataWatcher.addFieldView(metadata.key, views);
-                        if (!widgetFactory.getWidgetKey().equals(GroupTitleFactory.class.getSimpleName()))
-                            ++count;
 
                         viewsFromJson.add(views);
+
+                        /**
+                         * ## Add separator
+                         *
+                         * Group separator is not considered, if it is really necessary,
+                         * then override the group title layout and add the separator there
+                         */
+                        if (!widgetType.equals(GroupTitleFactory.class.getSimpleName())) {
+                            boolean needSeparator = childJson.optBoolean(JsonFormField.ATTRIBUTE_NAME_SEPARATOR_UNDER, Config.formWithSeparator);
+                            if (needSeparator && count < fields.length()) {
+                                View separator = factory.inflate(R.layout.form_separator, null);
+                                viewsFromJson.add(separator);
+                            }
+                        }
 
                     } catch (Exception e) {
                         Log.e(TAG,

@@ -366,6 +366,8 @@ public class FormHelper {
 
                         if (null != value.getType())
                             field.type = value.getType();
+
+                        field.separator_under = value.hasSeparator();
                     }
                 }
                 else
