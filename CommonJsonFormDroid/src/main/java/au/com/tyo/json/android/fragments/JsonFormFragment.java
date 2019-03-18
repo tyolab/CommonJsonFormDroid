@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.activities.JsonFormActivity;
@@ -49,6 +50,27 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     private JsonApi             mJsonApi;
     private boolean             keyboardHidden = true;
     private MetaDataWatcher     metaDataWatcher;
+
+    public Map<String, FormFragment.FieldMetadata> metadataMap;
+
+    static class FieldMetadata {
+        public int index;
+        public int required; // -1 nullable, 0 optional, 1 required
+        public java.lang.Object value;
+        public boolean visible;
+        public View view;
+
+        public FieldMetadata(int i, int required) {
+            this();
+            this.index = i;
+            this.required = required;
+        }
+
+        public FieldMetadata() {
+            visible = true;
+            index = -1;
+        }
+    }
 
     public void setJsonApi(JsonApi jsonApi) {
         this.mJsonApi = jsonApi;
@@ -333,7 +355,16 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        presenter.onCheckedChanged(buttonView, isChecked);
+        String parentKey = (String) buttonView.getTag(R.id.key);
+        String childKey = (String) buttonView.getTag(R.id.childKey);
+        String childValue = null;
+
+        if (buttonView instanceof RadioButton) {
+            FormFragment.FieldMetadata metaData = getFieldMetaData(childKey);
+            if (null != metaData)
+                childValue = metaData.value.toString();
+        }
+        presenter.onCheckedChanged(buttonView, isChecked, childValue);
 
         buttonView.requestFocus();
         if (!isKeyboardHidden())
@@ -360,7 +391,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     }
 
     @Override
-    public void onInitialValueSet(String parentKey, String childKey, String value) {
+    public void onInitialValueSet(String parentKey, String childKey, Object value) {
         // no ops
     }
 
@@ -392,4 +423,12 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         return false;
     }
 
+    protected FieldMetadata getFieldMetaData(String key) {
+        FieldMetadata fieldMetadata = metadataMap.get(key);
+        if (fieldMetadata == null) {
+            fieldMetadata = new FieldMetadata();
+            metadataMap.put(key, fieldMetadata);
+        }
+        return fieldMetadata;
+    }
 }

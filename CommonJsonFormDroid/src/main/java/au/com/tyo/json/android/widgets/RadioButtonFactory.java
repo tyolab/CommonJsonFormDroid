@@ -44,6 +44,17 @@ public class RadioButtonFactory extends CompoundItemFactory {
 
     }
 
+    /**
+     *
+     *
+     * @param factory
+     * @param parent
+     * @param stepName
+     * @param jsonObject
+     * @param listener
+     * @param editable
+     * @throws JSONException
+     */
     @Override
     protected void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
 
@@ -59,6 +70,9 @@ public class RadioButtonFactory extends CompoundItemFactory {
             View view = inflateViewForField(jsonObject, factory, R.layout.item_radiobutton); //factory.inflate(R.layout.item_radiobutton,null);
 
             String childKey = item.getString("key");
+            Object childValue = item.opt("value");
+            if (null == childValue)
+                childValue = childKey;
 
             RadioButton radioButton = (RadioButton) view; // (RadioButton) view.findViewById(R.id.user_input);
             radioButton.setText(item.getString("text"));
@@ -69,18 +83,30 @@ public class RadioButtonFactory extends CompoundItemFactory {
             // radioButton.setTextSize(16);
             /// radioButton.setTypeface(Typeface.createFromAsset(context.getAssets(), Resources.FONT_DEFAULT_PATH));
             radioButton.setOnCheckedChangeListener(listener);
-            if (!TextUtils.isEmpty(value)
-                    && value.equals(item.getString("key"))) {
+            if (null != childValue && null != value && childValue.equals(value)) {
                 radioButton.setChecked(true);
 
                 // radio button only keep one value
-                listener.onInitialValueSet(parentKey, null, childKey);
+                listener.onInitialValueSet(parentKey, childKey, childValue);
             }
-//            if (i == options.length() - 1) {
-//                radioButton.setLayoutParams(JsonFormUtils.getRelativeLayoutParams(MATCH_PARENT, WRAP_CONTENT, 0, 0, 0, (int) context
-//                        .getResources().getDimension(R.dimen.extra_bottom_margin)));
-//            }
+
+            /**
+             * For recording the value of radio button to be used when it gets changed
+             */
+            if (null != childValue)
+                listener.onInitialValueSet(childKey, null, childValue);
+
             parent.addView(view);
         }
     }
+
+    /**
+     * Extra setup
+     */
+    /*
+           if (i == options.length() - 1) {
+           radioButton.setLayoutParams(JsonFormUtils.getRelativeLayoutParams(MATCH_PARENT, WRAP_CONTENT, 0, 0, 0, (int) context
+                   .getResources().getDimension(R.dimen.extra_bottom_margin)));
+       }
+     */
 }

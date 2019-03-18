@@ -184,7 +184,7 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
         return false;
     }
 
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked, String childValue) {
         if (compoundButton instanceof CheckBox) {
             String parentKey = (String) compoundButton.getTag(R.id.key);
             String childKey = (String) compoundButton.getTag(R.id.childKey);
@@ -195,7 +195,7 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
                 String parentKey = (String) compoundButton.getTag(R.id.key);
                 String childKey = (String) compoundButton.getTag(R.id.childKey);
                 getView().unCheckAllExcept(parentKey, childKey);
-                getView().writeValue(mStepName, parentKey, childKey);
+                getView().writeValue(mStepName, parentKey, childValue);
             }
         }
     }

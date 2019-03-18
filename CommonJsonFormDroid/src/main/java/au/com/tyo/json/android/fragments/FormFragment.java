@@ -63,27 +63,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     private JsonFormExtensionPresenter  formPresenter;
     private boolean                     darkThemeInUse;
 
-    public Map<String, FieldMetadata>   metadataMap;
     public Map<String, View>            fieldViews;
-
-    static class FieldMetadata {
-        public int index;
-        public int required; // -1 nullable, 0 optional, 1 required
-        public java.lang.Object value;
-        public boolean visible;
-        public View view;
-
-        public FieldMetadata(int i, int required) {
-            this();
-            this.index = i;
-            this.required = required;
-        }
-
-        public FieldMetadata() {
-            visible = true;
-            index = -1;
-        }
-    }
 
     public Object getForm() {
         return form;
@@ -269,15 +249,6 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     @Override
     public void addFieldView(String key, View v) {
         fieldViews.put(key, v);
-    }
-
-    private FieldMetadata getFieldMetaData(String key) {
-        FieldMetadata fieldMetadata = metadataMap.get(key);
-        if (fieldMetadata == null) {
-            fieldMetadata = new FieldMetadata();
-            metadataMap.put(key, fieldMetadata);
-        }
-        return fieldMetadata;
     }
 
     public void changeFormEditableState(boolean editable) {
@@ -520,7 +491,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     }
 
     @Override
-    public void onInitialValueSet(String parentKey, String childKey, String value) {
+    public void onInitialValueSet(String parentKey, String childKey, Object value) {
         super.onInitialValueSet(parentKey, childKey, value);
         addUserInputValueToMetadata(parentKey, childKey, value);
     }
