@@ -45,14 +45,33 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return layoutResourceId;
     }
 
+    /**
+     *
+     * @param layoutResourceId
+     */
     public void setLayoutResourceId(int layoutResourceId) {
         this.layoutResourceId = layoutResourceId;
     }
 
+    /**
+     *
+     * @param jsonObject
+     * @param factory
+     * @param layoutFallback
+     * @return
+     */
     protected static View inflateViewForField(JSONObject jsonObject, LayoutInflater factory, int layoutFallback) {
         return inflateViewForField(jsonObject, factory, layoutFallback, false);
     }
 
+    /**
+     *
+     * @param jsonObject
+     * @param factory
+     * @param layoutFallback
+     * @param mustHaveUserInputId
+     * @return
+     */
     protected static View inflateViewForField(JSONObject jsonObject, LayoutInflater factory, int layoutFallback, boolean mustHaveUserInputId) {
         int layout = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_LAYOUT, layoutFallback);
 
@@ -69,6 +88,11 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return v;
     }
 
+    /**
+     *
+     * @param jsonObject
+     * @return
+     */
     public static String getJsonStringValue(JSONObject jsonObject) {
         String text = null;
         try {
@@ -79,6 +103,18 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return text;
     }
 
+    /**
+     *
+     * @param jsonApi
+     * @param parent
+     * @param jsonObject
+     * @param gravity
+     * @param listener
+     * @param editable
+     * @param clickable
+     * @param metaDataWatcher
+     * @throws JSONException
+     */
     public static void bindUserInput(JsonApi jsonApi, View parent, JSONObject jsonObject, int gravity, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException {
         View userInputView = parent.findViewById(R.id.user_input);
         final String value = getJsonStringValue(jsonObject);
@@ -100,6 +136,14 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         }
     }
 
+    /**
+     *
+     * @param jsonApi
+     * @param userInputView
+     * @param keyStr
+     * @param value
+     * @param styled
+     */
     public static void bindUserInput(JsonApi jsonApi, View userInputView, String keyStr, String value, boolean styled) {
         if (null == value)
             value = jsonApi.getNullValueReplacement(keyStr).toString();
@@ -126,16 +170,49 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
     }
 
+    /**
+     *
+     * @param factory
+     * @return
+     */
     protected static ViewGroup createViewContainer(LayoutInflater factory) {
         return (ViewGroup) factory.inflate(R.layout.form_row, null);
     }
 
+    /**
+     *
+     * @param factory
+     * @param jsonObject
+     * @param titleKey
+     * @return
+     * @throws JSONException
+     */
     protected static View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey) throws JSONException {
-        View v = factory.inflate(R.layout.form_title, null);
+        return createTitleView(factory, jsonObject, titleKey, R.layout.form_title);
+    }
+
+    /**
+     *
+     * @param factory
+     * @param jsonObject
+     * @param titleKey
+     * @param titleLayoutResId
+     * @return
+     * @throws JSONException
+     */
+    protected static View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey, int titleLayoutResId) throws JSONException {
+        View v = factory.inflate(titleLayoutResId, null);
         bindTitle(v, jsonObject, titleKey);
         return v;
     }
 
+    /**
+     *
+     * @param parent
+     * @param jsonObject
+     * @param titleKey
+     * @throws JSONException
+     */
     protected static void bindTitle(View parent, JSONObject jsonObject, String titleKey) throws JSONException {
         TextView titletext = (TextView) parent.findViewById(android.R.id.text1);
         // 1st Column
@@ -147,6 +224,19 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
             titletext.setVisibility(View.GONE);
     }
 
+    /**
+     *
+     * @param jsonApi
+     * @param stepName
+     * @param context
+     * @param jsonObject
+     * @param metadata
+     * @param listener
+     * @param editable
+     * @param metaDataWatcher
+     * @return
+     * @throws Exception
+     */
     @Override
     public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
 
