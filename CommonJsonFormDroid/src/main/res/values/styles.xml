@@ -148,4 +148,6 @@
         -->
     </style>
 
+    <style name="AppStyle.Form.CompoundButtonTitle"></style>
+
 </resources>

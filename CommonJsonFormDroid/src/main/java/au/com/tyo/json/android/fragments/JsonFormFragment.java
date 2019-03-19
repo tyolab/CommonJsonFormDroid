@@ -361,8 +361,10 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
 
         if (buttonView instanceof RadioButton) {
             FormFragment.FieldMetadata metaData = getFieldMetaData(childKey);
-            if (null != metaData)
-                childValue = metaData.value.toString();
+            if (null != metaData) {
+                if (null != metaData.value)
+                    childValue = metaData.value.toString();
+            }
         }
         presenter.onCheckedChanged(buttonView, isChecked, childValue);
 

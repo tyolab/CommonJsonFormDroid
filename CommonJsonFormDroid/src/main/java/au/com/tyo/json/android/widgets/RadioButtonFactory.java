@@ -58,7 +58,7 @@ public class RadioButtonFactory extends CompoundItemFactory {
     @Override
     protected void createCompoundView(LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, CommonListener listener, boolean editable) throws JSONException {
 
-        View titleView = createTitleView(factory, jsonObject, "label");
+        View titleView = createTitleView(factory, jsonObject, "label", R.layout.item_compound_title);
         parent.addView(titleView);
 
         String parentKey = jsonObject.getString("key");
@@ -83,18 +83,18 @@ public class RadioButtonFactory extends CompoundItemFactory {
             // radioButton.setTextSize(16);
             /// radioButton.setTypeface(Typeface.createFromAsset(context.getAssets(), Resources.FONT_DEFAULT_PATH));
             radioButton.setOnCheckedChangeListener(listener);
-            if (null != childValue && null != value && childValue.equals(value)) {
-                radioButton.setChecked(true);
-
-                // radio button only keep one value
-                listener.onInitialValueSet(parentKey, childKey, childValue);
-            }
 
             /**
              * For recording the value of radio button to be used when it gets changed
              */
-            if (null != childValue)
-                listener.onInitialValueSet(childKey, null, childValue);
+            listener.onInitialValueSet(childKey, null, childValue);
+
+            if (null != childValue && null != value && childValue.equals(value)) {
+                // radio button only keep one value
+                listener.onInitialValueSet(parentKey, null, childValue);
+
+                radioButton.setChecked(true);
+            }
 
             parent.addView(view);
         }

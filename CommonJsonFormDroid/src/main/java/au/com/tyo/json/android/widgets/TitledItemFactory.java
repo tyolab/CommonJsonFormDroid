@@ -55,21 +55,36 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
     @Override
     protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException {
         ViewGroup v;
+        ViewGroup container;
 
-        boolean vertical = this instanceof CompoundItemFactory ||
-                jsonObject.has(JsonFormField.ATTRIBUTE_NAME_ORIENTATION) && jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_ORIENTATION).equals("vertical");
+        boolean vertical = false;
+        boolean needTitle = true;
 
-        if (vertical)
-            v = (ViewGroup) factory.inflate(R.layout.form_item_two_rows, parent, false);
+        if (this instanceof CompoundItemFactory) {
+            vertical = true;
+            needTitle = false;
+        }
         else
-            v = (ViewGroup) factory.inflate(R.layout.form_item_two_cols, parent, false);
+            vertical = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_ORIENTATION, "horizontal").equals("vertical");
 
-        // 1st Column / Row
-        bindTitle(v, jsonObject, JsonFormField.ATTRIBUTE_NAME_TITLE);
+        if (needTitle) {
+            if (vertical)
+                v = (ViewGroup) factory.inflate(R.layout.form_item_two_rows, parent, false);
+            else
+                v = (ViewGroup) factory.inflate(R.layout.form_item_two_cols, parent, false);
 
+            // 1st Column / Row
+            bindTitle(v, jsonObject, JsonFormField.ATTRIBUTE_NAME_TITLE);
+
+            container = v.findViewById(R.id.frame2);
+        }
+        else {
+            container = parent;
+            v = null;
+        }
         // 2nd Column / Row
         // if it is aligned vertically, we adjust form to the "left"
-        FrameLayout container = (FrameLayout) v.findViewById(R.id.frame2);
+
         View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, clickable, vertical ? Gravity.LEFT : Gravity.RIGHT, metaDataWatcher);
 
         if (!vertical) {

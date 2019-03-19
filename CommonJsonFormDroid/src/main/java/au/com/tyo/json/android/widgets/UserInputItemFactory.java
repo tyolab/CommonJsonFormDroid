@@ -66,8 +66,10 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
 
         View child = createView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, clickable, metaDataWatcher);
 
-        child.setLayoutParams(layoutParams);
-        v.addView(child);
+        if (null != child) {
+            child.setLayoutParams(layoutParams);
+            v.addView(child);
+        }
 
         if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VISIBLE)) {
             boolean visible = Boolean.parseBoolean(jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VISIBLE));
