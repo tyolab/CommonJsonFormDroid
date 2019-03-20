@@ -1,15 +1,14 @@
 package au.com.tyo.json.android.interfaces;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.View;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import au.com.tyo.android.AndroidUtils;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.utils.JsonMetadata;
+import au.com.tyo.json.jsonform.JsonFormField;
 
 /**
  * Created by vijay on 24-05-2015.
@@ -21,8 +20,8 @@ public abstract class FormWidgetFactory {
      */
     private String widgetKey;
 
-    public static void setUserInputViewTags(View v, JSONObject jsonObject) throws JSONException {
-        setUserInputViewTags(v, new JsonMetadata(jsonObject));
+    public static void setViewTags(View v, JSONObject jsonObject) {
+        setViewTagKey(v, jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY), jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_TYPE));
     }
 
     public static void setViewTagKey(View v, String key) {
@@ -30,8 +29,11 @@ public abstract class FormWidgetFactory {
     }
 
     public static void setViewTagKey(View v, String key, String type) {
-        v.setTag(R.id.key, key);
-        v.setTag(R.id.type, type);
+        if (null != key)
+            v.setTag(R.id.key, key);
+
+        if (null != type)
+            v.setTag(R.id.type, type);
     }
 
     public static void setFieldTags(View v, JsonMetadata metadata) {
@@ -39,7 +41,7 @@ public abstract class FormWidgetFactory {
         v.setTag(R.id.required, metadata.required);
     }
 
-    public static void setUserInputViewTags(View v, JsonMetadata metadata) {
+    public static void setViewTags(View v, JsonMetadata metadata) {
         v.setTag(R.id.key, metadata.key);
         v.setTag(R.id.type, metadata.type);
         v.setTag(R.id.required, metadata.required);

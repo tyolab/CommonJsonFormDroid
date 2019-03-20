@@ -336,6 +336,8 @@ public class FormHelper {
                 JsonFormGroup jsonFormGroup = createGroup();
                 if (groupMap instanceof FormGroup) {
                     FormGroup formGroup = (FormGroup) groupMap;
+                    if (formGroup.hasKey())
+                        jsonFormGroup.key = formGroup.getKey();
 
                     if (formGroup.isShowingTitle() && null != formGroup.getTitle()) {
                         JsonFormField titleField = createFieldWidget(keyConverter.toKey(formGroup.getTitle()), GroupTitleFactory.class, formGroup.getTitle());

@@ -150,4 +150,6 @@
 
     <style name="AppStyle.Form.CompoundButtonTitle"></style>
 
+    <style name="AppStyle.Form.GroupContainer"></style>
+
 </resources>

@@ -106,7 +106,7 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
 
         if (null != userInputView) {
             metaDataWatcher.setUserInputView(metadata.key, userInputView, editable, editable, metadata.required);
-            setUserInputViewTags(userInputView, metadata);
+            setViewTags(userInputView, metadata);
 
             userInputView.setEnabled(enabled);
         }

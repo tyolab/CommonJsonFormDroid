@@ -501,6 +501,12 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         updateFormFieldVisibilityInMetadata(targetKey, visible);
     }
 
+    public void updateGroupVisibility(String groupKey, boolean visible) {
+        View groupView = getChildViewByKey(groupKey);
+        if (null != groupView)
+            groupView.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
     /**
      *
      * @param key

@@ -151,10 +151,7 @@ public class JsonFormInteractor {
             if (null != groups) {
                 for (int i = 0; i < groups.length(); i++) {
 
-                    if (i > 0) {
-                        View gapView = factory.inflate(R.layout.form_group_divider, null);
-                        viewsFromJson.add(gapView);
-                    }
+                    ViewGroup groupContainer = (ViewGroup) factory.inflate(R.layout.form_group_container, null);
 
                     JSONObject childJson = groups.getJSONObject(i);
                     try {
@@ -163,9 +160,20 @@ public class JsonFormInteractor {
                             ViewGroup viewGroup = (ViewGroup) factory.inflate(R.layout.form_group, null);
                             for (View view : views)
                                 viewGroup.addView(view);
-                            viewsFromJson.add(viewGroup);
+                            groupContainer.addView(viewGroup);
                         }
 
+                        if (groups.length() > 1 && i < (groups.length() - 1)) {
+                            View gapView = factory.inflate(R.layout.form_group_divider, null);
+                            groupContainer.addView(gapView);
+                        }
+
+                        /**
+                         * Set Group view key tag
+                         */
+                        FormWidgetFactory.setViewTags(groupContainer, childJson);
+
+                        viewsFromJson.add(groupContainer);
                     } catch (Exception e) {
                         Log.e(TAG,
                                 "Exception occurred in making group view at index : " + i + "", e);

@@ -209,6 +209,17 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         }
     }
 
+    public View getChildViewByKey(String keyStr) {
+        int childCount = mMainView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = mMainView.getChildAt(i);
+            String key = (String) view.getTag(R.id.key);
+            if (null != key && key.equals(keyStr))
+                return view;
+        }
+        return null;
+    }
+
     @Override
     public void writeValue(String stepName, String key, String s) {
         try {
