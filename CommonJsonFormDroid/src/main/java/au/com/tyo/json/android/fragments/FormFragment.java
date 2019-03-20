@@ -176,20 +176,23 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     protected void updateFormField(String targetKey, String text) {
         onValueChange(targetKey, null, text);
 
-        View userInputView;
+        View userInputView = null;
         View view = getViewByKey(targetKey);
-        int required;
+        int required = 0;
         if (null == view) {
             view = getFieldViewByKey(targetKey);
-            userInputView = view.findViewById(R.id.user_input);
+            if (null != view)
+                userInputView = view.findViewById(R.id.user_input);
         }
         else
             userInputView = view;
 
-        required = (int) userInputView.getTag(R.id.required);
+        if (null != userInputView)
+            required = (int) userInputView.getTag(R.id.required);
 
         // show the optional button if there is one
-        TitledItemFactory.showHideOptionalClearButton(view, text, required);
+        if (null != view)
+            TitledItemFactory.showHideOptionalClearButton(view, text, required);
 
         // update the text
         if (null != userInputView) {
