@@ -30,6 +30,7 @@ import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.customviews.RadioButton;
 import au.com.tyo.json.android.interfaces.CommonListener;
+import au.com.tyo.json.jsonform.JsonFormField;
 
 /**
  * Created by vijay on 24-05-2015.
@@ -62,7 +63,7 @@ public class RadioButtonFactory extends CompoundItemFactory {
         parent.addView(titleView);
 
         String parentKey = jsonObject.getString("key");
-        String value = jsonObject.optString("value");
+        Object value = jsonObject.opt("value");
 
         JSONArray options = jsonObject.getJSONArray(JsonFormConstants.OPTIONS_FIELD_NAME);
         for (int i = 0; i < options.length(); i++) {
@@ -83,6 +84,9 @@ public class RadioButtonFactory extends CompoundItemFactory {
             // radioButton.setTextSize(16);
             /// radioButton.setTypeface(Typeface.createFromAsset(context.getAssets(), Resources.FONT_DEFAULT_PATH));
             radioButton.setOnCheckedChangeListener(listener);
+
+            boolean enabled = item.optBoolean(JsonFormField.ATTRIBUTE_NAME_ENABLED, true);
+            radioButton.setEnabled(enabled);
 
             /**
              * For recording the value of radio button to be used when it gets changed
