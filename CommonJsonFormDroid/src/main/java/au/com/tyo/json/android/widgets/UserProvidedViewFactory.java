@@ -12,6 +12,8 @@ import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.json.jsonform.JsonFormField;
 
+import static au.com.tyo.json.jsonform.JsonFormField.ATTRIBUTE_NAME_LAYOUT;
+
 public class UserProvidedViewFactory extends CommonItemFactory {
 
     public static final String NAME = UserProvidedViewFactory.class.getSimpleName();
@@ -36,6 +38,9 @@ public class UserProvidedViewFactory extends CommonItemFactory {
             }
             catch (Exception ex) {}
         }
+
+        if (resId == -1)
+            resId = jsonObject.optInt(ATTRIBUTE_NAME_LAYOUT, -1);
 
         if (resId == -1)
             throw new IllegalStateException("User provided view resource id can not be empty");
