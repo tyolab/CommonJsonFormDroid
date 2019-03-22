@@ -22,12 +22,14 @@ import static au.com.tyo.json.android.utils.FormUtils.getTextViewWith;
  */
 public class LabelFactory extends CommonItemFactory {
 
+    public static final String NAME = LabelFactory.class.getSimpleName();
+
     public LabelFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public LabelFactory() {
-
+        this(NAME);
     }
 
     @Override

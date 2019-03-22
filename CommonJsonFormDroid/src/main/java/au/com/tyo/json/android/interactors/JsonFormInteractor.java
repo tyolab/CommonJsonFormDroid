@@ -42,54 +42,13 @@ import au.com.tyo.json.jsonform.JsonFormField;
 public class JsonFormInteractor {
 
     private static final String                             TAG               = "JsonFormInteractor";
-    private static final Map<String, FormWidgetFactory>    map                = new HashMap<>();
-    private static final JsonFormInteractor                INSTANCE           = new JsonFormInteractor();
+    private static final JsonFormInteractor                 INSTANCE          = new JsonFormInteractor();
+
+    private Map<String, FormWidgetFactory>                  map               = new HashMap<>();
 
     private JsonFormInteractor() {
-        registerWidgets();
-    }
-
-    private void registerWidgets() {
-        registerWidget(new EditTextFactory());
-        registerWidget(new LabelFactory());
-        registerWidget(new ButtonFactory());
-        registerWidget(new ImageFactory());
-        registerWidget(new CheckBoxFactory());
-        registerWidget(new RadioButtonFactory());
-        registerWidget(new ImagePickerFactory());
-        registerWidget(new SpinnerFactory());
-        registerWidget(new GapFactory());
-    }
-
-    public static void registerWidget(String key, FormWidgetFactory factory) {
-        map.put(key, factory);
-    }
-
-    public static void registerWidget(FormWidgetFactory factory) {
-        map.put(factory.getWidgetKey(), factory);
-    }
-
-    /**
-     * Using factory class name as key
-     *
-     * @param factory
-     * @param <T>
-     */
-    public static <T extends FormWidgetFactory> void registerWidget(Class<T> factory) {
-        try {
-            Constructor ctor = factory.getConstructor(String.class);
-            FormWidgetFactory instance = (FormWidgetFactory) ctor.newInstance(new Object[]{factory.getSimpleName()});
-
-            registerWidget(instance);
-        } catch (InstantiationException e) {
-            Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
-        } catch (IllegalAccessException e) {
-            Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
-        } catch (NoSuchMethodException e) {
-            Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
-        } catch (InvocationTargetException e) {
-            Log.e(TAG, "Failed to create widget factory:" + factory.getSimpleName(), e);
-        }
+        if (null == map)
+            map = FormWidgetFactory.registerWidgets();
     }
 
     public List<View> fetchFormElements(JsonApi jsonApi, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) {

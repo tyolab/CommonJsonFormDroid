@@ -14,6 +14,8 @@ import au.com.tyo.json.jsonform.JsonFormField;
 
 public class UserProvidedViewFactory extends CommonItemFactory {
 
+    public static final String NAME = UserProvidedViewFactory.class.getSimpleName();
+
     public UserProvidedViewFactory(String widgetKey) {
         super(widgetKey);
     }
@@ -24,7 +26,20 @@ public class UserProvidedViewFactory extends CommonItemFactory {
 
     @Override
     public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
-        int resId = jsonObject.getInt("value");
+        Object value = jsonObject.opt("value");
+        int resId = -1;
+        if (value instanceof Integer)
+            resId = (int) value;
+        else if (value instanceof String) {
+            try {
+                resId = Integer.parseInt((String) value);
+            }
+            catch (Exception ex) {}
+        }
+
+        if (resId == -1)
+            throw new IllegalStateException("User provided view resource id can not be empty");
+
         LayoutInflater factory = LayoutInflater.from(context);
 
         int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, 0);

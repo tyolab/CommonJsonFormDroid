@@ -13,6 +13,7 @@ import au.com.tyo.json.android.fragments.FormFragment;
  * Created by vijay on 5/16/15.
  */
 public interface JsonApi {
+
     JSONObject getStep(String stepName);
 
     void writeValue(String stepName, String key, String value) throws JSONException;
@@ -49,4 +50,5 @@ public interface JsonApi {
     void onValidateRequiredFormFieldFailed(String key);
 
     void loadImage(String keyStr, ImageView imageView);
+
 }
