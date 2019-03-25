@@ -39,9 +39,11 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public class TitledButtonFactory extends TitledItemFactory {
 
-    public static final String KEY = TitledButtonFactory.class.getSimpleName();
+    public static final String NAME = TitledButtonFactory.class.getSimpleName();
 
-    private static final String TAG = TitledButtonFactory.class.getSimpleName();
+    public static final String KEY = NAME;
+
+    private static final String TAG = NAME;
 
     static {
         JsonFormFieldButton.setWidgetType(TitledButtonFactory.class.getSimpleName());
@@ -49,6 +51,10 @@ public class TitledButtonFactory extends TitledItemFactory {
 
     public TitledButtonFactory(String widgetKey) {
         super(widgetKey);
+    }
+
+    public TitledButtonFactory() {
+        super(NAME);
     }
 
     protected void setupOnClickListener(final CommonListener listener, final View button) {

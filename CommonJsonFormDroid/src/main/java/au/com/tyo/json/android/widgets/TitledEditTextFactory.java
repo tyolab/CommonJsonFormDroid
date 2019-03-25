@@ -37,9 +37,11 @@ public class TitledEditTextFactory extends TitledItemFactory {
 
     public static int WIDGET_EDIT_TEXT_RESOURCE = R.layout.item_titled_edit_text;
 
-    public static final String KEY = TitledEditTextFactory.class.getSimpleName();
+    public static final String NAME = TitledEditTextFactory.class.getSimpleName();
 
-    private static final String TAG = TitledEditTextFactory.class.getSimpleName();
+    public static final String KEY = NAME;
+
+    private static final String TAG = NAME;
 
     public static final int MIN_LENGTH = 0;
     public static final int MAX_LENGTH = 0;
@@ -53,7 +55,7 @@ public class TitledEditTextFactory extends TitledItemFactory {
     }
 
     public TitledEditTextFactory() {
-        super(TitledEditTextFactory.class.getSimpleName());
+        super(NAME);
     }
 
     @Override

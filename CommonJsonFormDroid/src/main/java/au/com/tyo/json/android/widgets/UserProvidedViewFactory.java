@@ -23,7 +23,7 @@ public class UserProvidedViewFactory extends CommonItemFactory {
     }
 
     public UserProvidedViewFactory() {
-        super(UserProvidedViewFactory.class.getSimpleName());
+        super(NAME);
     }
 
     @Override

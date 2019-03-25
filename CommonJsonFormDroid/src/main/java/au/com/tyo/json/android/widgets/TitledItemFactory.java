@@ -42,6 +42,8 @@ import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
 
 public abstract class TitledItemFactory extends UserInputItemFactory {
 
+    public static final String NAME = ;
+
     public TitledItemFactory(String widgetKey) {
         super(widgetKey);
     }

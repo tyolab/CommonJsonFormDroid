@@ -68,11 +68,6 @@ public class FormHelper {
     public static final String WIDGET_TYPE_TITLED_BUTTON = TitledClickableLabelFactory.class.getSimpleName();
     public static final String WIDGET_TYPE_TITLED_SWITCH_BUTTON = TitledSwitchButtonFactory.class.getSimpleName();
 
-    private static final TitledEditTextFactory titledTextFactory = new TitledEditTextFactory();
-    private static final TitledLabelFactory titledLabelFactory = new TitledLabelFactory();
-    private static final TitledSwitchButtonFactory titledSwitchButtonFactory = new TitledSwitchButtonFactory();
-    private static final UserProvidedViewFactory userProvidedViewFactory = new UserProvidedViewFactory();
-
     public static class GeneralTitleKeyConverter implements TitleKeyConverter {
 
         @Override
@@ -140,16 +135,6 @@ public class FormHelper {
         JsonFormFieldButton.setWidgetType(WIDGET_TYPE_TITLED_BUTTON);
 
         //
-        JsonFormInteractor.registerWidget(titledLabelFactory);
-        JsonFormInteractor.registerWidget(titledTextFactory);
-        JsonFormInteractor.registerWidget(titledSwitchButtonFactory);
-        JsonFormInteractor.registerWidget(userProvidedViewFactory);
-
-        JsonFormInteractor.registerWidget(TitledButtonFactory.class);
-        JsonFormInteractor.registerWidget(TitledClickableLabelFactory.class);
-
-        JsonFormInteractor.registerWidget(GroupTitleFactory.class);
-        JsonFormInteractor.registerWidget(TitledImageFactory.class);
     }
 
     public static String getWidgetName(CommonItemFactory factory) {
@@ -158,7 +143,7 @@ public class FormHelper {
 
     public static JsonFormFieldEditText createTitledEditTextField(String key, String title, String text) {
         JsonFormFieldEditText editText = new JsonFormFieldEditText(key, title, "");
-        editText.type = titledTextFactory.getClass().getSimpleName();
+        editText.type = itledTextFactory.getClass().getSimpleName();
         editText.value = text;
         return editText;
     }

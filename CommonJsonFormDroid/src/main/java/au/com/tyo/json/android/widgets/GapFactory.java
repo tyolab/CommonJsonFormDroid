@@ -14,6 +14,8 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public class GapFactory extends CommonItemFactory {
 
+    public static final String NAME =
+
     public GapFactory(String widgetKey) {
         super(widgetKey);
     }

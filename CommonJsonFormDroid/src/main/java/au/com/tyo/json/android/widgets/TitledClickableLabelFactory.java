@@ -36,16 +36,18 @@ import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
  */
 public class TitledClickableLabelFactory extends TitledItemFactory {
 
-    public static final String KEY = TitledClickableLabelFactory.class.getSimpleName();
+    public static final String NAME = TitledClickableLabelFactory.class.getSimpleName();
 
-    private static final String TAG = TitledClickableLabelFactory.class.getSimpleName();
+    public static final String KEY = NAME;
+
+    private static final String TAG = NAME;
 
     public TitledClickableLabelFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public TitledClickableLabelFactory() {
-        super(TitledClickableLabelFactory.class.getSimpleName());
+        super(NAME);
     }
 
     @Override

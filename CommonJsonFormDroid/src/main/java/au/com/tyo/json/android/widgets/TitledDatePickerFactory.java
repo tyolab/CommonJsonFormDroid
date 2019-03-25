@@ -53,6 +53,8 @@ import static au.com.tyo.json.jsonform.JsonFormFieldButton.PICK_TIME;
 
 public class TitledDatePickerFactory extends TitledButtonFactory {
 
+    public static final String NAME = ;
+
     public static final String KEY = TitledDatePickerFactory.class.getSimpleName();
 
     private static final String TAG = "TitledDatePickerFactory";

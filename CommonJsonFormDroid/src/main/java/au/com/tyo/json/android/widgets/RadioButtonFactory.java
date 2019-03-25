@@ -37,6 +37,8 @@ import au.com.tyo.json.jsonform.JsonFormField;
  */
 public class RadioButtonFactory extends CompoundItemFactory {
 
+    public static final String NAME = ;
+
     public RadioButtonFactory(String widgetKey) {
         super(widgetKey);
     }

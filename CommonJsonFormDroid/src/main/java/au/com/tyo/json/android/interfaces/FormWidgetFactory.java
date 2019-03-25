@@ -14,11 +14,19 @@ import au.com.tyo.json.android.widgets.ButtonFactory;
 import au.com.tyo.json.android.widgets.CheckBoxFactory;
 import au.com.tyo.json.android.widgets.EditTextFactory;
 import au.com.tyo.json.android.widgets.GapFactory;
+import au.com.tyo.json.android.widgets.GroupTitleFactory;
 import au.com.tyo.json.android.widgets.ImageFactory;
 import au.com.tyo.json.android.widgets.ImagePickerFactory;
 import au.com.tyo.json.android.widgets.LabelFactory;
 import au.com.tyo.json.android.widgets.RadioButtonFactory;
 import au.com.tyo.json.android.widgets.SpinnerFactory;
+import au.com.tyo.json.android.widgets.TitledButtonFactory;
+import au.com.tyo.json.android.widgets.TitledClickableLabelFactory;
+import au.com.tyo.json.android.widgets.TitledEditTextFactory;
+import au.com.tyo.json.android.widgets.TitledImageFactory;
+import au.com.tyo.json.android.widgets.TitledLabelFactory;
+import au.com.tyo.json.android.widgets.TitledSwitchButtonFactory;
+import au.com.tyo.json.android.widgets.UserProvidedViewFactory;
 import au.com.tyo.json.jsonform.JsonFormField;
 
 /**
@@ -26,7 +34,12 @@ import au.com.tyo.json.jsonform.JsonFormField;
  */
 public abstract class FormWidgetFactory {
 
-    private static final Map<String, FormWidgetFactory> map                = new HashMap<>();
+    private static final Map<String, FormWidgetFactory> map                     = new HashMap<>();
+
+    private static final TitledEditTextFactory titledTextFactory                = new TitledEditTextFactory();
+    private static final TitledLabelFactory titledLabelFactory                  = new TitledLabelFactory();
+    private static final TitledSwitchButtonFactory titledSwitchButtonFactory    = new TitledSwitchButtonFactory();
+    private static final UserProvidedViewFactory userProvidedViewFactory        = new UserProvidedViewFactory();
 
     /**
      * Widget Key, for identifying the which Widget Factory to use
@@ -43,7 +56,22 @@ public abstract class FormWidgetFactory {
         registerWidget(new ImagePickerFactory());
         registerWidget(new SpinnerFactory());
         registerWidget(new GapFactory());
+
+        FormWidgetFactory.registerWidget(new TitledButtonFactory());
+        FormWidgetFactory.registerWidget(new TitledClickableLabelFactory());
+
+        FormWidgetFactory.registerWidget(new GroupTitleFactory());
+        FormWidgetFactory.registerWidget(new TitledImageFactory());
+
+        FormWidgetFactory.registerWidget(titledLabelFactory);
+        FormWidgetFactory.registerWidget(titledTextFactory);
+        FormWidgetFactory.registerWidget(titledSwitchButtonFactory);
+        FormWidgetFactory.registerWidget(userProvidedViewFactory);
         return map;
+    }
+
+    public static <T extends FormWidgetFactory> void registerWidget(Class<T> tClass) throws InstantiationException, IllegalAccessException {
+        registerWidget(tClass.newInstance());
     }
 
     public static void registerWidget(String key, FormWidgetFactory factory) {

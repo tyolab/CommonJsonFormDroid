@@ -14,8 +14,14 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public class GroupTitleFactory extends CommonItemFactory {
 
+    public static final String NAME = GroupTitleFactory.class.getSimpleName();
+
     public GroupTitleFactory(String widgetKey) {
         super(widgetKey);
+    }
+
+    public GroupTitleFactory() {
+        super(NAME);
     }
 
     @Override

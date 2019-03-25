@@ -41,6 +41,8 @@ import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_ROW;
 
 public abstract class UserInputItemFactory extends CommonItemFactory {
 
+    public static final String NAME = U;
+
     public UserInputItemFactory(String widgetKey) {
         super(widgetKey);
     }

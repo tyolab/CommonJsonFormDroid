@@ -34,6 +34,8 @@ import au.com.tyo.json.android.utils.JsonMetadata;
  */
 public class TitledLabelFactory extends TitledItemFactory {
 
+    public static final String NAME = ;
+
     public static final String KEY = TitledLabelFactory.class.getSimpleName();
 
     private static final String TAG = TitledLabelFactory.class.getSimpleName();

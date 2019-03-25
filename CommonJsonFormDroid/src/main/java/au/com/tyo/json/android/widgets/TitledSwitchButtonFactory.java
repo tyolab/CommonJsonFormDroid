@@ -37,6 +37,8 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public class TitledSwitchButtonFactory extends TitledItemFactory {
 
+    public static final String NAME = ;
+
     public static final String KEY = TitledSwitchButtonFactory.class.getSimpleName();
 
     public TitledSwitchButtonFactory(String widgetKey) {

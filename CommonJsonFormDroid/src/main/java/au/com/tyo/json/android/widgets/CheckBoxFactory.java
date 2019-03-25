@@ -36,6 +36,8 @@ import au.com.tyo.json.android.interfaces.CommonListener;
  */
 public class CheckBoxFactory extends CompoundItemFactory {
 
+    public static final String NAME =
+
     public CheckBoxFactory(String widgetKey) {
         super(widgetKey);
     }

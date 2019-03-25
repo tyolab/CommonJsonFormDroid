@@ -9,6 +9,8 @@ import au.com.tyo.json.android.R;
 
 public class ImageFactory extends CommonItemFactory {
 
+    public static final String NAME =
+
     public ImageFactory(String widgetKey) {
         super(widgetKey);
         setLayoutResourceId(R.layout.item_imageview);

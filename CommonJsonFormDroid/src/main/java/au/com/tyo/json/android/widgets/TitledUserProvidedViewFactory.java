@@ -14,6 +14,8 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public class TitledUserProvidedViewFactory extends TitledItemFactory {
 
+    public static final String NAME = ;
+
     public TitledUserProvidedViewFactory(String widgetKey) {
         super(widgetKey);
     }
