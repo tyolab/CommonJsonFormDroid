@@ -27,7 +27,7 @@ public class UserProvidedViewFactory extends CommonItemFactory {
     }
 
     @Override
-    public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
+    protected View createView(JSONObject jsonObject, LayoutInflater factory) {
         Object value = jsonObject.opt("value");
         int resId = -1;
         if (value instanceof Integer)
@@ -45,15 +45,23 @@ public class UserProvidedViewFactory extends CommonItemFactory {
         if (resId == -1)
             throw new IllegalStateException("User provided view resource id can not be empty");
 
-        LayoutInflater factory = LayoutInflater.from(context);
-
-        int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, 0);
-
-        View v = factory.inflate(resId, null);
-
-        bindUserInput(jsonApi, v, jsonObject, -1, listener, editable, clickable, metaDataWatcher);
-
-        return (v);
+        return inflateViewForField(jsonObject, factory, resId);
     }
+
+    // @Override
+    // public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
+    //
+    //
+    //     LayoutInflater factory = LayoutInflater.from(context);
+    //
+    //     int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, 0);
+    //
+    //     View v = factory.inflate(resId, null);
+    //
+    //
+    //     bindUserInput(jsonApi, v, jsonObject, -1, listener, editable, clickable, metaDataWatcher);
+    //
+    //     return (v);
+    // }
 
 }

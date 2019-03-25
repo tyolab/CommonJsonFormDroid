@@ -241,7 +241,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
         LayoutInflater factory = LayoutInflater.from(context);
 
-        View v = inflateViewForField(jsonObject, factory, layoutResourceId);
+        View v = createView(jsonObject, factory);
 
         bindDataAndAction(v, jsonApi, jsonObject, editable, listener, metaDataWatcher);
 
@@ -251,8 +251,13 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return v;
     }
 
+    protected View createView(JSONObject jsonObject, LayoutInflater factory) {
+        return inflateViewForField(jsonObject, factory, layoutResourceId);
+    }
+
     protected void bindDataAndAction(View parent, JsonApi jsonApi, JSONObject jsonObject, boolean editable, CommonListener listener, MetaDataWatcher metaDataWatcher) {
         final String keyStr = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY);
+        final int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, CLICKABLE_NONE);
 
         setViewTagKey(parent, keyStr);
 
@@ -267,7 +272,6 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
             if (null != userInputView) {
                 final String value = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_VALUE);
-                final int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, CLICKABLE_NONE);
                 final boolean enabled = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_ENABLED, true);
 
                 bindUserInput(jsonApi, userInputView, keyStr, value, false);
@@ -284,12 +288,12 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
                      */
                     setViewTagKey(userInputView, keyStr);
                 }
-                else if (clickable == CLICKABLE_ROW) {
-                    parent.setClickable(true);
-                    parent.setOnClickListener(listener);
-                }
             }
         }
 
+        if (clickable == CLICKABLE_ROW) {
+            parent.setClickable(true);
+            parent.setOnClickListener(listener);
+        }
     }
 }

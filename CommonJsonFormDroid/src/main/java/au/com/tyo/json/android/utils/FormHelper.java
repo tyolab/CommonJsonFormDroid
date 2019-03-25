@@ -126,17 +126,6 @@ public class FormHelper {
         }
     }
 
-    static {
-        registerWidgetFactories();
-    }
-
-    public static void registerWidgetFactories() {
-        //
-        JsonFormFieldButton.setWidgetType(WIDGET_TYPE_TITLED_BUTTON);
-
-        //
-    }
-
     public static String getWidgetName(CommonItemFactory factory) {
         return factory.getClass().getCanonicalName();
     }
