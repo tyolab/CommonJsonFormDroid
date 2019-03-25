@@ -9,7 +9,7 @@ import au.com.tyo.json.android.R;
 
 public class ButtonFactory extends CommonItemFactory {
 
-    public static final String NAME =
+    public static final String NAME = ButtonFactory.class.getSimpleName();
 
     public ButtonFactory(String widgetKey) {
         super(widgetKey);
@@ -17,8 +17,7 @@ public class ButtonFactory extends CommonItemFactory {
     }
 
     public ButtonFactory() {
-        this()
-        setLayoutResourceId(R.layout.item_button);
+        this(NAME);
     }
 
 }

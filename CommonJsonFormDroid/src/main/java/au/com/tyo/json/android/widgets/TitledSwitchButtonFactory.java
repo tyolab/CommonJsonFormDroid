@@ -37,16 +37,16 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public class TitledSwitchButtonFactory extends TitledItemFactory {
 
-    public static final String NAME = ;
+    public static final String NAME = TitledSwitchButtonFactory.class.getSimpleName();
 
-    public static final String KEY = TitledSwitchButtonFactory.class.getSimpleName();
+    public static final String KEY = NAME;
 
     public TitledSwitchButtonFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public TitledSwitchButtonFactory() {
-        super(TitledSwitchButtonFactory.class.getSimpleName());
+        super(NAME);
     }
 
     @Override

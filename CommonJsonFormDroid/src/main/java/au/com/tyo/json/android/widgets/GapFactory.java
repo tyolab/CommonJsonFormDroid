@@ -14,14 +14,14 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public class GapFactory extends CommonItemFactory {
 
-    public static final String NAME =
+    public static final String NAME = GapFactory.class.getSimpleName();
 
     public GapFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public GapFactory() {
-        super();
+        super(NAME);
     }
 
     @Override

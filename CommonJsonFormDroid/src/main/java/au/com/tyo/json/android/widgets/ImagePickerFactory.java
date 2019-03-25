@@ -29,14 +29,14 @@ import static au.com.tyo.json.android.utils.FormUtils.getLayoutParams;
  */
 public class ImagePickerFactory extends CompoundItemFactory {
 
-    public static final String NAME =
+    public static final String NAME = ImagePickerFactory.class.getSimpleName();
 
     public ImagePickerFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public ImagePickerFactory() {
-
+        super(NAME);
     }
 
     @Override

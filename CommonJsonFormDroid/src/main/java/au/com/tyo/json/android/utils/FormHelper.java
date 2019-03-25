@@ -143,7 +143,7 @@ public class FormHelper {
 
     public static JsonFormFieldEditText createTitledEditTextField(String key, String title, String text) {
         JsonFormFieldEditText editText = new JsonFormFieldEditText(key, title, "");
-        editText.type = itledTextFactory.getClass().getSimpleName();
+        editText.type = TitledEditTextFactory.NAME;
         editText.value = text;
         return editText;
     }

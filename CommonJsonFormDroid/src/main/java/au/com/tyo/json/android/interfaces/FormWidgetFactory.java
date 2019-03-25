@@ -1,6 +1,7 @@
 package au.com.tyo.json.android.interfaces;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONObject;
@@ -34,6 +35,8 @@ import au.com.tyo.json.jsonform.JsonFormField;
  */
 public abstract class FormWidgetFactory {
 
+    private static final String TAG = "FormWidgetFactory";
+
     private static final Map<String, FormWidgetFactory> map                     = new HashMap<>();
 
     private static final TitledEditTextFactory titledTextFactory                = new TitledEditTextFactory();
@@ -46,27 +49,33 @@ public abstract class FormWidgetFactory {
      */
     private String widgetKey;
 
+    static {
+        registerWidgets();
+    }
+
     public static Map<String, FormWidgetFactory> registerWidgets() {
-        registerWidget(new EditTextFactory());
-        registerWidget(new LabelFactory());
-        registerWidget(new ButtonFactory());
-        registerWidget(new ImageFactory());
-        registerWidget(new CheckBoxFactory());
-        registerWidget(new RadioButtonFactory());
-        registerWidget(new ImagePickerFactory());
-        registerWidget(new SpinnerFactory());
-        registerWidget(new GapFactory());
+        if (map.size() == 0) {
+            registerWidget(new EditTextFactory());
+            registerWidget(new LabelFactory());
+            registerWidget(new ButtonFactory());
+            registerWidget(new ImageFactory());
+            registerWidget(new CheckBoxFactory());
+            registerWidget(new RadioButtonFactory());
+            registerWidget(new ImagePickerFactory());
+            registerWidget(new SpinnerFactory());
+            registerWidget(new GapFactory());
 
-        FormWidgetFactory.registerWidget(new TitledButtonFactory());
-        FormWidgetFactory.registerWidget(new TitledClickableLabelFactory());
+            registerWidget(new TitledButtonFactory());
+            registerWidget(new TitledClickableLabelFactory());
 
-        FormWidgetFactory.registerWidget(new GroupTitleFactory());
-        FormWidgetFactory.registerWidget(new TitledImageFactory());
+            registerWidget(new GroupTitleFactory());
+            registerWidget(new TitledImageFactory());
 
-        FormWidgetFactory.registerWidget(titledLabelFactory);
-        FormWidgetFactory.registerWidget(titledTextFactory);
-        FormWidgetFactory.registerWidget(titledSwitchButtonFactory);
-        FormWidgetFactory.registerWidget(userProvidedViewFactory);
+            registerWidget(titledLabelFactory);
+            registerWidget(titledTextFactory);
+            registerWidget(titledSwitchButtonFactory);
+            registerWidget(userProvidedViewFactory);
+        }
         return map;
     }
 
@@ -79,7 +88,10 @@ public abstract class FormWidgetFactory {
     }
 
     public static void registerWidget(FormWidgetFactory factory) {
-        map.put(factory.getWidgetKey(), factory);
+        String widgetKey = factory.getWidgetKey();
+        if (null == widgetKey)
+            Log.w(TAG, "Widget typ is null: " + factory.getClass().getName());
+        map.put(widgetKey, factory);
     }
 
     public static void setViewTags(View v, JSONObject jsonObject) {

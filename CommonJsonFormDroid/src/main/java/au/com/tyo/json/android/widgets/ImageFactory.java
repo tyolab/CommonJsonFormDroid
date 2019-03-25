@@ -9,7 +9,7 @@ import au.com.tyo.json.android.R;
 
 public class ImageFactory extends CommonItemFactory {
 
-    public static final String NAME =
+    public static final String NAME = ImageFactory.class.getSimpleName();
 
     public ImageFactory(String widgetKey) {
         super(widgetKey);

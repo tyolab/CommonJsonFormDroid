@@ -22,10 +22,14 @@ package au.com.tyo.json.android.widgets;
 
 public abstract class ImageBoxFactory extends CompoundItemFactory {
 
-    public static final String NAME =
+    public static final String NAME = ImageBoxFactory.class.getSimpleName();
 
     public ImageBoxFactory(String widgetKey) {
         super(widgetKey);
+    }
+
+    public ImageBoxFactory() {
+        super(NAME);
     }
 
     /**

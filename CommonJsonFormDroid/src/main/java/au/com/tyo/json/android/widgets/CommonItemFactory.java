@@ -38,7 +38,6 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
     public CommonItemFactory() {
         super();
-
     }
 
     public int getLayoutResourceId() {

@@ -20,12 +20,14 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public abstract class CompoundItemFactory extends TitledItemFactory {
 
+    public static final String NAME = CompoundItemFactory.class.getSimpleName();
+
     public CompoundItemFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public CompoundItemFactory() {
-        super();
+        super(NAME);
     }
 
     @Override

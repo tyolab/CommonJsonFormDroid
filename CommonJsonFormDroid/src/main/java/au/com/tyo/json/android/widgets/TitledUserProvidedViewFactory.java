@@ -14,14 +14,14 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 
 public class TitledUserProvidedViewFactory extends TitledItemFactory {
 
-    public static final String NAME = ;
+    public static final String NAME = TitledUserProvidedViewFactory.class.getSimpleName();
 
     public TitledUserProvidedViewFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public TitledUserProvidedViewFactory() {
-        super(TitledUserProvidedViewFactory.class.getSimpleName());
+        super(NAME);
     }
 
     @Override

@@ -23,14 +23,14 @@ import au.com.tyo.json.android.utils.ValidationStatus;
  */
 public class SpinnerFactory extends CommonItemFactory {
 
-    public static final String NAME = ;
+    public static final String NAME = SpinnerFactory.class.getSimpleName();
 
     public SpinnerFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public SpinnerFactory() {
-
+        super(NAME);
     }
 
     @Override

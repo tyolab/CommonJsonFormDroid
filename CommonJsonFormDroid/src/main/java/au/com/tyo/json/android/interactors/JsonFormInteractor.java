@@ -44,11 +44,10 @@ public class JsonFormInteractor {
     private static final String                             TAG               = "JsonFormInteractor";
     private static final JsonFormInteractor                 INSTANCE          = new JsonFormInteractor();
 
-    private Map<String, FormWidgetFactory>                  map               = new HashMap<>();
+    private Map<String, FormWidgetFactory>                  map;
 
     private JsonFormInteractor() {
-        if (null == map)
-            map = FormWidgetFactory.registerWidgets();
+        map = FormWidgetFactory.registerWidgets();
     }
 
     public List<View> fetchFormElements(JsonApi jsonApi, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) {

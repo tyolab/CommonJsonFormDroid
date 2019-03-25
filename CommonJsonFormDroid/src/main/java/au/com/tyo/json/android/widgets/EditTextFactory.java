@@ -34,7 +34,7 @@ import au.com.tyo.json.android.utils.JsonMetadata;
  */
 public class EditTextFactory extends UserInputItemFactory {
 
-    public static final String NAME =
+    public static final String NAME = EditTextFactory.class.getSimpleName();
 
     public static int WIDGET_EDIT_TEXT_RESOURCE = R.layout.item_edit_text;
 
@@ -46,7 +46,7 @@ public class EditTextFactory extends UserInputItemFactory {
     }
 
     public EditTextFactory() {
-        super();
+        super(NAME);
     }
 
     @Override

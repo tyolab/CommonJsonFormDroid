@@ -42,14 +42,14 @@ import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
 
 public abstract class TitledItemFactory extends UserInputItemFactory {
 
-    public static final String NAME = ;
+    public static final String NAME = TitledItemFactory.class.getSimpleName();
 
     public TitledItemFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public TitledItemFactory() {
-
+        super(NAME);
     }
 
     protected abstract View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException;

@@ -36,14 +36,14 @@ import au.com.tyo.json.android.interfaces.CommonListener;
  */
 public class CheckBoxFactory extends CompoundItemFactory {
 
-    public static final String NAME =
+    public static final String NAME = CheckBoxFactory.class.getSimpleName();
 
     public CheckBoxFactory(String widgetKey) {
         super(widgetKey);
     }
 
     public CheckBoxFactory() {
-        super();
+        super(NAME);
     }
 
     @Override

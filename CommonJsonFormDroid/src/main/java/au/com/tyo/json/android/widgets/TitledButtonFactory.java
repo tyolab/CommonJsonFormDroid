@@ -46,7 +46,7 @@ public class TitledButtonFactory extends TitledItemFactory {
     private static final String TAG = NAME;
 
     static {
-        JsonFormFieldButton.setWidgetType(TitledButtonFactory.class.getSimpleName());
+        JsonFormFieldButton.setWidgetType(NAME);
     }
 
     public TitledButtonFactory(String widgetKey) {

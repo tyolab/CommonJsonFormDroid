@@ -47,7 +47,7 @@ public class TitledEditTextFactory extends TitledItemFactory {
     public static final int MAX_LENGTH = 0;
 
     static {
-        JsonFormFieldEditText.setWidgetType(TitledEditTextFactory.class.getSimpleName());
+        JsonFormFieldEditText.setWidgetType(NAME);
     }
 
     public TitledEditTextFactory(String widgetKey) {
