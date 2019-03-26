@@ -226,7 +226,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
      * @param required
      */
     @Override
-    public void setUserInputView(String key, View v, boolean editable, boolean enabled, int required) {
+    public void setKeyMappingView(String key, View v, boolean editable, boolean enabled, int required) {
         // String key = (String) view.getTag(R.id.key);
         // int i;
 
@@ -503,7 +503,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     public void updateFormFieldVisibility(String targetKey, boolean visible) {
         View v = getViewByKey(targetKey);
         if (null != v)
-            getViewByKey(targetKey).setVisibility(visible ? View.VISIBLE : View.GONE);
+            v.setVisibility(visible ? View.VISIBLE : View.GONE);
         else
             Log.w(TAG, "Trying to update visibility of null field: " + targetKey);
         updateFormFieldVisibilityInMetadata(targetKey, visible);

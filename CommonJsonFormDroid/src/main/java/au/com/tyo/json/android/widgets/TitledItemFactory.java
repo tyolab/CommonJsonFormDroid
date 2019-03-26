@@ -107,13 +107,13 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
             enabled = editable;
 
         if (null != userInputView) {
-            metaDataWatcher.setUserInputView(metadata.key, userInputView, editable, editable, metadata.required);
+            metaDataWatcher.setKeyMappingView(metadata.key, userInputView, editable, editable, metadata.required);
             setViewTags(userInputView, metadata);
 
             userInputView.setEnabled(enabled);
         }
         else
-            metaDataWatcher.setUserInputView(metadata.key, child, enabled, editable, metadata.required);
+            metaDataWatcher.setKeyMappingView(metadata.key, child, enabled, editable, metadata.required);
 
         return v;
     }

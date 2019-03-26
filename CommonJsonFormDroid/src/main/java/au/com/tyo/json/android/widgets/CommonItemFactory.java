@@ -124,7 +124,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         // inputTextView.setGravity(gravity);
         if (null != userInputView) {
             if (null != metaDataWatcher)
-                metaDataWatcher.setUserInputView(keyStr, userInputView, editable, editable, -1);
+                metaDataWatcher.setKeyMappingView(keyStr, userInputView, editable, editable, -1);
 
             if (clickable == CLICKABLE_FIELD) {
                 userInputView.setClickable(true);
@@ -258,6 +258,8 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
     protected void bindDataAndAction(View parent, JsonApi jsonApi, JSONObject jsonObject, boolean editable, CommonListener listener, MetaDataWatcher metaDataWatcher) {
         final String keyStr = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY);
         final int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, CLICKABLE_NONE);
+        final String value = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_VALUE);
+        final boolean enabled = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_ENABLED, true);
 
         setViewTagKey(parent, keyStr);
 
@@ -267,28 +269,37 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
             String text = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_TITLE);
             tv.setText(text);
         }
-        else {
-            View userInputView = parent.findViewById(R.id.user_input);
 
-            if (null != userInputView) {
-                final String value = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_VALUE);
-                final boolean enabled = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_ENABLED, true);
+        /**
+         * Check if there is a view with the id of "user_input"
+         */
+        View userInputView = parent.findViewById(R.id.user_input);
 
-                bindUserInput(jsonApi, userInputView, keyStr, value, false);
+        if (null != userInputView) {
 
-                if (null != metaDataWatcher)
-                    metaDataWatcher.setUserInputView(keyStr, userInputView, editable, enabled, -1);
+            bindUserInput(jsonApi, userInputView, keyStr, value, false);
 
-                if (clickable == CLICKABLE_FIELD) {
-                    userInputView.setClickable(true);
-                    userInputView.setOnClickListener(listener);
+            if (null != metaDataWatcher)
+                metaDataWatcher.setKeyMappingView(keyStr, userInputView, editable, enabled, -1);
 
-                    /**
-                     * Set the input view with key too
-                     */
-                    setViewTagKey(userInputView, keyStr);
-                }
+            if (clickable == CLICKABLE_FIELD) {
+                userInputView.setClickable(true);
+                userInputView.setOnClickListener(listener);
+
+                /**
+                 * Set the input view with key too
+                 */
+                setViewTagKey(userInputView, keyStr);
             }
+
+            /**
+             * Register the view to the form metadata map
+             */
+            listener.onInitialValueSet(keyStr, null, value);
+        }
+        else {
+            if (null != metaDataWatcher)
+                metaDataWatcher.setKeyMappingView(keyStr, parent, editable, enabled, -1);
         }
 
         if (clickable == CLICKABLE_ROW) {
