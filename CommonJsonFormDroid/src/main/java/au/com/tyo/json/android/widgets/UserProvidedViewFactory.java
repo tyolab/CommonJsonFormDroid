@@ -1,16 +1,9 @@
 package au.com.tyo.json.android.widgets;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import org.json.JSONObject;
-
-import au.com.tyo.json.android.interfaces.CommonListener;
-import au.com.tyo.json.android.interfaces.JsonApi;
-import au.com.tyo.json.android.interfaces.MetaDataWatcher;
-import au.com.tyo.json.android.utils.JsonMetadata;
-import au.com.tyo.json.jsonform.JsonFormField;
 
 import static au.com.tyo.json.jsonform.JsonFormField.ATTRIBUTE_NAME_LAYOUT;
 

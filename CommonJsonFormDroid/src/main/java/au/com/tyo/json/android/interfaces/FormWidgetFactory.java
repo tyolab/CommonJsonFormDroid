@@ -89,9 +89,27 @@ public abstract class FormWidgetFactory {
 
     public static void registerWidget(FormWidgetFactory factory) {
         String widgetKey = factory.getWidgetKey();
-        if (null == widgetKey)
+        if (null == widgetKey) {
             Log.w(TAG, "Widget typ is null: " + factory.getClass().getName());
+            factory.setWidgetKey(widgetKey = factory.getClass().getSimpleName());
+        }
         map.put(widgetKey, factory);
+    }
+
+    public FormWidgetFactory(String widgetKey) {
+        this.widgetKey = widgetKey;
+    }
+
+    public FormWidgetFactory() {
+        this.widgetKey = this.getClass().getSimpleName();
+    }
+
+    public String getWidgetKey() {
+        return widgetKey;
+    }
+
+    public void setWidgetKey(String widgetKey) {
+        this.widgetKey = widgetKey;
     }
 
     public static void setViewTags(View v, JSONObject jsonObject) {
@@ -119,18 +137,6 @@ public abstract class FormWidgetFactory {
         v.setTag(R.id.key, metadata.key);
         v.setTag(R.id.type, metadata.type);
         v.setTag(R.id.required, metadata.required);
-    }
-
-    public FormWidgetFactory(String widgetKey) {
-        this.widgetKey = widgetKey;
-    }
-
-    public FormWidgetFactory() {
-        this.widgetKey = this.getClass().getSimpleName();
-    }
-
-    public String getWidgetKey() {
-        return widgetKey;
     }
 
     public abstract View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception;

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -500,7 +501,11 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     }
 
     public void updateFormFieldVisibility(String targetKey, boolean visible) {
-        getViewByKey(targetKey).setVisibility(visible ? View.VISIBLE : View.GONE);
+        View v = getViewByKey(targetKey);
+        if (null != v)
+            getViewByKey(targetKey).setVisibility(visible ? View.VISIBLE : View.GONE);
+        else
+            Log.w(TAG, "Trying to update visibility of null field: " + targetKey);
         updateFormFieldVisibilityInMetadata(targetKey, visible);
     }
 
