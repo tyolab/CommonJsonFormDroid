@@ -123,9 +123,6 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
         // inputTextView.setGravity(gravity);
         if (null != userInputView) {
-            if (null != metaDataWatcher)
-                metaDataWatcher.setKeyMappingView(keyStr, userInputView, editable, editable, -1);
-
             if (clickable == CLICKABLE_FIELD) {
                 userInputView.setClickable(true);
                 userInputView.setOnClickListener(listener);
@@ -133,6 +130,9 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
                 setViewTagKey(userInputView, keyStr);
             }
         }
+
+        if (null != metaDataWatcher)
+            metaDataWatcher.setKeyMappingView(keyStr, parent, userInputView, editable, editable, -1);
     }
 
     /**
@@ -279,9 +279,6 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
             bindUserInput(jsonApi, userInputView, keyStr, value, false);
 
-            if (null != metaDataWatcher)
-                metaDataWatcher.setKeyMappingView(keyStr, userInputView, editable, enabled, -1);
-
             if (clickable == CLICKABLE_FIELD) {
                 userInputView.setClickable(true);
                 userInputView.setOnClickListener(listener);
@@ -297,10 +294,10 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
              */
             listener.onInitialValueSet(keyStr, null, value);
         }
-        else {
-            if (null != metaDataWatcher)
-                metaDataWatcher.setKeyMappingView(keyStr, parent, editable, enabled, -1);
-        }
+
+        if (null != metaDataWatcher)
+            metaDataWatcher.setKeyMappingView(keyStr, parent, userInputView, editable, enabled, -1);
+
 
         if (clickable == CLICKABLE_ROW) {
             parent.setClickable(true);

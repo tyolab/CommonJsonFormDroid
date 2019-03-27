@@ -58,7 +58,16 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         public int required; // -1 nullable, 0 optional, 1 required
         public java.lang.Object value;
         public boolean visible;
+
+        /**
+         * Widget View
+         */
         public View view;
+
+        /**
+         * User Input View
+         */
+        public View inputView;
 
         public FieldMetadata(int i, int required) {
             this();

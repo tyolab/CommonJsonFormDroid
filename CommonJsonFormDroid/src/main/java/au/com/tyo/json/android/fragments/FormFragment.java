@@ -221,32 +221,20 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
      *
      * We only keep the metadata info for the user input / or updatable
      * @param key
-     * @param v
+     * @param widgetView
+     * @param inputView
      * @param enabled
      * @param required
      */
     @Override
-    public void setKeyMappingView(String key, View v, boolean editable, boolean enabled, int required) {
-        // String key = (String) view.getTag(R.id.key);
-        // int i;
-
+    public void setKeyMappingView(String key, View widgetView, View inputView, boolean editable, boolean enabled, int required) {
         FieldMetadata metadata = null;
-        //if (metadataMap.containsKey(key)) {
-            metadata = getFieldMetaData(key);
-             // i = metadata.index;
-        //}
-        // else {
-            // i = metadataMap.size();
-            // metadata.index = i;
-        // }
 
-        //if (null != v.getTag(R.id.required)) {
-        //    int required = (int) v.getTag(R.id.required);
-            metadata.required = required;
-        // }
+        metadata = getFieldMetaData(key);
+        metadata.required = required;
 
-        //if (!editable)
-        metadata.view = v;
+        metadata.view = widgetView;
+        metadata.inputView = inputView;
         setFormRowEditableOrEnabled(metadata.view, editable, enabled);
     }
 
