@@ -1,6 +1,7 @@
 package au.com.tyo.json.android.widgets;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,7 +133,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         }
 
         if (null != metaDataWatcher)
-            metaDataWatcher.setKeyMappingView(keyStr, parent, userInputView, editable, editable, -1);
+            metaDataWatcher.setKeyInputView(keyStr, userInputView, editable, editable, -1);
     }
 
     /**
@@ -296,12 +297,18 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         }
 
         if (null != metaDataWatcher)
-            metaDataWatcher.setKeyMappingView(keyStr, parent, userInputView, editable, enabled, -1);
+            metaDataWatcher.setKeyInputView(keyStr, userInputView, editable, enabled, -1);
 
 
         if (clickable == CLICKABLE_ROW) {
             parent.setClickable(true);
             parent.setOnClickListener(listener);
         }
+    }
+
+    @Override
+    public void updateView(JsonApi jsonApi, View view, String targetKey, Object value, ColorStateList fieldTextColors) {
+        // no ops yet
+        // as most views won't be changed due the lifespan
     }
 }

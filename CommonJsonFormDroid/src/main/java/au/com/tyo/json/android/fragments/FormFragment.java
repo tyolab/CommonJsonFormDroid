@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.widgets.UserInputItemFactory;
 import au.com.tyo.json.form.FieldValue;
 import au.com.tyo.json.android.R;
@@ -64,8 +65,6 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     private JsonFormExtensionPresenter  formPresenter;
     private boolean                     darkThemeInUse;
 
-    public Map<String, View>            fieldViews;
-
     public Object getForm() {
         return form;
     }
@@ -99,8 +98,6 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
         if (null == metadataMap)
             metadataMap = new HashMap<>();
-
-        fieldViews = new HashMap<>();
 
         /**
          * The context is themed
@@ -155,58 +152,25 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         return false;
     }
 
-    public void updateForm(String targetKey, java.lang.Object result) {
-        String text = null;
-        if (null != result) {
-            if (result instanceof String)
-                text = (String) result;
-            else if (result instanceof FieldValue)
-                text = ((FieldValue) result).getStringValue();
-            else
-                text = result.toString();
-        }
-
-        /** it can be null
-         if (null == text)
-            return;
-         */
-
-        updateFormField(targetKey, text);
+    public void updateForm(String targetKey, Object result) {
+        updateFormField(targetKey, result);
     }
 
-    protected void updateFormField(String targetKey, String text) {
-        onValueChange(targetKey, null, text);
+    protected void updateFormField(String targetKey, Object value) {
+        onValueChange(targetKey, null, value);
 
-        View userInputView = null;
         View view = getViewByKey(targetKey);
-        int required = 0;
-        if (null == view) {
-            view = getFieldViewByKey(targetKey);
-            if (null != view)
-                userInputView = view.findViewById(R.id.user_input);
-        }
-        else
-            userInputView = view;
 
-        if (null != userInputView)
-            required = (int) userInputView.getTag(R.id.required);
+        if (null != view) {
+            String type = (String) view.getTag(R.id.type);
 
-        // show the optional button if there is one
-        if (null != view)
-            TitledItemFactory.showHideOptionalClearButton(view, text, required);
+            FormWidgetFactory factory = FormWidgetFactory.getWidgetFactory(type);
 
-        // update the text
-        if (null != userInputView) {
-            UserInputItemFactory.bindUserInput(getJsonApi(), userInputView, targetKey, text, false);
-
-            if (userInputView instanceof TextView) {
-                TextView button = (TextView) userInputView;
-                // button.setText(text);
-                button.setTextColor(fieldTextColors);
-            }
+            factory.updateView(getJsonApi(), view, targetKey, value, fieldTextColors);
         }
         else
             throw new IllegalStateException("User input view is not found, and a value is set to attach to the view");
+
     }
 
     @Override
@@ -221,26 +185,24 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
      *
      * We only keep the metadata info for the user input / or updatable
      * @param key
-     * @param widgetView
      * @param inputView
      * @param enabled
      * @param required
      */
     @Override
-    public void setKeyMappingView(String key, View widgetView, View inputView, boolean editable, boolean enabled, int required) {
+    public void setKeyInputView(String key, View inputView, boolean editable, boolean enabled, int required) {
         FieldMetadata metadata = null;
 
         metadata = getFieldMetaData(key);
         metadata.required = required;
-
-        metadata.view = widgetView;
         metadata.inputView = inputView;
         setFormRowEditableOrEnabled(metadata.view, editable, enabled);
     }
 
     @Override
-    public void addFieldView(String key, View v) {
-        fieldViews.put(key, v);
+    public void setKeyWidgetView(String key, View v) {
+        FieldMetadata metadata = getFieldMetaData(key);
+        metadata.view = v;
     }
 
     public void changeFormEditableState(boolean editable) {
@@ -378,15 +340,15 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     }
 
     public View getViewByKey(String key) {
-        View view;
-        FieldMetadata metaData = getFieldMetaData(key);
-        view = metaData.view; //
-
-        return view;
+        return getWidgetViewByKey(key);
     }
 
-    public View getFieldViewByKey(String key) {
-        return fieldViews.get(key);
+    public View getInputViewByKey(String key) {
+        return getFieldMetaData(key).inputView;
+    }
+
+    public View getWidgetViewByKey(String key) {
+        return getFieldMetaData(key).view;
     }
 
     public void requestFocusForField(String key) {

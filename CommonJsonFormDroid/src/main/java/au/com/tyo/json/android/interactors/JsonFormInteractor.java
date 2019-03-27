@@ -10,10 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,16 +21,7 @@ import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
-import au.com.tyo.json.android.widgets.ButtonFactory;
-import au.com.tyo.json.android.widgets.CheckBoxFactory;
-import au.com.tyo.json.android.widgets.EditTextFactory;
-import au.com.tyo.json.android.widgets.GapFactory;
 import au.com.tyo.json.android.widgets.GroupTitleFactory;
-import au.com.tyo.json.android.widgets.ImageFactory;
-import au.com.tyo.json.android.widgets.ImagePickerFactory;
-import au.com.tyo.json.android.widgets.LabelFactory;
-import au.com.tyo.json.android.widgets.RadioButtonFactory;
-import au.com.tyo.json.android.widgets.SpinnerFactory;
 import au.com.tyo.json.jsonform.JsonFormField;
 
 /**
@@ -176,8 +164,16 @@ public class JsonFormInteractor {
                          */
                         JsonMetadata metadata = new JsonMetadata(childJson);
                         View views = widgetFactory.getViewFromJson(jsonApi, stepName, context, childJson, metadata, listener, editable, metaDataWatcher);
-                        FormWidgetFactory.setFieldTags(views, metadata);
-                        metaDataWatcher.addFieldView(metadata.key, views);
+
+                        /**
+                         * need at least type tag
+                         */
+                        FormWidgetFactory.setViewTags(views, metadata);
+
+                        /**
+                         * Set the the widget view
+                         */
+                        metaDataWatcher.setKeyWidgetView(metadata.key, views);
 
                         viewsFromJson.add(views);
 

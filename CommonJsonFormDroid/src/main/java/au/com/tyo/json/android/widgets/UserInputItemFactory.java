@@ -3,8 +3,8 @@ package au.com.tyo.json.android.widgets;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Build;
-import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import au.com.tyo.android.AndroidUtils;
+import au.com.tyo.json.form.FieldValue;
 import au.com.tyo.json.jsonform.JsonFormField;
 import au.com.tyo.json.jsonform.JsonFormFieldFilter;
 import au.com.tyo.json.android.R;
@@ -32,7 +33,6 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
-import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_FIELD;
 import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_ROW;
 
 /**
@@ -280,5 +280,41 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
 
         editText.setOnFocusChangeListener(listener);
         return v;
+    }
+
+    @Override
+    public void updateView(JsonApi jsonApi, View view, String targetKey, Object value, ColorStateList fieldTextColors) {
+        View userInputView = view.findViewById(R.id.user_input);
+
+        updateUserInput(jsonApi, userInputView, targetKey, value, fieldTextColors);
+    }
+
+    protected void updateUserInput(JsonApi jsonApi, View userInputView, String targetKey, Object result, ColorStateList fieldTextColors) {
+
+        String text = null;
+        if (null != result) {
+            if (result instanceof String)
+                text = (String) result;
+            else if (result instanceof FieldValue)
+                text = ((FieldValue) result).getStringValue();
+            else
+                text = result.toString();
+        }
+
+        /** it can be null
+         if (null == text)
+         return;
+         */
+
+        // update the text
+        if (null != userInputView) {
+            UserInputItemFactory.bindUserInput(jsonApi, userInputView, targetKey, text, false);
+
+            if (userInputView instanceof TextView) {
+                TextView button = (TextView) userInputView;
+                // button.setText(text);
+                button.setTextColor(fieldTextColors);
+            }
+        }
     }
 }

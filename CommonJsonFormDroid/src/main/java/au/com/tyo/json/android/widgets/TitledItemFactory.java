@@ -16,6 +16,7 @@
 
 package au.com.tyo.json.android.widgets;
 
+import android.content.res.ColorStateList;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -113,7 +114,7 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         }
 
         if (null != metaDataWatcher)
-            metaDataWatcher.setKeyMappingView(metadata.key, parent, userInputView, enabled, editable, metadata.required);
+            metaDataWatcher.setKeyInputView(metadata.key, userInputView, enabled, editable, metadata.required);
 
         return v;
     }
@@ -158,6 +159,17 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
                     optionalButton.showClearButton();
                 }
             }
+        }
+    }
+
+    @Override
+    public void updateView(JsonApi jsonApi, View view, String targetKey, Object value, ColorStateList fieldTextColors) {
+        super.updateView(jsonApi, view, targetKey, value, fieldTextColors);
+
+        if (null != view) {
+            int required = (int) view.getTag(R.id.required);
+
+            showHideOptionalClearButton(view, value.toString(), required);
         }
     }
 }

@@ -1,6 +1,7 @@
 package au.com.tyo.json.android.interfaces;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.View;
 
@@ -96,6 +97,11 @@ public abstract class FormWidgetFactory {
         map.put(widgetKey, factory);
     }
 
+    public static FormWidgetFactory getWidgetFactory(String type) {
+        return map.get(type);
+    }
+
+
     public FormWidgetFactory(String widgetKey) {
         this.widgetKey = widgetKey;
     }
@@ -141,4 +147,5 @@ public abstract class FormWidgetFactory {
 
     public abstract View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception;
 
+    public abstract void updateView(JsonApi jsonApi, View view, String targetKey, Object value, ColorStateList fieldTextColors);
 }
