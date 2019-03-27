@@ -8,7 +8,7 @@ import android.util.AttributeSet;
  * Created by Eric Tang (eric.tang@tyo.com.au) on 12/1/18.
  */
 
-public class ImageOption extends android.support.v7.widget.AppCompatImageButton {
+public class ImageOption extends androidx.appcompat.widget.AppCompatImageButton {
 
     public ImageOption(Context context) {
         super(context);

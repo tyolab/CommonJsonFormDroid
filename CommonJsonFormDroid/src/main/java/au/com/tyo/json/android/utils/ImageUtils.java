@@ -3,10 +3,11 @@ package au.com.tyo.json.android.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+
+import androidx.collection.LruCache;
 
 /**
  * Created by vijay.rawat01 on 7/29/15.

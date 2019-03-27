@@ -1,20 +1,16 @@
 package au.com.tyo.json.android.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
-
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
-import au.com.tyo.json.android.fragments.FormFragment;
 import au.com.tyo.json.android.fragments.JsonFormFragment;
 import au.com.tyo.json.android.interfaces.JsonApi;
 

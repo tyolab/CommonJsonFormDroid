@@ -30,7 +30,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.android.support:appcompat-v7:${SUPPORT_LIBERY_VERSION}"
+    implementation "androidx.appcompat:appcompat:1.0.0-beta01"
 
     // try not to rely on too many third-party libraries for this core json form library
     // api 'com.github.rey5137:material:1.1.0'
