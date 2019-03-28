@@ -225,7 +225,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
      * @return
      */
     public View getChildViewByKey(String keyStr) {
-        int childCount = mMainView.getChildCount();
+        int childCount = mMainView != null ? mMainView.getChildCount() : 0;
         for (int i = 0; i < childCount; i++) {
             View view = mMainView.getChildAt(i);
             if (null != view) {
