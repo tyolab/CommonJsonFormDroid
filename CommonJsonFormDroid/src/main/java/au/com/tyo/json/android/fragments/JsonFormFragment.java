@@ -25,6 +25,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     private boolean             keyboardHidden = true;
     private MetaDataWatcher     metaDataWatcher;
 
-    public Map<String, FormFragment.FieldMetadata> metadataMap;
+    protected Map<String, FormFragment.FieldMetadata> metadataMap;
 
     static class FieldMetadata {
         public int index;
@@ -107,6 +108,10 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
+        if (null == metadataMap)
+            metadataMap = new HashMap<>();
+
         super.onCreate(savedInstanceState);
     }
 
@@ -454,11 +459,17 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
     }
 
     protected FieldMetadata getFieldMetaData(String key) {
-        FieldMetadata fieldMetadata = metadataMap.get(key);
+        FieldMetadata fieldMetadata = getMetadataMap().get(key);
         if (fieldMetadata == null) {
             fieldMetadata = new FieldMetadata();
             metadataMap.put(key, fieldMetadata);
         }
         return fieldMetadata;
+    }
+
+    public Map<String, FieldMetadata> getMetadataMap() {
+        if (null == metadataMap)
+            metadataMap = new HashMap<>();
+        return metadataMap;
     }
 }

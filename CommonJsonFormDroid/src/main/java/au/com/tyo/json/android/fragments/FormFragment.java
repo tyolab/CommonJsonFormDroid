@@ -96,9 +96,6 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (null == metadataMap)
-            metadataMap = new HashMap<>();
-
         /**
          * The context is themed
          */
