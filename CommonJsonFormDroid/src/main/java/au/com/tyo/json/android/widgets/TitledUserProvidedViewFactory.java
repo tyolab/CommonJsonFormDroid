@@ -31,7 +31,7 @@ public class TitledUserProvidedViewFactory extends TitledItemFactory {
 
         View v = factory.inflate(resId, null);
 
-        bindUserInput(jsonApi, v, jsonObject, -1, listener, editable, clickable, metaDataWatcher);
+        bindUserInput(jsonApi, v, jsonObject, -1, listener, editable, clickable, false, metaDataWatcher);
 
         return v;
     }

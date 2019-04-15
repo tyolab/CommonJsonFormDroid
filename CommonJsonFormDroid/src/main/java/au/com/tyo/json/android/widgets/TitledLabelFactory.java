@@ -28,6 +28,7 @@ import au.com.tyo.json.android.interfaces.CommonListener;
 import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
+import au.com.tyo.json.jsonform.JsonFormField;
 
 /**
  * Created by vijay on 24-05-2015.
@@ -53,7 +54,9 @@ public class TitledLabelFactory extends TitledItemFactory {
 
         View v = inflateViewForField(jsonObject, factory, R.layout.item_label, editable);
 
-        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, clickable, metaDataWatcher);
+        boolean scrollable = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_SCROLLABLE, false);
+
+        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, clickable, scrollable, metaDataWatcher);
 
         return v;
     }

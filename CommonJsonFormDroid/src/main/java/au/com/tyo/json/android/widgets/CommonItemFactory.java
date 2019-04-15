@@ -3,6 +3,7 @@ package au.com.tyo.json.android.widgets;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,15 +113,16 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
      * @param listener
      * @param editable
      * @param clickable
+     * @param scrollable
      * @param metaDataWatcher
      * @throws JSONException
      */
-    public static void bindUserInput(JsonApi jsonApi, View parent, JSONObject jsonObject, int gravity, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException {
+    public static void bindUserInput(JsonApi jsonApi, View parent, JSONObject jsonObject, int gravity, CommonListener listener, boolean editable, int clickable, boolean scrollable, MetaDataWatcher metaDataWatcher) throws JSONException {
         View userInputView = parent.findViewById(R.id.user_input);
         final String value = getJsonStringValue(jsonObject);
         final String keyStr = jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_KEY);
 
-        bindUserInput(jsonApi, userInputView, keyStr, value, jsonObject.has("textStyle") && jsonObject.getString("textStyle").equalsIgnoreCase("html"));
+        bindUserInput(jsonApi, userInputView, keyStr, value, jsonObject.has("textStyle") && jsonObject.getString("textStyle").equalsIgnoreCase("html"), scrollable);
 
         // inputTextView.setGravity(gravity);
         if (null != userInputView) {
@@ -137,24 +139,29 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
     }
 
     /**
-     *
-     * @param jsonApi
+     *  @param jsonApi
      * @param userInputView
      * @param keyStr
      * @param value
      * @param styled
+     * @param scrollable
      */
-    public static void bindUserInput(JsonApi jsonApi, View userInputView, String keyStr, String value, boolean styled) {
-        if (null == value)
-            value = jsonApi.getNullValueReplacement(keyStr).toString();
-
+    public static void bindUserInput(JsonApi jsonApi, View userInputView, String keyStr, String value, boolean styled, boolean scrollable) {
         if (userInputView instanceof android.widget.TextView) {
             android.widget.TextView inputTextView = (android.widget.TextView) userInputView;
+
+            if (null == value) {
+                Object replacement = jsonApi.getNullValueReplacement(keyStr);
+                value = null != replacement ? replacement.toString() : "";
+            }
 
             if (styled)
                 inputTextView.setText(Html.fromHtml(value));
             else
                 inputTextView.setText(value);
+
+            if (scrollable)
+                inputTextView.setMovementMethod(new ScrollingMovementMethod());
 
         }
         else if (userInputView instanceof EditText) {
@@ -256,11 +263,12 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return inflateViewForField(jsonObject, factory, layoutResourceId);
     }
 
-    protected void bindDataAndAction(View parent, JsonApi jsonApi, JSONObject jsonObject, boolean editable, CommonListener listener, MetaDataWatcher metaDataWatcher) {
+    protected void bindDataAndAction(View parent, JsonApi jsonApi, JSONObject jsonObject, boolean editable, CommonListener listener, MetaDataWatcher metaDataWatcher) throws JSONException {
         final String keyStr = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY);
         final int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, CLICKABLE_NONE);
         final String value = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_VALUE);
         final boolean enabled = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_ENABLED, true);
+        final boolean scrollable = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_SCROLLABLE, false);
 
         setViewTagKey(parent, keyStr);
 
@@ -278,7 +286,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
         if (null != userInputView) {
 
-            bindUserInput(jsonApi, userInputView, keyStr, value, false);
+            bindUserInput(jsonApi, userInputView, keyStr, value, false, scrollable);
 
             if (clickable == CLICKABLE_FIELD) {
                 userInputView.setClickable(true);

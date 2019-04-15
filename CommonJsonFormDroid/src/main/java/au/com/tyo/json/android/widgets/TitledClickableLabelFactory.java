@@ -60,7 +60,7 @@ public class TitledClickableLabelFactory extends TitledItemFactory {
         if (metadata.required != VALUE_REQUIRED)
             setupOptionalButton(metadata, v, value, listener);
 
-        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, clickable, metaDataWatcher);
+        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, clickable, false, metaDataWatcher);
 
         return v;
     }

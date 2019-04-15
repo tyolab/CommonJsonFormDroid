@@ -53,7 +53,7 @@ public class TitledImageFactory extends TitledItemFactory {
 
         View v = inflateViewForField(jsonObject, factory, R.layout.item_imageview);
 
-        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, clickable, metaDataWatcher);
+        bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, clickable, false, metaDataWatcher);
 
         return v;
     }

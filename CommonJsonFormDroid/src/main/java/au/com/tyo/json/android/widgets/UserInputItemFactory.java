@@ -308,7 +308,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
 
         // update the text
         if (null != userInputView) {
-            UserInputItemFactory.bindUserInput(jsonApi, userInputView, targetKey, text, false);
+            UserInputItemFactory.bindUserInput(jsonApi, userInputView, targetKey, text, false, false);
 
             if (userInputView instanceof TextView) {
                 TextView button = (TextView) userInputView;
