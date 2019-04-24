@@ -38,7 +38,7 @@
     <dimen name="form_default_group_gap_height">24dp</dimen>
 
     <!-- SEPARATOR -->
-    <dimen name="form_default_separator_height">1dp</dimen>
+    <dimen name="form_default_separator_height">1px</dimen>
     <dimen name="form_default_separator_padding_right">3dp</dimen>
     <dimen name="form_default_separator_padding_left">3dp</dimen>
     <dimen name="form_default_separator_container_height">3dp</dimen>

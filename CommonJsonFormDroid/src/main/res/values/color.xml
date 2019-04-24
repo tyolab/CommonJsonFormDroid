@@ -10,7 +10,7 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
 
-    <color name="colorFormFieldSeparator">#B6B6B6</color>
+    <color name="colorFormFieldSeparator">#DBDBDB</color>
     <color name="colorEnabled">#1e3261</color>
     <color name="colorDisabled">#85a6ab</color>
 </resources>

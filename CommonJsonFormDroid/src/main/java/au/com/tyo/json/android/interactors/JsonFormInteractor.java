@@ -183,7 +183,7 @@ public class JsonFormInteractor {
                          * Group separator is not considered, if it is really necessary,
                          * then override the group title layout and add the separator there
                          */
-                        if (!widgetType.equals(GroupTitleFactory.class.getSimpleName())) {
+                        if (!widgetType.equals(GroupTitleFactory.NAME)) {
                             boolean needSeparator = childJson.optBoolean(JsonFormField.ATTRIBUTE_NAME_SEPARATOR_UNDER, Config.formWithSeparator);
                             if (needSeparator && count < fields.length()) {
                                 View separator = factory.inflate(R.layout.form_separator, null);
