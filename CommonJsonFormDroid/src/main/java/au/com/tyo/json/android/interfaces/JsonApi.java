@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.util.Date;
 
 import au.com.tyo.json.android.fragments.FormFragment;
+import au.com.tyo.json.validator.Validator;
 
 /**
  * Created by vijay on 5/16/15.
@@ -47,8 +48,13 @@ public interface JsonApi {
 
     Object getNullValueReplacement(String keyStr);
 
-    void onValidateRequiredFormFieldFailed(String key);
+    boolean onValidateRequiredFormFieldFailed(String key, String errorMessage);
 
     void loadImage(String keyStr, ImageView imageView);
 
+    void installValidator(String keyStr, Validator validator);
+
+    boolean validate(String stepName, String key, String text);
+
+    boolean hasValidator(String keyStr);
 }

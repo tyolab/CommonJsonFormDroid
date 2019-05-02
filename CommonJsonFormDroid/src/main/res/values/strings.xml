@@ -4,4 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="data_saved">Data saved</string>
+    <string name="requires_value">A valid value is required</string>
+    <string name="must_not_empty">Cannot be empty</string>
+    <string name="must_select_one">Must choose one option</string>
 </resources>

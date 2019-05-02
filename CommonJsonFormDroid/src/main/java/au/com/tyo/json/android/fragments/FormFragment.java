@@ -38,6 +38,7 @@ import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
 import au.com.tyo.json.android.views.OptionalButton;
 import au.com.tyo.json.android.widgets.TitledItemFactory;
+import au.com.tyo.json.validator.Validator;
 
 import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
 
@@ -307,24 +308,46 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         for (Map.Entry<String, FieldMetadata> entry : keyValues) {
             String key = entry.getKey();
             FieldMetadata md = entry.getValue();
+            String errorMessage = "Error";
 
             if (VALUE_REQUIRED != md.required || !md.visible)
                 continue;
+            else
+                errorMessage = getContext().getResources().getString(R.string.requires_value);
 
-            if (md.value instanceof String ) {
+            if (md.value instanceof String) {
                 if (!TextUtils.isEmpty((CharSequence) md.value))
                     continue;
+
+                errorMessage = getContext().getResources().getString(R.string.must_not_empty);
             }
             else if (md.value instanceof Set) {
                 Set set = (Set) md.value;
                 if (null != set && set.size() > 0)
+                    continue;
+
+                errorMessage = getContext().getResources().getString(R.string.must_select_one);
+            }
+            else if (null != md.getValidators()){
+                List<Validator> validators = md.getValidators();
+                boolean allPassed = true;
+
+                for (Validator validator : validators) {
+                    if (!validator.isValid(md.value)) {
+                        allPassed = false;
+                        errorMessage = validator.getErrorMessage();
+                        break;
+                    }
+                }
+
+                if (allPassed)
                     continue;
             }
             else if (md.value != null)
                 continue;
 
             // OK, the validation failed
-            onValidateRequiredFormFieldFailed(key);
+            onValidateRequiredFormFieldFailed(key, errorMessage);
 
             result = false;
             break;
@@ -332,8 +355,8 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         return result;
     }
 
-    protected void onValidateRequiredFormFieldFailed(String key) {
-        getJsonApi().onValidateRequiredFormFieldFailed(key);
+    protected void onValidateRequiredFormFieldFailed(String key, String errorMessage) {
+        getJsonApi().onValidateRequiredFormFieldFailed(key, errorMessage);
     }
 
     public View getViewByKey(String key) {

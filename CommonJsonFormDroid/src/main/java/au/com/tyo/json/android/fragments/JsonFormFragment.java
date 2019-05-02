@@ -25,6 +25,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ import au.com.tyo.json.android.mvp.MvpFragment;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.JsonFormFragmentView;
 import au.com.tyo.json.android.viewstates.JsonFormFragmentViewState;
+import au.com.tyo.json.validator.Validator;
 
 /**
  * Created by vijay on 5/7/15.
@@ -54,11 +56,13 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
 
     protected Map<String, FormFragment.FieldMetadata> metadataMap;
 
-    static class FieldMetadata {
+    public static class FieldMetadata {
         public int index;
         public int required; // -1 nullable, 0 optional, 1 required
         public java.lang.Object value;
         public boolean visible;
+
+        private List<Validator> validators;
 
         /**
          * Widget View
@@ -79,6 +83,16 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         public FieldMetadata() {
             visible = true;
             index = -1;
+        }
+
+        public void addValidator(Validator validator) {
+            if (null == validators)
+                validators = new ArrayList<>();
+            validators.add(validator);
+        }
+
+        public List<Validator> getValidators() {
+            return validators;
         }
     }
 

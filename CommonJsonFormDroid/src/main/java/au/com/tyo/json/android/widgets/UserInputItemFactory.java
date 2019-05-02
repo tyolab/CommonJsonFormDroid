@@ -8,6 +8,7 @@ import android.os.Build;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import au.com.tyo.android.AndroidUtils;
+import au.com.tyo.json.android.validators.MaxValidator;
+import au.com.tyo.json.android.validators.MinValidator;
+import au.com.tyo.json.android.validators.RegexpValidator;
+import au.com.tyo.json.android.validators.RequiredValidator;
 import au.com.tyo.json.form.FieldValue;
 import au.com.tyo.json.jsonform.JsonFormField;
 import au.com.tyo.json.jsonform.JsonFormFieldFilter;
@@ -120,70 +125,70 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
             editText.setText("");
 
         //add validators
-//        JSONArray validatorArray = jsonObject.optJSONArray("validators");
-//        if (validatorArray != null) {
-//            for (int i = 0; i < validatorArray.length(); ++ i) {
-//                JSONObject requiredObject = validatorArray.getJSONObject(i);
-//                String validatorName = requiredObject.getString("name");
-//                if (validatorName.equals("v_required")) {
-//                    String requiredValue = requiredObject.getString("value");
-//                    if (!TextUtils.isEmpty(requiredValue)) {
-//                        if (Boolean.TRUE.toString().equalsIgnoreCase(requiredValue)) {
-//                            editText.addValidator(new RequiredValidator(requiredObject.getString("err")));
-//                        }
-//                    }
-//                }
-//                else if (validatorName.equals("v_min_length")) {
-//                    String minLengthValue = requiredObject.optString("value");
-//                    if (!TextUtils.isEmpty(minLengthValue)) {
-//                        minLength = Integer.parseInt(minLengthValue);
-//                        editText.addValidator(new MinLengthValidator(requiredObject.getString("err"), Integer.parseInt(minLengthValue)));
-//                    }
-//                }
-//
-//                else if (validatorName.equals("v_max_length")) {
-//                    String maxLengthValue = requiredObject.optString("value");
-//                    if (!TextUtils.isEmpty(maxLengthValue)) {
-//                        maxLength = Integer.parseInt(maxLengthValue);
-//                        editText.addValidator(new MaxLengthValidator(requiredObject.getString("err"), Integer.parseInt(maxLengthValue)));
-//                    }
-//                }
-//
-//                else if (validatorName.equals("v_regex")) {
-//                    String regexValue = requiredObject.optString("value");
-//                    if (!TextUtils.isEmpty(regexValue)) {
-//                        editText.addValidator(new RegexpValidator(requiredObject.getString("err"), regexValue));
-//                    }
-//                }
-//
-//                else if (validatorName.equals("v_email")) {
-//                    String emailValue = requiredObject.optString("value");
-//                    if (!TextUtils.isEmpty(emailValue)) {
-//                        if (Boolean.TRUE.toString().equalsIgnoreCase(emailValue)) {
-//                            editText.addValidator(new RegexpValidator(requiredObject.getString("err"), Patterns.EMAIL_ADDRESS.toString()));
-//                        }
-//                    }
-//                }
-//
-//                else if (validatorName.equals("v_url")) {
-//                    String urlValue = requiredObject.optString("value");
-//                    if (!TextUtils.isEmpty(urlValue)) {
-//                        if (Boolean.TRUE.toString().equalsIgnoreCase(urlValue)) {
-//                            editText.addValidator(new RegexpValidator(requiredObject.getString("err"), Patterns.WEB_URL.toString()));
-//                        }
-//                    }
-//                }
-//
-//                else if (validatorName.equals("v_numeric")) {
-//                    String numericValue = requiredObject.optString("value");
-//                    if (!TextUtils.isEmpty(numericValue)) {
-//                        if (Boolean.TRUE.toString().equalsIgnoreCase(numericValue)) {
-//                            editText.addValidator(new RegexpValidator(requiredObject.getString("err"), "[0-9]+"));
-//                        }
-//                    }
-//                }
-//            }
-//        }
+       JSONArray validatorArray = jsonObject.optJSONArray("validators");
+       if (validatorArray != null) {
+           for (int i = 0; i < validatorArray.length(); ++ i) {
+               JSONObject requiredObject = validatorArray.getJSONObject(i);
+               String validatorName = requiredObject.getString("name");
+               if (validatorName.equals("v_required")) {
+                   String requiredValue = requiredObject.getString("value");
+                   if (!TextUtils.isEmpty(requiredValue)) {
+                       if (Boolean.TRUE.toString().equalsIgnoreCase(requiredValue)) {
+                           jsonApi.installValidator(keyStr, new RequiredValidator(requiredObject.getString("err")));
+                       }
+                   }
+               }
+               else if (validatorName.equals("v_min_length")) {
+                   String minLengthValue = requiredObject.optString("value");
+                   if (!TextUtils.isEmpty(minLengthValue)) {
+                       minLength = Integer.parseInt(minLengthValue);
+                       jsonApi.installValidator(keyStr,  new MinValidator(requiredObject.getString("err"), Integer.parseInt(minLengthValue)));
+                   }
+               }
+
+               else if (validatorName.equals("v_max_length")) {
+                   String maxLengthValue = requiredObject.optString("value");
+                   if (!TextUtils.isEmpty(maxLengthValue)) {
+                       maxLength = Integer.parseInt(maxLengthValue);
+                       jsonApi.installValidator(keyStr,  new MaxValidator(requiredObject.getString("err"), Integer.parseInt(maxLengthValue)));
+                   }
+               }
+
+               else if (validatorName.equals("v_regex")) {
+                   String regexValue = requiredObject.optString("value");
+                   if (!TextUtils.isEmpty(regexValue)) {
+                       jsonApi.installValidator(keyStr,  new RegexpValidator(requiredObject.getString("err"), regexValue));
+                   }
+               }
+
+               else if (validatorName.equals("v_email")) {
+                   String emailValue = requiredObject.optString("value");
+                   if (!TextUtils.isEmpty(emailValue)) {
+                       if (Boolean.TRUE.toString().equalsIgnoreCase(emailValue)) {
+                           jsonApi.installValidator(keyStr,  new RegexpValidator(requiredObject.getString("err"), Patterns.EMAIL_ADDRESS.toString()));
+                       }
+                   }
+               }
+
+               else if (validatorName.equals("v_url")) {
+                   String urlValue = requiredObject.optString("value");
+                   if (!TextUtils.isEmpty(urlValue)) {
+                       if (Boolean.TRUE.toString().equalsIgnoreCase(urlValue)) {
+                           jsonApi.installValidator(keyStr,  new RegexpValidator(requiredObject.getString("err"), Patterns.WEB_URL.toString()));
+                       }
+                   }
+               }
+
+               else if (validatorName.equals("v_numeric")) {
+                   String numericValue = requiredObject.optString("value");
+                   if (!TextUtils.isEmpty(numericValue)) {
+                       if (Boolean.TRUE.toString().equalsIgnoreCase(numericValue)) {
+                           jsonApi.installValidator(keyStr,  new RegexpValidator(requiredObject.getString("err"), "[0-9]+"));
+                       }
+                   }
+               }
+           }
+       }
 
         // add filters
         InputFilter[] editFilters = editText.getFilters();
@@ -276,6 +281,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
             // be careful, setRawInputType doesn't work on the CAP_SETENNCES and CAP_WORDS
             editText.setInputType(types);
         }
+
         editText.addTextChangedListener(new GenericTextWatcher(jsonApi, stepName, editText));
 
         editText.setOnFocusChangeListener(listener);
