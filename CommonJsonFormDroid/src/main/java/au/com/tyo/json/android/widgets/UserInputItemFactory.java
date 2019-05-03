@@ -142,7 +142,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
                    String minLengthValue = requiredObject.optString("value");
                    if (!TextUtils.isEmpty(minLengthValue)) {
                        minLength = Integer.parseInt(minLengthValue);
-                       jsonApi.installValidator(keyStr,  new MinValidator(requiredObject.getString("err"), Integer.parseInt(minLengthValue)));
+                       jsonApi.installValidator(keyStr,  new MinValidator(requiredObject.getString("err"), minLength));
                    }
                }
 
@@ -150,7 +150,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
                    String maxLengthValue = requiredObject.optString("value");
                    if (!TextUtils.isEmpty(maxLengthValue)) {
                        maxLength = Integer.parseInt(maxLengthValue);
-                       jsonApi.installValidator(keyStr,  new MaxValidator(requiredObject.getString("err"), Integer.parseInt(maxLengthValue)));
+                       jsonApi.installValidator(keyStr,  new MaxValidator(requiredObject.getString("err"), maxLength));
                    }
                }
 

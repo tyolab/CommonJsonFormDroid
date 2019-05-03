@@ -148,6 +148,8 @@ public class JsonFormInteractor {
                 int count = 0;
                 for (int i = 0; i < fields.length(); i++) {
                     JSONObject childJson = fields.getJSONObject(i);
+                    final JsonMetadata metadata = new JsonMetadata(childJson);
+
                     try {
                         String widgetType = childJson.getString("type");
                         FormWidgetFactory widgetFactory = map.get(widgetType);
@@ -162,7 +164,6 @@ public class JsonFormInteractor {
                          * ### Add widget
                          * // a ViewGroups with lots of children
                          */
-                        JsonMetadata metadata = new JsonMetadata(childJson);
                         View views = widgetFactory.getViewFromJson(jsonApi, stepName, context, childJson, metadata, listener, editable, metaDataWatcher);
 
                         /**
@@ -191,9 +192,10 @@ public class JsonFormInteractor {
                             }
                         }
 
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         Log.e(TAG,
-                                "Exception occurred in making child view at index : " + i + "", e);
+                                "Exception occurred in making child view at index : " + i + ", info: " + metadata, e);
                     }
                 }
             }

@@ -308,51 +308,93 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         for (Map.Entry<String, FieldMetadata> entry : keyValues) {
             String key = entry.getKey();
             FieldMetadata md = entry.getValue();
-            String errorMessage = "Error";
+            String errorMessage = validateField(md, md.value);
+            //
+            // if (VALUE_REQUIRED != md.required || !md.visible)
+            //     continue;
+            // else
+            //     errorMessage = getContext().getResources().getString(R.string.requires_value);
+            //
+            // if (md.value instanceof String) {
+            //     if (!TextUtils.isEmpty((CharSequence) md.value))
+            //         continue;
+            //
+            //     errorMessage = getContext().getResources().getString(R.string.must_not_empty);
+            // }
+            // else if (md.value instanceof Set) {
+            //     Set set = (Set) md.value;
+            //     if (null != set && set.size() > 0)
+            //         continue;
+            //
+            //     errorMessage = getContext().getResources().getString(R.string.must_select_one);
+            // }
+            // else if (null != md.getValidators()){
+            //     List<Validator> validators = md.getValidators();
+            //     boolean allPassed = true;
+            //
+            //     for (Validator validator : validators) {
+            //         if (!validator.isValid(md.value)) {
+            //             allPassed = false;
+            //             errorMessage = validator.getErrorMessage();
+            //             break;
+            //         }
+            //     }
+            //
+            //     if (allPassed)
+            //         continue;
+            // }
+            // else if (md.value != null)
+            //     continue;
 
-            if (VALUE_REQUIRED != md.required || !md.visible)
-                continue;
-            else
-                errorMessage = getContext().getResources().getString(R.string.requires_value);
+            if (null != errorMessage) {
+                // OK, the validation failed
+                onValidateRequiredFormFieldFailed(key, errorMessage);
 
-            if (md.value instanceof String) {
-                if (!TextUtils.isEmpty((CharSequence) md.value))
-                    continue;
-
-                errorMessage = getContext().getResources().getString(R.string.must_not_empty);
+                result = false;
+                break;
             }
-            else if (md.value instanceof Set) {
-                Set set = (Set) md.value;
-                if (null != set && set.size() > 0)
-                    continue;
-
-                errorMessage = getContext().getResources().getString(R.string.must_select_one);
-            }
-            else if (null != md.getValidators()){
-                List<Validator> validators = md.getValidators();
-                boolean allPassed = true;
-
-                for (Validator validator : validators) {
-                    if (!validator.isValid(md.value)) {
-                        allPassed = false;
-                        errorMessage = validator.getErrorMessage();
-                        break;
-                    }
-                }
-
-                if (allPassed)
-                    continue;
-            }
-            else if (md.value != null)
-                continue;
-
-            // OK, the validation failed
-            onValidateRequiredFormFieldFailed(key, errorMessage);
-
-            result = false;
-            break;
         }
         return result;
+    }
+
+    public String validateField(String keyStr, String text) {
+        return validateField(metadataMap.get(keyStr), text);
+    }
+
+    public String validateField(FieldMetadata md, Object value) {
+        if (null == md) {
+            Log.w(TAG, "null metadata");
+            return null;
+        }
+
+        if (VALUE_REQUIRED == md.required && !md.visible) {
+            if (value instanceof String) {
+                if (TextUtils.isEmpty((CharSequence) value))
+                    return getContext().getResources().getString(R.string.must_not_empty);
+            }
+
+            if (value == null)
+                return getContext().getResources().getString(R.string.requires_value);
+        }
+
+        String errorMessage = null;
+        if (value instanceof Set) {
+            Set set = (Set) value;
+            if (null == set || set.size() == 0)
+                errorMessage = getContext().getResources().getString(R.string.must_select_one);
+        }
+        else if (null != md.getValidators()){
+            List<Validator> validators = md.getValidators();
+
+            for (Validator validator : validators) {
+                if (!validator.isValid(value)) {
+                    errorMessage = validator.getErrorMessage();
+                    break;
+                }
+            }
+        }
+
+        return errorMessage;
     }
 
     protected void onValidateRequiredFormFieldFailed(String key, String errorMessage) {

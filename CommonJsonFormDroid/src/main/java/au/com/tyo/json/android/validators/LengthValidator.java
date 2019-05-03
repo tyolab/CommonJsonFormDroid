@@ -19,8 +19,14 @@ public class LengthValidator extends Validator {
     @Override
     public boolean isValid(Object text) {
         int length = 0;
-        if (text instanceof CharSequence)
-            length = ((CharSequence) text).length();
+        if (text instanceof CharSequence) {
+            CharSequence charSequence = (CharSequence) text;
+            if (Character.isDigit(charSequence.charAt(0))) {
+                length = Integer.valueOf(charSequence.toString());
+            }
+            else
+                length = charSequence.length();
+        }
         else if (text instanceof Collection)
             length = ((Collection) text).size();
         else if (text instanceof Object[])

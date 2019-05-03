@@ -54,7 +54,5 @@ public interface JsonApi {
 
     void installValidator(String keyStr, Validator validator);
 
-    boolean validate(String stepName, String key, String text);
-
-    boolean hasValidator(String keyStr);
+    boolean validate(String key, String text);
 }

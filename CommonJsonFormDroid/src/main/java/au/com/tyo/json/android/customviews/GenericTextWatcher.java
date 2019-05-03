@@ -53,7 +53,9 @@ public class GenericTextWatcher implements TextWatcher {
                 }
 
                 try {
-                    api.writeValue(mStepName, key, text);
+                    //if (api.validate(key, text)) {
+                        api.writeValue(mStepName, key, text);
+                    //}
                 } catch (JSONException e) {
                     // TODO- handle
                     Log.e(TAG, "Write form value error", e);

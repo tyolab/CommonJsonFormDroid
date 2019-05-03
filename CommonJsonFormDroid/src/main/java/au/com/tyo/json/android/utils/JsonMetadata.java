@@ -22,4 +22,13 @@ public class JsonMetadata {
         type = jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_TYPE);
         required = jsonObject.getInt(JsonFormField.ATTRIBUTE_NAME_REQUIRED);
     }
+
+    @Override
+    public String toString() {
+        return "JsonMetadata{" +
+                "key='" + key + '\'' +
+                ", type='" + type + '\'' +
+                ", required=" + required +
+                '}';
+    }
 }

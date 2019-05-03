@@ -9,6 +9,10 @@ import au.com.tyo.json.validator.Validator;
 
 public class EmptyValidator extends Validator {
 
+    public EmptyValidator(String err) {
+        super(err);
+    }
+
     public boolean isValid(Object object) {
         return true;
     }

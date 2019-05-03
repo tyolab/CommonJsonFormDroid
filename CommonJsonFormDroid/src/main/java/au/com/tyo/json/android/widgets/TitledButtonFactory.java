@@ -104,7 +104,7 @@ public class TitledButtonFactory extends TitledItemFactory {
         // set tag info
         FormUtils.formatView(v, key,
                 jsonObject.getString("type") );
-        v.setTag(R.id.pick, jsonObject.getString("pick"));
+        v.setTag(R.id.pick, jsonObject.optString("pick"));
 
         CommonListener aListener = listener;
 

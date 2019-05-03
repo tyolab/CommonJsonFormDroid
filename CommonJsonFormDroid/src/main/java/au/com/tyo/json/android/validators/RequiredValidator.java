@@ -11,6 +11,7 @@ import au.com.tyo.json.validator.Validator;
 public class RequiredValidator extends Validator {
 
     public RequiredValidator(String errorMessage) {
+        super(errorMessage);
     }
 
     public boolean isValid(Object  charSequence, boolean isEmpty) {
