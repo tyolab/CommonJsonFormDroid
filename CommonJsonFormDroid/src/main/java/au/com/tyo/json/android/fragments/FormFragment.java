@@ -194,7 +194,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         metadata = getFieldMetaData(key);
         metadata.required = required;
         metadata.inputView = inputView;
-        setFormRowEditableOrEnabled(metadata.view, editable, enabled);
+        setFormRowEditableOrEnabled(metadata.inputView, editable, enabled);
     }
 
     @Override

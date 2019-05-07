@@ -24,15 +24,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import au.com.tyo.json.android.widgets.TitledImageFactory;
 import au.com.tyo.json.jsonform.JsonFormFieldButton;
 import au.com.tyo.json.jsonform.JsonFormGroup;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.widgets.CommonItemFactory;
 import au.com.tyo.json.android.widgets.GroupTitleFactory;
-import au.com.tyo.json.android.widgets.TitledButtonFactory;
 import au.com.tyo.json.android.widgets.TitledClickableLabelFactory;
-import au.com.tyo.json.android.widgets.UserProvidedViewFactory;
 import au.com.tyo.json.form.DataFormEx;
 import au.com.tyo.json.form.DataJson;
 import au.com.tyo.json.form.FormBasicItem;
@@ -45,7 +42,6 @@ import au.com.tyo.json.jsonform.JsonFormFieldSwitch;
 import au.com.tyo.json.jsonform.JsonFormFieldTitledLabel;
 import au.com.tyo.json.jsonform.JsonFormFieldWithTitleAndHint;
 import au.com.tyo.json.jsonform.JsonFormStep;
-import au.com.tyo.json.android.interactors.JsonFormInteractor;
 import au.com.tyo.json.android.widgets.TitledEditTextFactory;
 import au.com.tyo.json.android.widgets.TitledLabelFactory;
 import au.com.tyo.json.android.widgets.TitledSwitchButtonFactory;
@@ -236,7 +232,7 @@ public class FormHelper {
                  * the field value can be null
                  */
 
-                addField(step, key, null, value, data.isEditable(), keyConverter, metaMap);
+                addField(step, key, null, value, data.isEditable(), false, keyConverter, metaMap);
             }
         }
         else {
@@ -288,11 +284,19 @@ public class FormHelper {
     public static JsonForm createForm(Map map, boolean editable, TitleKeyConverter keyConverter, Map metaMap, boolean sortForm) {
         JsonForm form = new JsonForm();
         JsonFormStep step = form.createNewStep();
+
         if (keyConverter == null)
             keyConverter = generalTitleConverter;
 
         if (map instanceof DataFormEx) {
             DataFormEx formMap = (DataFormEx) map;
+            final boolean isFormLocked = formMap.isLocked();
+            boolean isFormEditable;
+            if (formMap.isEditableValueSet())
+                isFormEditable = formMap.isEditable();
+            else
+                isFormEditable = editable;
+
             form.title = formMap.getTitle();
 
             step.header = formMap.getHeader();
@@ -328,7 +332,7 @@ public class FormHelper {
                         //     jsonFormGroup.addField(field);
                         // }
                         // else
-                        field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), editable, keyConverter,
+                        field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), isFormEditable, isFormLocked, keyConverter,
                                 formMetaMap);
 
                         field.clickable = value.isClickable();
@@ -366,7 +370,7 @@ public class FormHelper {
                     mapToField(step, (Map) value, editable, keyConverter, metaMap);
                 }
                 else
-                    addField(step, key, null, value, editable, keyConverter, metaMap);
+                    addField(step, key, null, value, editable, false, keyConverter, metaMap);
             }
 
             if (sortForm)
@@ -390,7 +394,7 @@ public class FormHelper {
             String subkey = (String) entry1.getKey();
             Object subvalue = entry1.getValue();
 
-            addField(jsonFormGroup, subkey, null, subvalue, editable, keyConverter, metaMap);
+            addField(jsonFormGroup, subkey, null, subvalue, editable, false, keyConverter, metaMap);
         }
     }
 
@@ -425,15 +429,15 @@ public class FormHelper {
     }
 
     /**
-     *
-     * @param jsonFormGroup
+     *  @param jsonFormGroup
      * @param key
      * @param value
+     * @param isFormLocked
      * @param keyConverter
      * @param metaMap
      */
-    private static JsonFormField addField(JsonFormGroup jsonFormGroup, String key, String title, Object value, boolean editable, TitleKeyConverter keyConverter, Map metaMap) {
-        JsonFormField field = createField(key, title, value, editable, keyConverter, metaMap);
+    private static JsonFormField addField(JsonFormGroup jsonFormGroup, String key, String title, Object value, boolean editable, boolean isFormLocked, TitleKeyConverter keyConverter, Map metaMap) {
+        JsonFormField field = createField(key, title, value, editable, isFormLocked, keyConverter, metaMap);
 
         if (null != field)
             jsonFormGroup.addField(field);
@@ -444,11 +448,12 @@ public class FormHelper {
      *
      * @param key
      * @param value
+     * @param locked, the form is not changeable,
      * @param keyConverter
      * @param metaMap
      * @return
      */
-    public static JsonFormField createField(String key, String title, Object value, boolean editable, TitleKeyConverter keyConverter, Map metaMap) {
+    public static JsonFormField createField(String key, String title, Object value, boolean editable, boolean locked, TitleKeyConverter keyConverter, Map metaMap) {
 
         /**
          * Other data
@@ -502,7 +507,7 @@ public class FormHelper {
             else {
 
                 JsonFormField labelField;
-                if (editable)
+                if (!locked && editable)
                     // for anything else it is just edit text, and it is not editable by default
                     labelField = createTitledEditTextField(fieldKey, newTitle, value != null ? value.toString() : "");
                 else
