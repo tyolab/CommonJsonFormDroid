@@ -167,7 +167,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
             factory.updateView(getJsonApi(), view, targetKey, value, fieldTextColors);
         }
         else
-            throw new IllegalStateException("User input view is not found, and a value is set to attach to the view");
+            Log.w(TAG, "The view is not found, for key: " + targetKey);
 
     }
 
