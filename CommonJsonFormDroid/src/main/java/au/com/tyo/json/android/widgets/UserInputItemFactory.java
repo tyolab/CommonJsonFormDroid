@@ -46,14 +46,8 @@ import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_ROW;
 
 public abstract class UserInputItemFactory extends CommonItemFactory {
 
-    public static final String NAME = UserProvidedViewFactory.class.getSimpleName();
-
     public UserInputItemFactory(String widgetKey) {
         super(widgetKey);
-    }
-
-    public UserInputItemFactory() {
-        super(NAME);
     }
 
     protected abstract View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException;

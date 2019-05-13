@@ -249,7 +249,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
         LayoutInflater factory = LayoutInflater.from(context);
 
-        View v = createView(jsonObject, factory);
+        View v = createView(jsonApi, jsonObject, factory, metadata, listener, editable, metaDataWatcher);
 
         bindDataAndAction(v, jsonApi, jsonObject, editable, listener, metaDataWatcher);
 
@@ -259,7 +259,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return v;
     }
 
-    protected View createView(JSONObject jsonObject, LayoutInflater factory) {
+    protected View createView(JsonApi jsonApi, JSONObject jsonObject, LayoutInflater factory, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException {
         return inflateViewForField(jsonObject, factory, layoutResourceId);
     }
 
