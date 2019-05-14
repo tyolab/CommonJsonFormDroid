@@ -22,8 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import google.json.JSONException;
+import google.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;

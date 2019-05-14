@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -14,8 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import google.json.JSONException;
+import google.json.JSONObject;
 
 import java.util.List;
 
@@ -49,15 +50,19 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
 
     public void addFormElements(JsonApi jsonApi, boolean editable, MetaDataWatcher metaDataWatcher) {
         mStepName = getView().getArguments().getString("stepName");
-        JSONObject step = getView().getStep(mStepName);
+
         try {
+            JSONObject step = getView().getStep(mStepName);
             mStepDetails = new JSONObject(step.toString());
+
+            List<View> views = mJsonFormInteractor.fetchFormElements(jsonApi, mStepName, getView().getContext(),
+                    mStepDetails, getView().getCommonListener(), editable, metaDataWatcher);
+            getView().addFormElements(views);
+
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Creating JSONObject error", e);
+            Log.i(TAG, getView().toString());
         }
-        List<View> views = mJsonFormInteractor.fetchFormElements(jsonApi, mStepName, getView().getContext(),
-                mStepDetails, getView().getCommonListener(), editable, metaDataWatcher);
-        getView().addFormElements(views);
     }
 
     @SuppressLint("ResourceAsColor")

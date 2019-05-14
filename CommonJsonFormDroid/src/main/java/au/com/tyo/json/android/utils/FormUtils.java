@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import google.json.JSONException;
+import google.json.JSONObject;
 
 import au.com.tyo.android.AndroidUtils;
 import au.com.tyo.json.android.R;

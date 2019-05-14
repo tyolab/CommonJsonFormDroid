@@ -8,8 +8,8 @@ package au.com.tyo.json.android.widgets;
 import android.content.Context;
 import android.view.View;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import google.json.JSONException;
+import google.json.JSONObject;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;

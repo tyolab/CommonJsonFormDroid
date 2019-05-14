@@ -22,8 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import google.json.JSONException;
+import google.json.JSONObject;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;

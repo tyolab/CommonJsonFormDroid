@@ -10,7 +10,7 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
-import org.json.JSONObject;
+import google.json.JSONObject;
 
 import static au.com.tyo.json.android.utils.FormUtils.FONT_BOLD_PATH;
 import static au.com.tyo.json.android.utils.FormUtils.WRAP_CONTENT;

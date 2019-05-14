@@ -11,8 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import google.json.JSONException;
+import google.json.JSONObject;
 
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.interfaces.CommonListener;

@@ -2,8 +2,8 @@ package au.com.tyo.json.android.interfaces;
 
 import android.widget.ImageView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import google.json.JSONException;
+import google.json.JSONObject;
 
 import java.util.Date;
 

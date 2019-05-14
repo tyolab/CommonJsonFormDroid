@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import google.json.JSONArray;
+import google.json.JSONObject;
 
 import au.com.tyo.android.AndroidUtils;
 import au.com.tyo.json.android.R;
