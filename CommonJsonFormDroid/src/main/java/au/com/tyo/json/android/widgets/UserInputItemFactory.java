@@ -55,16 +55,13 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
     @Override
     public View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception {
 
-        int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, 0);
-
         LayoutInflater factory = LayoutInflater.from(context);
 
         ViewGroup v = createViewContainer(factory);
         RelativeLayout.LayoutParams layoutParams = (new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
         layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
 
-        final String keyStr = jsonObject.getString("key");
-
+        int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, 0);
         View child = createView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, clickable, metaDataWatcher);
 
         if (null != child) {
@@ -72,19 +69,8 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
             v.addView(child);
         }
 
-        if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VISIBLE)) {
-            boolean visible = Boolean.parseBoolean(jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VISIBLE));
-            if (!visible) {
-                v.setVisibility(View.GONE);
-                listener.onVisibilityChange(keyStr, null, false);
-            }
-        }
+        adjustView(v, jsonObject, listener);
 
-        // Clickable on the row level
-        if (clickable == CLICKABLE_ROW) {
-            v.setClickable(true);
-            v.setOnClickListener(listener);
-        }
         return v;
     }
 

@@ -348,6 +348,7 @@ public class FormHelper {
                             field.type = value.getType();
 
                         field.separator_under = value.hasSeparator();
+                        field.visible = String.valueOf(value.isVisible());
                     }
                 }
                 else

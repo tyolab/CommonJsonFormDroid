@@ -251,12 +251,33 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
         View v = createView(jsonApi, jsonObject, factory, metadata, listener, editable, metaDataWatcher);
 
+        adjustView(v, jsonObject, listener);
+
         bindDataAndAction(v, jsonApi, jsonObject, editable, listener, metaDataWatcher);
 
         if (v.isClickable())
             v.setOnClickListener(listener);
 
         return v;
+    }
+
+    protected void adjustView(View view, JSONObject jsonObject, CommonListener listener) throws JSONException {
+        final String keyStr = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY);
+        if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VISIBLE)) {
+            boolean visible = Boolean.parseBoolean(jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VISIBLE));
+            if (!visible) {
+                view.setVisibility(View.GONE);
+                listener.onVisibilityChange(keyStr, null, false);
+            }
+        }
+
+        int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, 0);
+
+        // Clickable on the row level
+        if (clickable == CLICKABLE_ROW) {
+            view.setClickable(true);
+            view.setOnClickListener(listener);
+        }
     }
 
     protected View createView(JsonApi jsonApi, JSONObject jsonObject, LayoutInflater factory, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws JSONException {
