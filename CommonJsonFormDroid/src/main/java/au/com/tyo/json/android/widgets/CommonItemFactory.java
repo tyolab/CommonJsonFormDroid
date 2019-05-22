@@ -261,7 +261,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return v;
     }
 
-    protected void adjustView(View view, JSONObject jsonObject, CommonListener listener) throws JSONException {
+    public static void adjustView(View view, JSONObject jsonObject, CommonListener listener) throws JSONException {
         final String keyStr = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY);
         if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VISIBLE)) {
             boolean visible = Boolean.parseBoolean(jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VISIBLE));

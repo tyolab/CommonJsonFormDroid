@@ -314,6 +314,10 @@ public class FormHelper {
                 JsonFormGroup jsonFormGroup = createGroup();
                 if (groupMap instanceof FormGroup) {
                     FormGroup formGroup = (FormGroup) groupMap;
+
+                    jsonFormGroup.visible = String.valueOf(formGroup.isVisible());
+                    jsonFormGroup.clickable = formGroup.getClickable();
+
                     if (formGroup.hasKey())
                         jsonFormGroup.key = formGroup.getKey();
 

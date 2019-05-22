@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import au.com.tyo.json.android.widgets.CommonItemFactory;
 import google.json.JSONArray;
 import google.json.JSONException;
 import google.json.JSONObject;
@@ -113,6 +114,8 @@ public class JsonFormInteractor {
                             View gapView = factory.inflate(R.layout.form_group_divider, null);
                             groupContainer.addView(gapView);
                         }
+
+                        CommonItemFactory.adjustView(groupContainer, childJson, listener);
 
                         /**
                          * Set Group view key tag
