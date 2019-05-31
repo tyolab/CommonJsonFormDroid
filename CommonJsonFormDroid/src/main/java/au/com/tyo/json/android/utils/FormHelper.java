@@ -353,6 +353,7 @@ public class FormHelper {
 
                         field.separator_under = value.hasSeparator();
                         field.visible = String.valueOf(value.isVisible());
+                        field.orientation = value.getOrientation();
                     }
                 }
                 else

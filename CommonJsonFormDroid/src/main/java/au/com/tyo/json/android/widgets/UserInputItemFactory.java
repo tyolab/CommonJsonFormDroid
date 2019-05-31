@@ -69,7 +69,7 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
             v.addView(child);
         }
 
-        adjustView(v, jsonObject, listener);
+        adjustViewVisibility(v, jsonObject, listener);
 
         return v;
     }

@@ -58,6 +58,8 @@ public class TitledLabelFactory extends TitledItemFactory {
 
         bindUserInput(jsonApi, v, jsonObject, gravity, listener, editable, clickable, scrollable, metaDataWatcher);
 
+        adjustViewClickable(v, jsonObject, listener, JsonFormField.CLICKABLE_FIELD);
+
         return v;
     }
 

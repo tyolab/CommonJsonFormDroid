@@ -25,6 +25,8 @@ import au.com.tyo.json.android.utils.JsonMetadata;
 import au.com.tyo.json.android.widgets.GroupTitleFactory;
 import au.com.tyo.json.jsonform.JsonFormField;
 
+import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_ROW;
+
 /**
  * Created by vijay on 5/19/15.
  */
@@ -115,7 +117,8 @@ public class JsonFormInteractor {
                             groupContainer.addView(gapView);
                         }
 
-                        CommonItemFactory.adjustView(groupContainer, childJson, listener);
+                        CommonItemFactory.adjustViewVisibility(groupContainer, childJson, listener);
+                        CommonItemFactory.adjustViewClickable(groupContainer, childJson, listener, CLICKABLE_ROW);
 
                         /**
                          * Set Group view key tag
@@ -173,6 +176,9 @@ public class JsonFormInteractor {
                          * need at least type tag
                          */
                         FormWidgetFactory.setViewTags(views, metadata);
+
+                        CommonItemFactory.adjustViewVisibility(views, childJson, listener);
+                        CommonItemFactory.adjustViewClickable(views, childJson, listener, CLICKABLE_ROW);
 
                         /**
                          * Set the the widget view

@@ -134,8 +134,12 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
             }
         }
 
-        if (null != metaDataWatcher)
+        if (null != metaDataWatcher) {
             metaDataWatcher.setKeyInputView(keyStr, userInputView, editable, editable, -1);
+        }
+
+        if (null != listener)
+            listener.onInitialValueSet(keyStr, null, value);
     }
 
     /**
@@ -251,7 +255,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
 
         View v = createView(jsonApi, jsonObject, factory, metadata, listener, editable, metaDataWatcher);
 
-        adjustView(v, jsonObject, listener);
+        adjustViewVisibility(v, jsonObject, listener);
 
         bindDataAndAction(v, jsonApi, jsonObject, editable, listener, metaDataWatcher);
 
@@ -261,7 +265,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         return v;
     }
 
-    public static void adjustView(View view, JSONObject jsonObject, CommonListener listener) throws JSONException {
+    public static void adjustViewVisibility(View view, JSONObject jsonObject, CommonListener listener) throws JSONException {
         final String keyStr = jsonObject.optString(JsonFormField.ATTRIBUTE_NAME_KEY);
         if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VISIBLE)) {
             boolean visible = Boolean.parseBoolean(jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VISIBLE));
@@ -270,11 +274,13 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
                 listener.onVisibilityChange(keyStr, null, false);
             }
         }
+    }
 
+    public static void adjustViewClickable(View view, JSONObject jsonObject, CommonListener listener, int targetClickable) throws JSONException {
         int clickable = jsonObject.optInt(JsonFormField.ATTRIBUTE_NAME_CLICKABLE, 0);
 
         // Clickable on the row level
-        if (clickable == CLICKABLE_ROW) {
+        if (clickable == targetClickable) {
             view.setClickable(true);
             view.setOnClickListener(listener);
         }
@@ -329,10 +335,10 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
             metaDataWatcher.setKeyInputView(keyStr, userInputView, editable, enabled, -1);
 
 
-        if (clickable == CLICKABLE_ROW) {
-            parent.setClickable(true);
-            parent.setOnClickListener(listener);
-        }
+        // if (clickable == CLICKABLE_ROW) {
+        //     parent.setClickable(true);
+        //     parent.setOnClickListener(listener);
+        // }
     }
 
     @Override
