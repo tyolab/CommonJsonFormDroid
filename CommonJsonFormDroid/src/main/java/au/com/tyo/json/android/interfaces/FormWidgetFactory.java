@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.View;
 
+import au.com.tyo.json.android.widgets.TitledItemFactory;
 import google.json.JSONObject;
 
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public abstract class FormWidgetFactory {
     private static final UserProvidedViewFactory userProvidedViewFactory        = new UserProvidedViewFactory();
 
     /**
-     * Widget Key, for identifying the which Widget Factory to use
+     * Widget Key, for identifying which Widget Factory to use
      */
     private String widgetKey;
 
@@ -71,6 +72,7 @@ public abstract class FormWidgetFactory {
 
             registerWidget(new GroupTitleFactory());
             registerWidget(new TitledImageFactory());
+            registerWidget(new TitledItemFactory());
 
             registerWidget(titledLabelFactory);
             registerWidget(titledTextFactory);

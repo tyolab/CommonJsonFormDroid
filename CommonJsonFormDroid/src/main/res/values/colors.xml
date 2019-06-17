@@ -4,7 +4,7 @@
     <color name="primary">#673AB7</color>
     <color name="primary_dark">#512DA8</color>
     <color name="primary_light">#D1C4E9</color>
-    <color name="accent">#FF9800</color>
+    <color name="accent">#1e3261</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
     <color name="icons">#FFFFFF</color>
@@ -13,4 +13,5 @@
     <color name="colorFormFieldSeparator">#DBDBDB</color>
     <color name="colorEnabled">#1e3261</color>
     <color name="colorDisabled">#85a6ab</color>
+    <color name="colorAccent">#1e3261</color>
 </resources>

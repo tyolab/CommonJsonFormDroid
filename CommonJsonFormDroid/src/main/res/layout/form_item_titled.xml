@@ -9,11 +9,10 @@
     android:focusable="true"
     >
 
-    <include layout="@layout/form_title"
+    <include layout="@layout/form_row_title"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/form_row_title"
-        android:paddingLeft="0dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         />

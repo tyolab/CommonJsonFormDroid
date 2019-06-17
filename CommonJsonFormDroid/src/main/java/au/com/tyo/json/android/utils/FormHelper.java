@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import au.com.tyo.json.jsonform.JsonFormFieldButton;
+import au.com.tyo.json.jsonform.JsonFormFieldWithTitle;
 import au.com.tyo.json.jsonform.JsonFormGroup;
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
 import au.com.tyo.json.android.widgets.CommonItemFactory;
@@ -354,6 +355,9 @@ public class FormHelper {
                         field.separator_under = value.hasSeparator();
                         field.visible = String.valueOf(value.isVisible());
                         field.orientation = value.getOrientation();
+
+                        if (field instanceof JsonFormFieldWithTitle)
+                            ((JsonFormFieldWithTitle) field).subtitle = value.getSubtitle();
                     }
                 }
                 else

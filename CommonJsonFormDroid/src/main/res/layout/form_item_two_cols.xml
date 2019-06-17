@@ -23,27 +23,23 @@
     android:layout_gravity="center_vertical"
     >
 
-    <include layout="@layout/form_title"
+    <FrameLayout
+        android:id="@+id/frame2"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        style="@style/AppStyle.Form.FieldStyle.AlignRight"
+        />
+
+    <include layout="@layout/form_row_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/form_row_title"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/frame2"
         style="@style/AppStyle.Form.TitleStyle"
         />
-
-    <FrameLayout
-        android:id="@+id/frame2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/form_row_title"
-        android:layout_alignParentRight="true"
-        style="@style/AppStyle.Form.FieldStyle.AlignRight"
-        >
-
-    </FrameLayout>
 
 </au.com.tyo.json.android.views.TitledFormRow>

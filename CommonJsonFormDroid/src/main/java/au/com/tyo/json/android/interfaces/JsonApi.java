@@ -30,6 +30,14 @@ public interface JsonApi {
 
     String formatDateTime(String key, Date date);
 
+    void updateForm(String keyStr);
+
+    void updateForm(String keyStr, Object value);
+
+    void updateGroupVisibility(String keyStr, boolean visible);
+
+    void updateFieldVisibility(String keyStr, boolean visible);
+
     FormFragment getJsonFormFragment();
 
     String getPredefinedValue(String stepName, String key);

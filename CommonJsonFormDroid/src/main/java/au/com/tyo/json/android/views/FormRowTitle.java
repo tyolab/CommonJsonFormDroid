@@ -10,13 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 9/11/17.
  */
 
-public class FormRowTitle extends FrameLayout {
+public class FormRowTitle extends RelativeLayout {
 
     private TextView tvTitle;
 

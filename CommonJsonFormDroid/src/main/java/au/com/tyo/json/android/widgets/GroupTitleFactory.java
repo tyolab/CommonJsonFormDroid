@@ -31,7 +31,7 @@ public class GroupTitleFactory extends CommonItemFactory {
 
         View v = inflateViewForField(jsonObject, factory, R.layout.item_group_title);
 
-        bindTitle(v, jsonObject, "value");
+        bindTitle(v, jsonObject, "value", android.R.id.text1);
 
         return v;
     }

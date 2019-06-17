@@ -23,7 +23,7 @@
     android:layout_gravity="center_vertical"
     >
 
-    <include layout="@layout/form_title"
+    <include layout="@layout/form_row_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/form_row_title"

@@ -41,7 +41,10 @@ import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
  * Created by Eric Tang (eric.tang@tyo.com.au) on 21/9/17.
  */
 
-public abstract class TitledItemFactory extends UserInputItemFactory {
+/**
+ * This class is for creating a titled row
+ */
+public class TitledItemFactory extends UserInputItemFactory {
 
     public static final String NAME = TitledItemFactory.class.getSimpleName();
 
@@ -53,7 +56,9 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
         super(NAME);
     }
 
-    protected abstract View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException;
+    protected View createUserInputView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, int gravity, MetaDataWatcher metaDataWatcher) throws JSONException {
+        return null;
+    }
 
     @Override
     protected View createView(JsonApi jsonApi, LayoutInflater factory, ViewGroup parent, String stepName, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, int clickable, MetaDataWatcher metaDataWatcher) throws JSONException {
@@ -62,6 +67,13 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
 
         boolean vertical = false;
         boolean needTitle = true;
+
+        boolean enabled;
+        if (editable) {
+            enabled = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_ENABLED, editable);
+        }
+        else
+            enabled = editable;
 
         if (this instanceof CompoundItemFactory) {
             vertical = true;
@@ -77,7 +89,8 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
                 v = (ViewGroup) factory.inflate(R.layout.form_item_two_cols, parent, false);
 
             // 1st Column / Row
-            bindTitle(v, jsonObject, JsonFormField.ATTRIBUTE_NAME_TITLE);
+            bindTitle(v, jsonObject, JsonFormField.ATTRIBUTE_NAME_TITLE, android.R.id.text1);
+            bindTitle(v, jsonObject, JsonFormField.ATTRIBUTE_NAME_SUB_TITLE, android.R.id.text2);
 
             container = v.findViewById(R.id.frame2);
         }
@@ -90,27 +103,24 @@ public abstract class TitledItemFactory extends UserInputItemFactory {
 
         View child = createUserInputView(jsonApi, factory, v, stepName, jsonObject, metadata, listener, editable, clickable, vertical ? Gravity.LEFT : Gravity.RIGHT, metaDataWatcher);
 
-        if (!vertical) {
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.gravity = Gravity.RIGHT;
-            child.setLayoutParams(layoutParams);
-        }
+        View userInputView = null;
+        if (null != child) {
 
-        container.addView(child);
+            if (!vertical) {
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.gravity = Gravity.RIGHT;
+                child.setLayoutParams(layoutParams);
+            }
 
-        View userInputView = child.findViewById(R.id.user_input);
+            container.addView(child);
 
-        boolean enabled;
-        if (editable) {
-            enabled = jsonObject.optBoolean(JsonFormField.ATTRIBUTE_NAME_ENABLED, editable);
-        }
-        else
-            enabled = editable;
+            userInputView = child.findViewById(R.id.user_input);
 
-        if (null != userInputView) {
-            setViewTags(userInputView, metadata);
+            if (null != userInputView) {
+                setViewTags(userInputView, metadata);
 
-            userInputView.setEnabled(enabled);
+                userInputView.setEnabled(enabled);
+            }
         }
 
         if (null != metaDataWatcher)

@@ -24,7 +24,6 @@ import au.com.tyo.json.jsonform.JsonFormField;
 
 import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_FIELD;
 import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_NONE;
-import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_ROW;
 
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
@@ -199,7 +198,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
      * @throws JSONException
      */
     protected static View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey) throws JSONException {
-        return createTitleView(factory, jsonObject, titleKey, R.layout.form_title);
+        return createTitleView(factory, jsonObject, titleKey, R.layout.form_row_title);
     }
 
     /**
@@ -213,7 +212,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
      */
     protected static View createTitleView(LayoutInflater factory, JSONObject jsonObject, String titleKey, int titleLayoutResId) throws JSONException {
         View v = factory.inflate(titleLayoutResId, null);
-        bindTitle(v, jsonObject, titleKey);
+        bindTitle(v, jsonObject, titleKey, android.R.id.text1);
         return v;
     }
 
@@ -222,15 +221,16 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
      * @param parent
      * @param jsonObject
      * @param titleKey
+     * @param resId
      * @throws JSONException
      */
-    protected static void bindTitle(View parent, JSONObject jsonObject, String titleKey) throws JSONException {
-        TextView titletext = (TextView) parent.findViewById(android.R.id.text1);
+    protected static void bindTitle(View parent, JSONObject jsonObject, String titleKey, int resId) throws JSONException {
+        TextView titletext = (TextView) parent.findViewById(resId);
         // 1st Column
         if (jsonObject.has(titleKey))
             titletext.setText(jsonObject.getString(titleKey));
-        else if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VALUE))
-            titletext.setText(jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VALUE));
+        // else if (jsonObject.has(JsonFormField.ATTRIBUTE_NAME_VALUE))
+        //     titletext.setText(jsonObject.getString(JsonFormField.ATTRIBUTE_NAME_VALUE));
         else
             titletext.setVisibility(View.GONE);
     }
