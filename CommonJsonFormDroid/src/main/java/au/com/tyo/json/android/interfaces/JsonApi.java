@@ -1,5 +1,6 @@
 package au.com.tyo.json.android.interfaces;
 
+import android.view.View;
 import android.widget.ImageView;
 
 import google.json.JSONException;
@@ -63,4 +64,8 @@ public interface JsonApi {
     void installValidator(String keyStr, Validator validator);
 
     boolean validate(String key, String text);
+
+    void setupFormHeader(View view);
+
+    void setupFormFooter(View view);
 }

@@ -50,15 +50,19 @@ public class JsonFormInteractor {
         View view;
         view = createHeaderView(factory, parentJson);
 
-        if (null != view)
+        if (null != view) {
+            jsonApi.setupFormHeader(view);
             viewsFromJson.add(view);
+        }
 
         viewsFromJson.addAll(createFieldViews(jsonApi, factory, stepName, context, parentJson, listener, editable, metaDataWatcher));
         viewsFromJson.addAll(createGroupViews(jsonApi, factory, stepName, context, parentJson, listener, editable, metaDataWatcher));
 
         view = createFooterView(factory, parentJson);
-        if (null != view)
+        if (null != view) {
+            jsonApi.setupFormFooter(view);
             viewsFromJson.add(view);
+        }
 
         return viewsFromJson;
     }

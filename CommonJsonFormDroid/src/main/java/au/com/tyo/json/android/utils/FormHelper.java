@@ -303,12 +303,23 @@ public class FormHelper {
             step.header = formMap.getHeader();
             step.footer = formMap.getFooter();
 
-            List groups = formMap.getGroups();
-
             Map formMetaMap = formMap.getMetaMap();
             if (null == formMetaMap)
                 formMetaMap = metaMap;
 
+            /**
+             * Fields
+             */
+            List fields = formMap.getFields();
+            for (int i = 0; i < fields.size(); ++i) {
+                FormField value = (FormField) fields.get(i);
+                addField(step, value, isFormEditable, isFormLocked, keyConverter, formMetaMap);
+            }
+
+            /**
+             * Groups
+             */
+            List groups = formMap.getGroups();
             for (int i = 0; i < groups.size(); ++i) {
                 Map groupMap = (Map) groups.get(i);
 
@@ -331,33 +342,7 @@ public class FormHelper {
 
                     for (int j = 0; j < formGroup.size(); ++j) {
                         FormField value = (FormField) formGroup.getValue(j); // all value are stored as String during form creation
-                        JsonFormField field;
-                        // if (value.getValue() instanceof JsonFormField) {
-                        //     field = (JsonFormField) value.getValue();
-                        //     jsonFormGroup.addField(field);
-                        // }
-                        // else
-                        field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), isFormEditable, isFormLocked, keyConverter,
-                                formMetaMap);
-
-                        field.clickable = value.isClickable();
-                        field.enabled = value.isEnabled();
-
-                        /**
-                         * make it optional
-                         */
-                        if (value.getLayout() > -1)
-                            field.layout = value.getLayout();
-
-                        if (null != value.getType())
-                            field.type = value.getType();
-
-                        field.separator_under = value.hasSeparator();
-                        field.visible = String.valueOf(value.isVisible());
-                        field.orientation = value.getOrientation();
-
-                        if (field instanceof JsonFormFieldWithTitle)
-                            ((JsonFormFieldWithTitle) field).subtitle = value.getSubtitle();
+                        addField(jsonFormGroup, value, isFormEditable, isFormLocked, keyConverter, formMetaMap);
                     }
                 }
                 else
@@ -388,6 +373,36 @@ public class FormHelper {
         }
 
         return form;
+    }
+
+    protected static void addField(JsonFormGroup jsonFormGroup, FormField value, boolean isFormEditable, boolean isFormLocked, TitleKeyConverter keyConverter, Map formMetaMap) {
+        JsonFormField field;
+        // if (value.getValue() instanceof JsonFormField) {
+        //     field = (JsonFormField) value.getValue();
+        //     jsonFormGroup.addField(field);
+        // }
+        // else
+        field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), isFormEditable, isFormLocked, keyConverter,
+                formMetaMap);
+
+        field.clickable = value.isClickable();
+        field.enabled = value.isEnabled();
+
+        /**
+         * make it optional
+         */
+        if (value.getLayout() > -1)
+            field.layout = value.getLayout();
+
+        if (null != value.getType())
+            field.type = value.getType();
+
+        field.separator_under = value.hasSeparator();
+        field.visible = String.valueOf(value.isVisible());
+        field.orientation = value.getOrientation();
+
+        if (field instanceof JsonFormFieldWithTitle)
+            ((JsonFormFieldWithTitle) field).subtitle = value.getSubtitle();
     }
 
     /**
