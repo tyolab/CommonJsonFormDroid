@@ -61,6 +61,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         public int required; // -1 nullable, 0 optional, 1 required
         public java.lang.Object value;
         public boolean visible;
+        public boolean editable = true;
 
         private List<Validator> validators;
 
@@ -472,7 +473,7 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
         return false;
     }
 
-    protected FieldMetadata getFieldMetaData(String key) {
+    public FieldMetadata getFieldMetaData(String key) {
         FieldMetadata fieldMetadata = getMetadataMap().get(key);
         if (fieldMetadata == null) {
             fieldMetadata = new FieldMetadata();
@@ -486,4 +487,5 @@ public class JsonFormFragment extends MvpFragment<JsonFormFragmentPresenter, Jso
             metadataMap = new HashMap<>();
         return metadataMap;
     }
+
 }

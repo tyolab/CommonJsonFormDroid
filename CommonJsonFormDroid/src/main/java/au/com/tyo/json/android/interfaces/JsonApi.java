@@ -18,7 +18,7 @@ public interface JsonApi {
 
     JSONObject getStep(String stepName);
 
-    void writeValue(String stepName, String key, String value) throws JSONException;
+    boolean writeValue(String stepName, String key, String value) throws JSONException;
 
     void writeValue(String stepName, String prentKey, String childObjectKey, String childKey, String value)
             throws JSONException;
@@ -38,6 +38,10 @@ public interface JsonApi {
     void updateGroupVisibility(String keyStr, boolean visible);
 
     void updateFieldVisibility(String keyStr, boolean visible);
+
+    void enableField(String keyStr, boolean enabled);
+
+    void setFieldEditable(String keyStr, boolean editable);
 
     FormFragment getJsonFormFragment();
 

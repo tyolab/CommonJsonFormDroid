@@ -74,7 +74,7 @@ public abstract class JsonFormActivity extends AppCompatActivity implements Json
     }
 
     @Override
-    public void writeValue(String stepName, String key, String value) throws JSONException {
+    public boolean writeValue(String stepName, String key, String value) throws JSONException {
         synchronized (mJSONObject) {
             JSONObject jsonObject = mJSONObject.getJSONObject(stepName);
             JSONArray fields = jsonObject.getJSONArray("fields");
@@ -83,10 +83,11 @@ public abstract class JsonFormActivity extends AppCompatActivity implements Json
                 String keyAtIndex = item.getString("key");
                 if (key.equals(keyAtIndex)) {
                     item.put("value", value);
-                    return;
+                    return false;
                 }
             }
         }
+        return false;
     }
 
     @Override

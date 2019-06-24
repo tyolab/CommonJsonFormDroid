@@ -459,6 +459,10 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
     public FieldMetadata addUserInputValueToMetadata(String key, String childKey, java.lang.Object value) {
         FieldMetadata metaData = getFieldMetaData(key);
 
+        return addUserInputValueToMetadata(metaData, childKey, value);
+    }
+
+    public FieldMetadata addUserInputValueToMetadata(FieldMetadata metaData, String childKey, java.lang.Object value) {
         if (childKey == null) {
             metaData.value = value;
         }
@@ -503,7 +507,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
     @Override
     public void onValueChange(String parentKey, String childKey, java.lang.Object value) {
-        FieldMetadata metadata = addUserInputValueToMetadata(parentKey, childKey, value);
+        addUserInputValueToMetadata(parentKey, childKey, value);
     }
 
     @Override
@@ -544,8 +548,14 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         metaData.visible = visible;
     }
 
+    /**
+     * So far we need to enable/disable for the inputview (id/input_view)
+     *
+     * @param key
+     * @param enabled
+     */
     public void enableField(String key, boolean enabled) {
-        getViewByKey(key).setEnabled(enabled);
+        getInputViewByKey(key).setEnabled(enabled);
     }
 
     @Override
