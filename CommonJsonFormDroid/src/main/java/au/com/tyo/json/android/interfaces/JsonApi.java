@@ -72,4 +72,6 @@ public interface JsonApi {
     void setupFormHeader(View view);
 
     void setupFormFooter(View view);
+
+    void updateFieldTitle(String keyStr, int titleResId);
 }

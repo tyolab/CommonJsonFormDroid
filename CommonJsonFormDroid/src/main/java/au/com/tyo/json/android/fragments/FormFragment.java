@@ -401,14 +401,17 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         getJsonApi().onValidateRequiredFormFieldFailed(key, errorMessage);
     }
 
+    @Nullable
     public View getViewByKey(String key) {
         return getWidgetViewByKey(key);
     }
 
+    @Nullable
     public View getInputViewByKey(String key) {
         return getFieldMetaData(key).inputView;
     }
 
+    @Nullable
     public View getWidgetViewByKey(String key) {
         return getFieldMetaData(key).view;
     }
@@ -633,5 +636,23 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
         }
         else
             super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void updateFieldTitle(String keyStr, CharSequence title) {
+        View view = getViewByKey(keyStr);
+        if (null != view) {
+            TextView tvTitle = view.findViewById(android.R.id.text1);
+            if (null != tvTitle)
+                tvTitle.setText(title);
+        }
+    }
+
+    public void updateFieldTitle(String keyStr, int titleResId) {
+        View view = getViewByKey(keyStr);
+        if (null != view) {
+            TextView tvTitle = view.findViewById(android.R.id.text1);
+            if (null != tvTitle)
+                tvTitle.setText(titleResId);
+        }
     }
 }
