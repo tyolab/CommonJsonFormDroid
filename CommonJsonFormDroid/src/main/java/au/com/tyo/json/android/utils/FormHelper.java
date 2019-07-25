@@ -377,32 +377,34 @@ public class FormHelper {
 
     protected static void addField(JsonFormGroup jsonFormGroup, FormField value, boolean isFormEditable, boolean isFormLocked, TitleKeyConverter keyConverter, Map formMetaMap) {
         JsonFormField field;
-        // if (value.getValue() instanceof JsonFormField) {
-        //     field = (JsonFormField) value.getValue();
-        //     jsonFormGroup.addField(field);
-        // }
-        // else
+        boolean alreadyJsonFormField = value.getValue() instanceof JsonFormField;
         field = addField(jsonFormGroup, value.getKey(), value.getTitle(), value.getValue(), isFormEditable, isFormLocked, keyConverter,
                 formMetaMap);
 
-        field.clickable = value.isClickable();
-        field.enabled = value.isEnabled();
-
         /**
-         * make it optional
+         * We don't need to reset the attributes for the field as it is already JsonFormField, we don't wanna override them
          */
-        if (value.getLayout() > -1)
-            field.layout = value.getLayout();
+        if (!alreadyJsonFormField) {
+            field.clickable = value.isClickable();
+            field.enabled = value.isEnabled();
 
-        if (null != value.getType())
-            field.type = value.getType();
+            /**
+             * make it optional
+             */
+            if (value.getLayout() > -1)
+                field.layout = value.getLayout();
 
-        field.separator_under = value.hasSeparator();
-        field.visible = String.valueOf(value.isVisible());
-        field.orientation = value.getOrientation();
+            if (null != value.getType())
+                field.type = value.getType();
+
+            field.separator_under = value.hasSeparator();
+            field.visible = String.valueOf(value.isVisible());
+            field.orientation = value.getOrientation();
+        }
 
         if (field instanceof JsonFormFieldWithTitle)
             ((JsonFormFieldWithTitle) field).subtitle = value.getSubtitle();
+
     }
 
     /**
