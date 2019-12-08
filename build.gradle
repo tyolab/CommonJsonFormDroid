@@ -1,35 +1,45 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'com.android.library'
 
-buildscript {
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        jcenter()
-    }
-}
 
 project.ext {
-    MINIMUM_SDK_VERSION = 15
+    MINIMUM_SDK_VERSION = 14
     TARGET_SDK_VERSION = 28
     COMPILE_SDK_VERSION = 28
     TOOLS_VERSION = "28.0.3"
+}
 
-    SUPPORT_LIBERY_VERSION = "28.0.0"
+android {
+    compileSdkVersion COMPILE_SDK_VERSION
+    // buildToolsVersion TOOLS_VERSION
+
+    defaultConfig {
+        minSdkVersion MINIMUM_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+repositories {
+    maven { url "https://clojars.org/repo/" }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "androidx.appcompat:appcompat:1.0.0-beta01"
+
+    // try not to rely on too many third-party libraries for this core json form library
+    // api 'com.github.rey5137:material:1.1.0'
+    // implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+    //    implementation('com.github.ganfra:material-spinner:1.1.0') {
+    //        exclude group: 'com.nineoldandroids', module: 'library'
+    //        exclude group: 'com.android.support', module: 'appcompat-v7'
+    //    }
+    api project(':CommonJsonForm')
+    implementation project(':CommonUtils')
+    implementation project(':CommonAndroid')
 }
