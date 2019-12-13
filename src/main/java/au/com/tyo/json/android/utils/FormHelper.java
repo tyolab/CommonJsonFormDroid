@@ -17,6 +17,7 @@
 package au.com.tyo.json.android.utils;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.Date;
 import java.util.List;
@@ -312,8 +313,19 @@ public class FormHelper {
              */
             List fields = formMap.getFields();
             for (int i = 0; i < fields.size(); ++i) {
-                FormField value = (FormField) fields.get(i);
-                addField(step, value, isFormEditable, isFormLocked, keyConverter, formMetaMap);
+                Object obj = fields.get(i);
+                if (obj instanceof FormField) {
+                    FormField value = (FormField) obj;
+                    addField(step, value, isFormEditable, isFormLocked, keyConverter, formMetaMap);
+                }
+                else if (obj instanceof Map) {
+                    mapToField(step, (Map) obj, editable, keyConverter, metaMap);
+                }
+                else {
+                    // addField(step, key, null, value, editable, false, keyConverter, metaMap);
+                    // throw new Exception("");
+                    Log.e("FormHelper", "Unknown field data at : " + i);
+                }
             }
 
             /**
@@ -374,6 +386,7 @@ public class FormHelper {
 
         return form;
     }
+
 
     protected static void addField(JsonFormGroup jsonFormGroup, FormField value, boolean isFormEditable, boolean isFormLocked, TitleKeyConverter keyConverter, Map formMetaMap) {
         JsonFormField field;
