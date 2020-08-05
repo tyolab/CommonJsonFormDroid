@@ -30,7 +30,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "androidx.appcompat:appcompat:1.0.0-beta01"
+    implementation 'androidx.appcompat:appcompat:1.3.0-alpha01'
 
     // try not to rely on too many third-party libraries for this core json form library
     // api 'com.github.rey5137:material:1.1.0'
@@ -42,4 +42,19 @@ dependencies {
     api project(':CommonJsonForm')
     implementation project(':CommonUtils')
     implementation project(':CommonAndroid')
+
+    implementation ('com.google.code.gson:gson:2.8.6') {
+        exclude module: 'httpclient'
+        exclude group: 'org.apache.httpcomponents'
+    }
+
+   implementation ('com.google.http-client:google-http-client:1.22.0') {
+       exclude module: 'httpclient'
+       exclude group: 'org.apache.httpcomponents'
+   }
+
+    implementation ('com.google.http-client:google-http-client-gson:1.36.0') {
+        exclude module: 'httpclient'
+        exclude group: 'org.apache.httpcomponents'
+    }
 }
