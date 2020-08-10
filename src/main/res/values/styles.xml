@@ -141,6 +141,8 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
         -->
         <item name="android:layout_marginRight">-6dp</item>
+        <item name="android:textOff"></item>
+        <item name="android:textOn"></item>
     </style>
 
     <style name="AppStyle.Form.CompoundButton">

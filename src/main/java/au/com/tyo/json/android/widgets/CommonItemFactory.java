@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import google.json.JSONException;
@@ -149,27 +150,49 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
      * @param styled
      * @param scrollable
      */
-    public static void bindUserInput(JsonApi jsonApi, View userInputView, String keyStr, String value, boolean styled, boolean scrollable) {
-        if (userInputView instanceof android.widget.TextView) {
-            android.widget.TextView inputTextView = (android.widget.TextView) userInputView;
-
-            if (null == value) {
-                Object replacement = jsonApi.getNullValueReplacement(keyStr);
-                value = null != replacement ? replacement.toString() : "";
+    public static void bindUserInput(JsonApi jsonApi, View userInputView, String keyStr, Object value, boolean styled, boolean scrollable) {
+        if (userInputView instanceof Switch) {
+            boolean onOff = false;
+            if (value instanceof Boolean) {
+                onOff = (boolean) value;
+            }
+            else if (value instanceof String) {
+                try {
+                    onOff = Boolean.parseBoolean(value.toString().toLowerCase());
+                }
+                catch (Exception ex) {}
+            }
+            else if (value instanceof Integer || value instanceof Double || value instanceof Float) {
+                int v = (int) value;
+                onOff = v != 0;
             }
 
-            if (styled)
-                inputTextView.setText(Html.fromHtml(value));
+            Switch switchBtn = (Switch) userInputView;
+            switchBtn.setChecked(onOff);
+        }
+        else if (userInputView instanceof android.widget.TextView) {
+            android.widget.TextView inputTextView = (android.widget.TextView) userInputView;
+            String valueStr;
+            if (null == value) {
+                Object replacement = jsonApi.getNullValueReplacement(keyStr);
+                valueStr = null != replacement ? replacement.toString() : "";
+            }
             else
-                inputTextView.setText(value);
+                valueStr = value.toString();
+
+            if (styled)
+                inputTextView.setText(Html.fromHtml(valueStr));
+            else
+                inputTextView.setText(valueStr);
 
             if (scrollable)
                 inputTextView.setMovementMethod(new ScrollingMovementMethod());
 
         }
         else if (userInputView instanceof EditText) {
+            String valueStr = value != null ? value.toString() : "";
             EditText inputTextView = (EditText) userInputView;
-            inputTextView.setText(value);
+            inputTextView.setText(valueStr);
         }
         else if (userInputView instanceof ImageView) {
             ImageView imageView = (ImageView) userInputView;

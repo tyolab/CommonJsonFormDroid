@@ -179,7 +179,7 @@ public class TitledItemFactory extends UserInputItemFactory {
         if (null != view) {
             int required = (int) view.getTag(R.id.required);
 
-            showHideOptionalClearButton(view, value.toString(), required);
+            showHideOptionalClearButton(view, null != value ? value.toString() : "", required);
         }
     }
 }
