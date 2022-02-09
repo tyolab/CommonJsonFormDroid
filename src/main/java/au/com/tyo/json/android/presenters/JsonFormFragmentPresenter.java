@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import au.com.tyo.json.util.OrderedDataMap;
 import google.json.JSONException;
 import google.json.JSONObject;
 
@@ -51,18 +52,23 @@ public class JsonFormFragmentPresenter extends MvpBasePresenter<JsonFormFragment
     public void addFormElements(JsonApi jsonApi, boolean editable, MetaDataWatcher metaDataWatcher) {
         mStepName = getView().getArguments().getString("stepName");
 
-        try {
-            JSONObject step = getView().getStep(mStepName);
-            mStepDetails = new JSONObject(step.toString());
+        /**
+         * @TODO refactoring it, no need to parse json string if we already has the map
+         */
+        OrderedDataMap orderedDataMap = jsonApi.getOrderedDataMap();
+        if (null == orderedDataMap)
+            try {
+                JSONObject step = getView().getStep(mStepName);
+                mStepDetails = new JSONObject(step.toString());
 
-            List<View> views = mJsonFormInteractor.fetchFormElements(jsonApi, mStepName, getView().getContext(),
-                    mStepDetails, getView().getCommonListener(), editable, metaDataWatcher);
-            getView().addFormElements(views);
+                List<View> views = mJsonFormInteractor.fetchFormElements(jsonApi, mStepName, getView().getContext(),
+                        mStepDetails, getView().getCommonListener(), editable, metaDataWatcher);
+                getView().addFormElements(views);
 
-        } catch (JSONException e) {
-            Log.e(TAG, "Creating JSONObject error", e);
-            Log.i(TAG, getView().toString());
-        }
+            } catch (JSONException e) {
+                Log.e(TAG, "Creating JSONObject error", e);
+                Log.i(TAG, getView().toString());
+            }
     }
 
     @SuppressLint("ResourceAsColor")

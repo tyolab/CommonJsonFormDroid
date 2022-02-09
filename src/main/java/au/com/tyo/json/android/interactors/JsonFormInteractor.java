@@ -55,7 +55,7 @@ public class JsonFormInteractor {
             viewsFromJson.add(view);
         }
 
-        viewsFromJson.addAll(createFieldViews(jsonApi, factory, stepName, context, parentJson, listener, editable, metaDataWatcher));
+
         viewsFromJson.addAll(createGroupViews(jsonApi, factory, stepName, context, parentJson, listener, editable, metaDataWatcher));
 
         view = createFooterView(factory, parentJson);
@@ -93,6 +93,8 @@ public class JsonFormInteractor {
 
     private List<? extends View> createGroupViews(JsonApi jsonApi, LayoutInflater factory, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) {
         List<View> viewsFromJson = new ArrayList<>();
+        List groupsList = jsonApi.getGroups();
+        if (null == groupsList)
         try {
             JSONArray groups = null;
 
@@ -144,6 +146,8 @@ public class JsonFormInteractor {
 
     private List<View> createFieldViews(JsonApi jsonApi, LayoutInflater factory, String stepName, Context context, JSONObject parentJson, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) {
         List<View> viewsFromJson = new ArrayList<>();
+        List fieldsList = jsonApi.getFields();
+        if (null == fieldsList)
         try {
             JSONArray fields = null;
 

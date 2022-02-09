@@ -50,7 +50,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
     public static final String          FRAGMENT_JSON_FORM_TAG = "FormFragment";
 
-    private static final String TAG = FRAGMENT_JSON_FORM_TAG;
+    private static final String         TAG = FRAGMENT_JSON_FORM_TAG;
 
     private LinearLayout                mainView;
 

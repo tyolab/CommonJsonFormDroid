@@ -3,10 +3,12 @@ package au.com.tyo.json.android.interfaces;
 import android.view.View;
 import android.widget.ImageView;
 
+import au.com.tyo.json.util.OrderedDataMap;
 import google.json.JSONException;
 import google.json.JSONObject;
 
 import java.util.Date;
+import java.util.List;
 
 import au.com.tyo.json.android.fragments.FormFragment;
 import au.com.tyo.json.validator.Validator;
@@ -63,7 +65,7 @@ public interface JsonApi {
 
     boolean onValidateRequiredFormFieldFailed(String key, String errorMessage);
 
-    void loadImage(String keyStr, ImageView imageView);
+    void loadFormFieldImage(String keyStr, ImageView imageView);
 
     void installValidator(String keyStr, Validator validator);
 
@@ -74,4 +76,10 @@ public interface JsonApi {
     void setupFormFooter(View view);
 
     void updateFieldTitle(String keyStr, int titleResId);
+
+    OrderedDataMap getOrderedDataMap();
+
+    List getGroups();
+
+    List getFields();
 }

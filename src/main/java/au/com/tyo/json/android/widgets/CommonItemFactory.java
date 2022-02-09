@@ -196,7 +196,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
         }
         else if (userInputView instanceof ImageView) {
             ImageView imageView = (ImageView) userInputView;
-            jsonApi.loadImage(keyStr, imageView);
+            jsonApi.loadFormFieldImage(keyStr, imageView);
         }
         else
             throw new IllegalStateException("Unknown user input view type");
