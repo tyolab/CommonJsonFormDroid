@@ -149,5 +149,5 @@ public abstract class FormWidgetFactory {
 
     public abstract View getViewFromJson(JsonApi jsonApi, String stepName, Context context, JSONObject jsonObject, JsonMetadata metadata, CommonListener listener, boolean editable, MetaDataWatcher metaDataWatcher) throws Exception;
 
-    public abstract void updateView(JsonApi jsonApi, View view, String targetKey, Object value, ColorStateList fieldTextColors);
+    public abstract void updateView(JsonApi jsonApi, View view, String targetKey, boolean enabled, Object value, ColorStateList fieldTextColors);
 }

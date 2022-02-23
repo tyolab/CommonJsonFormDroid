@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,8 +26,6 @@ import java.util.Map;
 import java.util.Set;
 
 import au.com.tyo.json.android.interfaces.FormWidgetFactory;
-import au.com.tyo.json.android.widgets.UserInputItemFactory;
-import au.com.tyo.json.form.FieldValue;
 import au.com.tyo.json.android.R;
 import au.com.tyo.json.android.constants.JsonFormConstants;
 import au.com.tyo.json.android.customviews.RadioButton;
@@ -37,7 +34,6 @@ import au.com.tyo.json.android.presenters.JsonFormExtensionPresenter;
 import au.com.tyo.json.android.presenters.JsonFormFragmentPresenter;
 import au.com.tyo.json.android.views.ButtonContainer;
 import au.com.tyo.json.android.views.OptionalButton;
-import au.com.tyo.json.android.widgets.TitledItemFactory;
 import au.com.tyo.json.validator.Validator;
 
 import static au.com.tyo.json.jsonform.JsonFormField.VALUE_REQUIRED;
@@ -164,7 +160,7 @@ public class FormFragment extends JsonFormFragment implements MetaDataWatcher {
 
             FormWidgetFactory factory = FormWidgetFactory.getWidgetFactory(type);
 
-            factory.updateView(getJsonApi(), view, targetKey, value, fieldTextColors);
+            factory.updateView(getJsonApi(), view, targetKey, true, value, fieldTextColors);
         }
         else
             Log.w(TAG, "The view is not found, for key: " + targetKey);

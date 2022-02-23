@@ -173,8 +173,8 @@ public class TitledItemFactory extends UserInputItemFactory {
     }
 
     @Override
-    public void updateView(JsonApi jsonApi, View view, String targetKey, Object value, ColorStateList fieldTextColors) {
-        super.updateView(jsonApi, view, targetKey, value, fieldTextColors);
+    public void updateView(JsonApi jsonApi, View view, String targetKey, boolean enabled, Object value, ColorStateList fieldTextColors) {
+        super.updateView(jsonApi, view, targetKey, enabled, value, fieldTextColors);
 
         if (null != view) {
             int required = (int) view.getTag(R.id.required);

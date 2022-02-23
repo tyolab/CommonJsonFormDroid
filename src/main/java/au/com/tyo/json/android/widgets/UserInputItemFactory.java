@@ -38,8 +38,6 @@ import au.com.tyo.json.android.interfaces.JsonApi;
 import au.com.tyo.json.android.interfaces.MetaDataWatcher;
 import au.com.tyo.json.android.utils.JsonMetadata;
 
-import static au.com.tyo.json.jsonform.JsonFormField.CLICKABLE_ROW;
-
 /**
  * Created by Eric Tang (eric.tang@tyo.com.au) on 26/7/17.
  */
@@ -269,8 +267,9 @@ public abstract class UserInputItemFactory extends CommonItemFactory {
     }
 
     @Override
-    public void updateView(JsonApi jsonApi, View view, String targetKey, Object value, ColorStateList fieldTextColors) {
+    public void updateView(JsonApi jsonApi, View view, String targetKey, boolean enabled, Object value, ColorStateList fieldTextColors) {
         View userInputView = view.findViewById(R.id.user_input);
+        userInputView.setEnabled(enabled);
 
         updateUserInput(jsonApi, userInputView, targetKey, value, fieldTextColors);
     }

@@ -365,7 +365,7 @@ public abstract class CommonItemFactory extends FormWidgetFactory {
     }
 
     @Override
-    public void updateView(JsonApi jsonApi, View view, String targetKey, Object value, ColorStateList fieldTextColors) {
+    public void updateView(JsonApi jsonApi, View view, String targetKey, boolean enabled, Object value, ColorStateList fieldTextColors) {
         // no ops yet
         // as most views won't be changed due the lifespan
     }
